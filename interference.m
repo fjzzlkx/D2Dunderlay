@@ -97,13 +97,14 @@ for x = 1:length(Npool)
                 end
             end
 
-            %类型3：celllular受到D2D之间
+            %类型3：celllular受到D2D干扰
 
             for i = QCellular+1:Q          
                 if D2D_loc(i-QCellular,1)+D2D_loc(i-QCellular,2)^2 < (d_broadcast(i))^2 && i~=j
-                    for j = 1:QCellular
-                        Vtrue{i} = [Vtrue{i} j];
-                    end
+                    %for j = 1:QCellular
+                    %   Vtrue{i} = [Vtrue{i} j];
+                    %end
+                    Vtrue{i} = [Vtrue{i} 10000];%选取一个特殊的数字当作基站
                 end
             end
 
