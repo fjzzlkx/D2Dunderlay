@@ -19,7 +19,7 @@ sigma = 8;                           %衰落标准差
 Dmax = 50;                           %D2Dlink最大通信半径
 
 
-data = cell(size(QCellularpool,1)*size(QCellularpool,2), length(Npool));   %存放storage
+data = cell(length(Npool),size(QCellularpool,1)*size(QCellularpool,2));   %存放storage
 for x = 1:length(Npool)
     for y = 1:length(QD2Dpool)
         for z = 1:size(QCellularpool,2)
@@ -118,6 +118,10 @@ for x = 1:length(Npool)
             %%%%%%%%%%%%%%%%%%%%%%%     stage1     %%%%%%%%%%%%%%%%%%%%%%%%%%%%
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             flag = ones(1,Q);    %标记变量，初始化全1
+            link_tpyes = [ones(1,QCellular),zeros(1,QD2D)];  %标记链接的类型
+            cellular_link_type = find(link_tpyes==1);
+            D2D_link_tpye = find(link_tpyes==0);
+
             Nq = 0;              %统计迭代次数
             storage = [];        %存放每次迭代pp的值，行向量
 
@@ -132,7 +136,8 @@ for x = 1:length(Npool)
             while (sum(flag)~=0)
         
                 link = find(flag==1);   %flag = 1的link,行向量
-                
+
+                cellular_link = intersect(cellular_link_type,link); 
                 %---------------------      分配资源    -----------------------%
                 RU = zeros(1,Q);   %行向量,每条flag=1链路的资源分配情况
                 for i = 1:length(link)
@@ -155,7 +160,7 @@ for x = 1:length(Npool)
                     V_nbor_RU{i} = [];
                     for j = 1:length(V_nbor{i})
                         if V_nbor{i}(j)==10000
-                            V_nbor_RU{i} = [V_nbor_RU{i} RU(link(1:QCellular))];
+                            V_nbor_RU{i} = [V_nbor_RU{i} RU(cellular_link)];
                         else   
                             V_nbor_RU{i} = [V_nbor_RU{i} RU(V_nbor{i}(j))];
                         end
@@ -194,7 +199,7 @@ for x = 1:length(Npool)
                     Ack_nbor_Delay{i} = [];   %初始化为空
                     for j = 1:length(V_nbor{i})
                         if V_nbor{i}(j)==10000
-                            Ack_nbor_Delay{i} = [Ack_nbor_Delay{i} AckDelay(link(1:QCellular))];
+                            Ack_nbor_Delay{i} = [Ack_nbor_Delay{i} AckDelay(cellular_link)];
                         else
                             Ack_nbor_Delay{i} = [Ack_nbor_Delay{i} AckDelay(V_nbor{i}(j))];
                         end
@@ -297,7 +302,7 @@ for x = 1:length(Npool)
             
 
             end
-            data{x,y} = storage;
+            data{x,size(QCellularpool,2)*(y-1)+z} = storage;
               
 
         end
