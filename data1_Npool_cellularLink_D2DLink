@@ -36,3 +36,57 @@ a_150_30_500  =   [0.2377    0.0302         0];
 a_150_60_500  =   [0.2857    0.0750    0.0125         0];
 a_150_90_500  =   [0.3169    0.1220    0.0373    0.0068         0];
 a_150_120_500 =   [0.4210    0.1710    0.0919    0.0258         0];
+
+MaxTimes1 = 10;
+interationtimes = 1:10;
+a_100_20_100_fix = [a_100_20_100 zeros(1,MaxTimes1-length(a_100_20_100))]; 
+a_100_40_100_fix = [a_100_40_100 zeros(1,MaxTimes1-length(a_100_40_100))]; 
+a_100_60_100_fix = [a_100_60_100 zeros(1,MaxTimes1-length(a_100_60_100))]; 
+a_100_80_100_fix = [a_100_80_100 zeros(1,MaxTimes1-length(a_100_80_100))]; 
+a_100_20_300_fix = [a_100_20_300 zeros(1,MaxTimes1-length(a_100_20_300))]; 
+a_100_40_300_fix = [a_100_40_300 zeros(1,MaxTimes1-length(a_100_40_300))]; 
+a_100_60_300_fix = [a_100_60_300 zeros(1,MaxTimes1-length(a_100_60_300))];  
+a_100_80_300_fix = [a_100_80_300 zeros(1,MaxTimes1-length(a_100_80_300))]; 
+a_100_20_500_fix = [a_100_20_500 zeros(1,MaxTimes1-length(a_100_20_500))]; 
+a_100_40_500_fix = [a_100_40_500 zeros(1,MaxTimes1-length(a_100_40_500))];
+a_100_60_500_fix = [a_100_60_500 zeros(1,MaxTimes1-length(a_100_60_500))];
+a_100_80_500_fix = [a_100_80_500 zeros(1,MaxTimes1-length(a_100_80_500))];
+figure(2)
+plot(interationtimes,a_50_10_100_fix,'g-o');  
+hold on;  xlabel('迭代的次数'), ylabel('需要重播的比例');
+plot(interationtimes,a_50_20_100_fix,'b--o');
+plot(interationtimes,a_50_30_100_fix,'m-.o');
+plot(interationtimes,a_50_10_300_fix,'g-*');
+plot(interationtimes,a_50_20_300_fix,'b--*');
+plot(interationtimes,a_50_30_300_fix,'m-.*');
+plot(interationtimes,a_50_10_500_fix,'g-+');  
+plot(interationtimes,a_50_20_500_fix,'b--+');
+plot(interationtimes,a_50_30_500_fix,'m-.+');
+legend('QD2D=100,QCellular=10','QD2D=100,QCellular=20','QD2D=100,QCellular=30','QD2D=300,QCellular=10','QD2D=300,QCellular=20','QD2D=300,QCellular=30','QD2D=500,QCellular=10','QD2D=500,QCellular=20','QD2D=500,QCellular=30');
+
+
+a_150_30_100_fix = [a_150_30_100 zeros(1,MaxTimes1-length(a_150_30_100))]; 
+a_150_60_100_fix = [a_150_60_100 zeros(1,MaxTimes1-length(a_150_60_100))]; 
+a_150_90_100_fix = [a_150_90_100 zeros(1,MaxTimes1-length(a_150_90_100))]; 
+a_150_120_100_fix = [a_150_120_100 zeros(1,MaxTimes1-length(a_150_120_100))]; 
+a_150_30_300_fix = [a_150_30_300 zeros(1,MaxTimes1-length(a_150_30_300))]; 
+a_150_60_300_fix = [a_150_60_300 zeros(1,MaxTimes1-length(a_150_60_300))]; 
+a_150_90_300_fix = [a_150_90_300 zeros(1,MaxTimes1-length(a_150_90_300))];  
+a_150_120_300_fix = [a_150_120_300 zeros(1,MaxTimes1-length(a_150_120_300))]; 
+a_150_30_500_fix = [a_150_30_500 zeros(1,MaxTimes1-length(a_150_30_500))]; 
+a_150_60_500_fix = [a_150_60_500 zeros(1,MaxTimes1-length(a_150_60_500))];
+a_150_90_500_fix = [a_150_90_500 zeros(1,MaxTimes1-length(a_150_90_500))];
+a_150_120_500_fix = [a_150_120_500 zeros(1,MaxTimes1-length(a_150_120_500))];
+figure(3)
+plot(interationtimes,a_150_60_100_fix,'g-o');  
+hold on;  xlabel('迭代的次数'), ylabel('需要重播的比例');
+plot(interationtimes,a_150_90_100_fix,'b--o');
+plot(interationtimes,a_150_120_100_fix,'m-.o');
+plot(interationtimes,a_150_60_300_fix,'g-*');
+plot(interationtimes,a_150_90_300_fix,'b--*');
+plot(interationtimes,a_150_120_300_fix,'m-.*');
+plot(interationtimes,a_150_60_500_fix,'g-+');  
+plot(interationtimes,a_150_90_500_fix,'b--+');
+plot(interationtimes,a_150_120_500_fix,'m-.+');
+legend('QD2D=100,QCellular=60','QD2D=100,QCellular=90','QD2D=100,QCellular=120','QD2D=300,QCellular=60','QD2D=300,QCellular=90','QD2D=300,QCellular=120','QD2D=500,QCellular=60','QD2D=500,QCellular=90','QD2D=500,QCellular=120');
+
