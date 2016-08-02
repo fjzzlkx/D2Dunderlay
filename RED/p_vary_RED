@@ -5,15 +5,15 @@ clear;
 clc;
 tic;
 r_cell = 300;                           %小区半径
-QD2D = 500;                            %D2D链路对数
-QCellular = 30;                         %cellular link的对数
+QD2D = 300;                            %D2D链路对数
+QCellular = 10;                         %cellular link的对数
 Q = QD2D+QCellular;
-N = 100;                                %资源块个数
+N = 50;                                %资源块个数
 Dmax = 50;                              %D2Dlink最大通信半径
 %p_pool = [0 0.1 0.3 0.5 0.7 0.9];       %阈值
 p_pool =[0.3,0.7];
 w = 2;                                  %广播的倍数
-maxround = 30;                          %最大循环次数      @fjzzlkx
+maxround = 1;                          %最大循环次数      @fjzzlkx
 % Vtrue = zeros(Q);                       %真实干扰图矩阵
 VtrueCellularMat = zeros(QCellular, QCellular+QD2D);
 VtrueD2DMat = zeros(QD2D,QD2D+1);
@@ -181,20 +181,20 @@ for s = 1:length(p_pool)
             end
 
             for i = 1:QD2D
-                if ~isempty(V_RED{i})
-                    for j = 1:length(V_RED{i})
-                        if V_RED{i}(j) == 1
+                if ~isempty(V_RED{i+QCellular})
+                    for j = 1:length(V_RED{i+QCellular})
+                        if V_RED{i+QCellular}(j) == 10000
                             VtrueD2DMat(i,1) = 1;
                         else
-                            VtrueD2DMat(i,V_RED{i}(j) + 1) = 1;
+                            VtrueD2DMat(i,V_RED{i+QCellular}(j) + 1) = 1;
                         end
                     end
                 end
             end
 
-            compareTrue_RED_cellular = (VREDCellularMat == VtrueCellularMat); %比较真实干扰图与协议干扰图的矩阵
-            compareTrue_RED_D2D = (VREDD2DMat == VtrueD2DMat); %比较真实干扰图与协议干扰图的矩阵       
-            Nq = Nq+1;
+            compareTrue_RED_cellular = (VREDCellularMat == VtrueCellularMat); %比较真实干扰图与协议干扰图的矩阵 
+            compareTrue_RED_D2D = (VREDD2DMat == VtrueD2DMat);%比较真实干扰图与协议干扰图的矩阵
+            Nq = Nq+1
         end
         Nq_pool{s} = [Nq_pool{s} Nq];    %第round次循环时候得到的Nq
         Nqavg_pool{s} = [Nqavg_pool{s} mean(Nq_pool{s})];
