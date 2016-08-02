@@ -120,11 +120,11 @@ for s = 1:length(p_pool)
             flagTR = zeros(1,Q);            %存放发送message的link发射端
             link_tpyes = [ones(1,QCellular),zeros(1,QD2D)];  %标记链接的类型
             cellular_link_type = find(link_tpyes==1);
-            D2D_link_tpye = find(link_tpyes==0);
+            D2D_link_type = find(link_tpyes==0);
 
             link = find(Rand > p);     %存放大于p的link
             cellular_link = intersect(cellular_link_type,link);%存放大于p的celluar link
-
+            D2D_link = intersect(D2D_link_type,link);%存放大于p的D2D link
             flagTR(link) = 1;               %不发送message为0
             RU = zeros(1,Q);           %行向量,每条flag=1链路的资源分配情况
             for i = 1:length(link)
@@ -143,13 +143,30 @@ for s = 1:length(p_pool)
                 end
             end
 
-            for i = 1:Q
+            for i = 1:QCellular
                 if ~isempty(V_nbor_RU{i})
                     b = tabulate(V_nbor_RU{i});   %统计分配不同资源块的个数
                     c = b(find(b(:,2)==1),1);     %出现一次资源块标号（可能有0，即没分配）
-                    cb = setdiff(c,0);            %出现一次资源块标号，列向量
+                    cb = setdiff(c,0);            %出现一次资源块标号，列向量        
                     for j = 1:length(cb)
                         V_RED{i} = [V_RED{i} V_true{i}(find(V_nbor_RU{i}==cb(j)))];
+                    end
+                else V_RED{i} = [];
+                end
+            end
+
+            for i = QCellular+1:Q
+                if ~isempty(V_nbor_RU{i})
+                    RUtable = tabulate(V_nbor_RU{i});   %统计分配不同资源块的个数
+                    RU_one_time_include0 = RUtable(find(RUtable(:,2)==1),1);     %出现一次资源块标号（可能有0，即没分配）
+                    RU_one_time = setdiff(RU_one_time_include0,0);            %出现一次资源块标号，列向量 
+                    RU_one_time_cellular_link = intersect(RU_one_time,RU(cellular_link));%出现一次资源的D2D部分
+                    RU_one_time_D2D_link = intersect(RU_one_time,RU(D2D_link)); %出现一次资源的D2D部分
+                    if intersect(RU_one_time_D2D_link,RU(i))>0
+                        V_RED{i} = [V_RED{i} 10000];
+                    end
+                    for j = 1:length(RU_one_time_D2D_link)
+                        V_RED{i} = [V_RED{i} (find(V_nbor_RU{i}==RU_one_time_D2D_link(j)))];
                     end
                 else V_RED{i} = [];
                 end
@@ -167,9 +184,9 @@ for s = 1:length(p_pool)
                 if ~isempty(V_RED{i})
                     for j = 1:length(V_RED{i})
                         if V_RED{i}(j) == 1
-                            V(i,1) = 1;
+                            VtrueD2DMat(i,1) = 1;
                         else
-                            V(i,V_RED{i}(j) - QCellular + 1) = 1;
+                            VtrueD2DMat(i,V_RED{i}(j) + 1) = 1;
                         end
                     end
                 end
