@@ -1,0 +1,188 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%            RED协议   改变阈值p           %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+clear;
+clc;
+tic;
+r_cell = 300;                           %小区半径
+QD2D = 500;                            %D2D链路对数
+QCellular = 30;                         %cellular link的对数
+Q = QD2D+QCellular;
+N = 100;                                %资源块个数
+Dmax = 50;                              %D2Dlink最大通信半径
+%p_pool = [0 0.1 0.3 0.5 0.7 0.9];       %阈值
+p_pool =[0.3,0.7];
+w = 2;                                  %广播的倍数
+maxround = 30;                          %最大循环次数      @fjzzlkx
+% Vtrue = zeros(Q);                       %真实干扰图矩阵
+VtrueCellularMat = zeros(QCellular, QCellular+QD2D);
+VtrueD2DMat = zeros(QD2D,QD2D+1);
+V_true = cell(Q,1);                     %真实干扰图
+
+%%%%---------       cellular link在整个小区内均匀分布       ---------%%%%%
+cellular_loc = unifrnd(-r_cell,r_cell,QCellular,2);    %小区内每个D2D链路的位置
+for i = 1:QCellular
+    while cellular_loc(i,1)*cellular_loc(i,1)+cellular_loc(i,2)*cellular_loc(i,2) > r_cell*r_cell   %如果随机生成的发射端在圆之外，就继续生成，直到在圆之内为止
+        cellular_loc(i,1)= rand(1)*2*r_cell-r_cell;
+        cellular_loc(i,2)= rand(1)*2*r_cell-r_cell;
+    end
+end
+Dcellular = sqrt(sum(cellular_loc.^2,2));      %发射端与接收端距离
+d_broadcast = zeros(Q,1);   %存放所有的广播半径
+
+for i = 1:QCellular         %存放蜂窝的广播半径
+    d_broadcast(i) = Dcellular(i)*2;
+end
+
+%%%%-----------------D2D连接实在圆形区域内均匀分布-------------------%%%%
+D2D_loc = unifrnd(-r_cell,r_cell,QD2D,2);    %小区内每个D2D链路的位置
+for i = 1:QD2D
+    while D2D_loc(i,1)*D2D_loc(i,1)+D2D_loc(i,2)*D2D_loc(i,2) > r_cell*r_cell   %如果随机生成的发射端在圆之外，就继续生成，直到在圆之内为止
+        D2D_loc(i,1)= rand(1)*2*r_cell-r_cell;
+        D2D_loc(i,2)= rand(1)*2*r_cell-  r_cell;
+    end
+end
+DD2D = unifrnd(1,Dmax,QD2D,1);         %发射端与接收端距离
+AD2D = unifrnd(0,2*pi,QD2D,1);         %极坐标角度在0到2pi之间
+
+for i = 1:QD2D                      %存放D2D链接的广播半径
+    d_broadcast(i+QCellular) = DD2D(i)*2;
+end
+
+X_Yr=zeros(QD2D,2);     %接收端坐标
+for i = 1:QD2D         
+    X_Yr(i,1)=D2D_loc(i,1)+DD2D(i)*cos( AD2D(i));
+    X_Yr(i,2)=D2D_loc(i,2)+DD2D(i)*sin( AD2D(i));
+end
+
+%-------------------       构建真实干扰图       -------------------%   
+for i = 1:Q      %初始化Vtrue
+    V_true{i} = [];
+end
+
+%类型1：cellular之间
+%所有的蜂窝链接都是相邻的
+for i = 1:QCellular
+    for j = 1:QCellular
+        if i~=j
+            V_true{i} = [V_true{i} j];
+            VtrueCellularMat(i,j) = 1;
+        end
+    end
+end
+
+%类型2：D2D受到cellular干扰
+for i = 1:QCellular
+    for j = QCellular+1:Q
+        if (cellular_loc(i,1)-X_Yr(j-QCellular,1))^2+(cellular_loc(i,2)-X_Yr(j-QCellular,2))^2<(d_broadcast(i))^2 &&i~=j
+            V_true{i} = [V_true{i} j];
+            VtrueCellularMat(i,j) = 1;
+        end
+    end
+end
+
+%类型3：celllular受到D2D之间
+
+for i = QCellular+1:Q          
+    if D2D_loc(i-QCellular,1)+D2D_loc(i-QCellular,2)^2 < (d_broadcast(i))^2 && i~=j
+        V_true{i} = [V_true{i} 10000]; %用一个特殊的数字表示基站
+        VtrueD2DMat(i-QCellular,1) = 1;
+    end
+end
+
+%类型4：D2D之间
+for i = QCellular+1:Q
+    for j = QCellular+1:Q
+        if (D2D_loc(i-QCellular,1)-X_Yr(j-QCellular,1))^2+(D2D_loc(i-QCellular,2)-X_Yr(j-QCellular,2))^2<(d_broadcast(i))^2 &&i~=j
+            V_true{i} = [V_true{i} j];
+            VtrueD2DMat(i-QCellular,i-QCellular+1) = 1;
+        end
+    end
+end
+
+%%%%%%%%%%%%%%%%%%%%%%           RED协议部分          %%%%%%%%%%%%%%%%%%%%%%
+Nq_pool = cell(length(p_pool),1);     %存放迭代次数
+Nqavg_pool = cell(length(p_pool),1);  %存放前round次循环Nq的平均值
+
+for s = 1:length(p_pool)
+    for round = 1:maxround
+        p = p_pool(s);
+        VREDCellularMat = zeros(QCellular, QCellular+QD2D);
+        VREDD2DMat = zeros(QD2D,QD2D+1);            %RED干扰图矩阵，初始化全零
+        compareTrue_RED_cellular = (VREDCellularMat == VtrueCellularMat); %比较真实干扰图与协议干扰图的矩阵
+        compareTrue_RED_D2D = (VREDD2DMat == VtrueD2DMat); %比较真实干扰图与协议干扰图的矩阵
+        V_RED = cell(Q,1);      %RED干扰图
+        Nq = 0;
+        while (sum((sum(compareTrue_RED_cellular))') ~= QCellular * Q && sum((sum(compareTrue_RED_D2D))') ~= QD2D * (QD2D + 1))
+
+            %-------------------------      stage1      --------------------------%
+            Rand = rand(1,Q);
+            flagTR = zeros(1,Q);            %存放发送message的link发射端
+            link_tpyes = [ones(1,QCellular),zeros(1,QD2D)];  %标记链接的类型
+            cellular_link_type = find(link_tpyes==1);
+            D2D_link_tpye = find(link_tpyes==0);
+
+            link = find(Rand > p);     %存放大于p的link
+            cellular_link = intersect(cellular_link_type,link);%存放大于p的celluar link
+
+            flagTR(link) = 1;               %不发送message为0
+            RU = zeros(1,Q);           %行向量,每条flag=1链路的资源分配情况
+            for i = 1:length(link)
+                RU(1,link(1,i)) = randint(1,1,[1,N]);
+            end
+            %--------------------         stage2            ----------------------%
+            V_nbor_RU = cell(Q,1);     %存放邻居分配到的RU
+            for i = 1:Q
+                V_nbor_RU{i} = [];
+                for j = 1:length(V_true{i})
+                    if V_true{i}(j)==10000
+                        V_nbor_RU{i} = [V_nbor_RU{i} RU(cellular_link)];
+                    else   
+                        V_nbor_RU{i} = [V_nbor_RU{i} RU(V_true{i}(j))];
+                    end   
+                end
+            end
+
+            for i = 1:Q
+                if ~isempty(V_nbor_RU{i})
+                    b = tabulate(V_nbor_RU{i});   %统计分配不同资源块的个数
+                    c = b(find(b(:,2)==1),1);     %出现一次资源块标号（可能有0，即没分配）
+                    cb = setdiff(c,0);            %出现一次资源块标号，列向量
+                    for j = 1:length(cb)
+                        V_RED{i} = [V_RED{i} V_true{i}(find(V_nbor_RU{i}==cb(j)))];
+                    end
+                else V_RED{i} = [];
+                end
+            end
+
+            for i = 1:QCellular
+                if ~isempty(V_RED{i})
+                    for j = 1:length(V_RED{i})
+                        VREDCellularMat(i,V_RED{i}(j)) = 1;
+                    end
+                end
+            end
+
+            for i = 1:QD2D
+                if ~isempty(V_RED{i})
+                    for j = 1:length(V_RED{i})
+                        if V_RED{i}(j) == 1
+                            V(i,1) = 1;
+                        else
+                            V(i,V_RED{i}(j) - QCellular + 1) = 1;
+                        end
+                    end
+                end
+            end
+
+            compareTrue_RED_cellular = (VREDCellularMat == VtrueCellularMat); %比较真实干扰图与协议干扰图的矩阵
+            compareTrue_RED_D2D = (VREDD2DMat == VtrueD2DMat); %比较真实干扰图与协议干扰图的矩阵       
+            Nq = Nq+1;
+        end
+        Nq_pool{s} = [Nq_pool{s} Nq];    %第round次循环时候得到的Nq
+        Nqavg_pool{s} = [Nqavg_pool{s} mean(Nq_pool{s})];
+    end
+end
+save(mfilename,'Nqavg_pool');
+
+toc;
