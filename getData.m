@@ -61,22 +61,7 @@ a_50_10_500_fix = [a_50_10_500 zeros(MaxTimes1-length(a_50_10_500),1)];
 a_50_20_500_fix = [a_50_20_500 zeros(MaxTimes1-length(a_50_20_500),1)];
 a_50_30_500_fix = [a_50_30_500 zeros(MaxTimes1-length(a_50_30_500),1)];
 a_50_40_500_fix = [a_50_40_500 zeros(MaxTimes1-length(a_50_40_500),1)];
-
-a_50_10_100_fix = [a_50_10_100 zeros(MaxTimes1-length(a_50_10_100),1)]; 
-a_50_20_100_fix = [a_50_20_100 zeros(MaxTimes1-length(a_50_20_100),1)]; 
-a_50_30_100_fix = [a_50_30_100 zeros(MaxTimes1-length(a_50_30_100),1)]; 
-a_50_40_100_fix = [a_50_40_100 zeros(MaxTimes1-length(a_50_40_100),1)]; 
-
-a_50_10_300_fix = [a_50_10_300 zeros(MaxTimes1-length(a_50_10_300),1)]; 
-a_50_20_300_fix = [a_50_20_300 zeros(MaxTimes1-length(a_50_20_300),1)]; 
-a_50_30_300_fix = [a_50_30_300 zeros(MaxTimes1-length(a_50_30_300),1)];  
-a_50_40_300_fix = [a_50_40_300 zeros(MaxTimes1-length(a_50_40_300),1)]; 
-
-a_50_10_500_fix = [a_50_10_500 zeros(MaxTimes1-length(a_50_10_500),1)]; 
-a_50_20_500_fix = [a_50_20_500 zeros(MaxTimes1-length(a_50_20_500),1)];
-a_50_30_500_fix = [a_50_30_500 zeros(MaxTimes1-length(a_50_30_500),1)];
-a_50_40_500_fix = [a_50_40_500 zeros(MaxTimes1-length(a_50_40_500),1)];
-
+figure(1)
 plot(interationtimes,a_50_10_100_fix,'-o');  hold on;  xlabel('迭代的次数')，ylabel('需要重播的比例');
 plot(interationtimes,a_50_20_100_fix,':.o');
 plot(interationtimes,a_50_30_100_fix,':o');
