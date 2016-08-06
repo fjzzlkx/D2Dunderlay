@@ -153,25 +153,39 @@ for s = 1:length(p_pool)
             for i = 1:QCellular
                 if ~isempty(V_RED{i})
                     for j = 1:length(V_RED{i})
-                        VREDCellularMat(i,V_RED{i}(j)) = 1;
-                    end
+                end
+              end
+            %part3部分
+            VRED_BS_expansion = cell(QD2D,1);
+            V_nbor_RU_part3 = cell(QD2D,1);     %存放邻居分配到的RU
+            RU10000 = RU(cellular_link);
+            for i = 1:QD2D
+                V_nbor_RU_part3{i} = [];
+                for j = 1:length(V_true{i+QCellular})
+                    if V_true{i}(j)==10000 
+                        V_nbor_RU_part3{i} = [V_nbor_RU_part3{i} RU10000];
+                    else
+                        V_nbor_RU_part3{i} = [V_nbor_RU_part1and2{i} RU(V_true{i}(j))]; 
                 end
             end
-            %part3部分
-            V_nbor_RU_part3 = cell(QD2D,1);     %存放邻居分配到的RU
-            for i = QCellular+1:Q
-                if ~isempty(V_nbor_RU{i})
-                    RUtable = tabulate(V_nbor_RU{i});   %统计分配不同资源块的个数
+            V_true_BS_expansion = cell(QD2D,1);
+            for i = 1:QD2D
+                V_true_BS_expansion{i} = [];
+                if intersect(V_true{i+QCellular},10000) == 10000
+                    V_true_BS_expansion{i} = [cellular_link,V_true{i+QCellular}(2:lengthV_true{i+QCellular})];
+                else
+                    V_true_BS_expansion{i} = V_true{i+QCellular};
+                end
+            end
+            for i = 1:QD2D
+                if ~isempty(V_nbor_RU_part3{i})
+                    RUtable = tabulate(V_nbor_RU_part3);   %统计分配不同资源块的个数
                     RU_one_time_include0 = RUtable(find(RUtable(:,2)==1),1);     %出现一次资源块标号（可能有0，即没分配）
                     RU_one_time = setdiff(RU_one_time_include0,0);            %出现一次资源块标号，列向量
                     for j = 1:length(RU_one_time) %找出附近的D2D link
-                        if(find(RU)==RU_one_time(j)>QCellular)
-                            nb_link_include_cellular = V_true{i}(find(V_nbor_RU{i}==RU_one_time(j)));
-                            nb_link_D2D = intersect(nb_link_include_cellular,D2D_link_type);
-                            V_RED{i} = [V_RED{i} nb_link_D2D];
-                        end
+                        VRED_BS_expansion{i} = [VRED_BS_expansion{i} V_true_BS_expansion{i}(find(V_nbor_RU{i}==RU_one_time(j)));
                     end 
-                else V_RED{i} = [];
+                else VRED_BS_expansion{i} = [];
                 end
             end
             %part4部分D2D之间
