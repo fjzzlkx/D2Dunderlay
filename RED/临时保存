@@ -120,7 +120,6 @@ for s = 1:length(p_pool)
             link_tpyes = [ones(1,QCellular),zeros(1,QD2D)];  %标记链接的类型
             cellular_link_type = find(link_tpyes==1);
             D2D_link_type = find(link_tpyes==0);
-
             link = find(Rand > p);     %存放大于p的link
             cellular_link = intersect(cellular_link_type,link);%存放大于p的celluar link
             D2D_link = intersect(D2D_link_type,link);%存放大于p的D2D link
@@ -130,6 +129,7 @@ for s = 1:length(p_pool)
                 RU(1,link(1,i)) = randint(1,1,[1,N]);
             end
             %--------------------         stage2            ----------------------%
+
             %part1 ,part2部分
             V_nbor_RU_part1and2 = cell(QCellular,1);     %存放邻居分配到的RU
             for i = 1:QCellular
@@ -138,13 +138,14 @@ for s = 1:length(p_pool)
                     V_nbor_RU_part1and2{i} = [V_nbor_RU_part1and2{i} RU(V_true{i}(j))];  
                 end
             end
+
             for i = 1:QCellular
                 if ~isempty(V_nbor_RU_part1and2{i})
                     RUtable = tabulate(V_nbor_RU_part1and2{i});   %统计分配不同资源块的个数
                     RU_one_time_include0 = RUtable(find(RUtable(:,2)==1),1);     %出现一次资源块标号（可能有0，即没分配）
                     RU_one_time = setdiff(RU_one_time_include0,0);            %出现一次资源块标号，列向量
-                    for j = 1:length(V_nbor_RU_part1and2{i})
-                        V_RED{i} = [V_RED{i} V_true{i}(find(V_nbor_RU_part1and2{i}==V_nbor_RU_part1and2{i}(j)))];
+                    for j = 1:length(RU_one_time)
+                        V_RED{i} = [V_RED{i} V_true{i}(find(V_nbor_RU_part1and2{i}==RU_one_time(j)))];
                     end
                 else V_RED{i} = [];
                 end
@@ -153,81 +154,70 @@ for s = 1:length(p_pool)
             for i = 1:QCellular
                 if ~isempty(V_RED{i})
                     for j = 1:length(V_RED{i})
-                end
-              end
-            %part3部分
-            VRED_BS_expansion = cell(QD2D,1);
-            V_nbor_RU_part3 = cell(QD2D,1);     %存放邻居分配到的RU
-            RU10000 = RU(cellular_link);
-            for i = 1:QD2D
-                V_nbor_RU_part3{i} = [];
-                for j = 1:length(V_true{i+QCellular})
-                    if V_true{i}(j)==10000 
-                        V_nbor_RU_part3{i} = [V_nbor_RU_part3{i} RU10000];
-                    else
-                        V_nbor_RU_part3{i} = [V_nbor_RU_part1and2{i} RU(V_true{i}(j))]; 
+                         VREDCellularMat(i,V_RED{i}(j)) = 1;
+                    end
                 end
             end
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%这部分没有问题%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            %part3,4部分
+            %把基站进行展开
             V_true_BS_expansion = cell(QD2D,1);
             for i = 1:QD2D
                 V_true_BS_expansion{i} = [];
                 if intersect(V_true{i+QCellular},10000) == 10000
-                    V_true_BS_expansion{i} = [cellular_link,V_true{i+QCellular}(2:lengthV_true{i+QCellular})];
+                    V_true_BS_expansion{i} = [cellular_link,V_true{i+QCellular}(2:length(V_true{i+QCellular}))];
                 else
                     V_true_BS_expansion{i} = V_true{i+QCellular};
                 end
             end
+            V_nbor_RU_part3and4 = cell(QD2D,1);     %存放邻居分配到的RU
             for i = 1:QD2D
-                if ~isempty(V_nbor_RU_part3{i})
-                    RUtable = tabulate(V_nbor_RU_part3);   %统计分配不同资源块的个数
+                V_nbor_RU_part3and4{i} = [];
+                for j = 1:length(V_true_BS_expansion{i})
+                    V_nbor_RU_part3and4{i} = [V_nbor_RU_part3and4{i} RU(V_true_BS_expansion{i}(j))];  
+                end
+            end
+
+            VRED_BS_expansion = cell(QD2D,1);
+            for i = 1:QD2D
+                if ~isempty(V_nbor_RU_part3and4{i})
+                    RUtable = tabulate(V_nbor_RU_part3and4{i});   %统计分配不同资源块的个数
                     RU_one_time_include0 = RUtable(find(RUtable(:,2)==1),1);     %出现一次资源块标号（可能有0，即没分配）
                     RU_one_time = setdiff(RU_one_time_include0,0);            %出现一次资源块标号，列向量
                     for j = 1:length(RU_one_time) %找出附近的D2D link
-                        VRED_BS_expansion{i} = [VRED_BS_expansion{i} V_true_BS_expansion{i}(find(V_nbor_RU{i}==RU_one_time(j)));
+                        VRED_BS_expansion{i} = [VRED_BS_expansion{i} V_true_BS_expansion{i}(find(V_nbor_RU_part3and4{i}==RU_one_time(j)))];
                     end 
+                    if intersect(RU_one_time,RU(i+QCellular)) == RU(i+QCellular)
+                    	VREDD2DMat(i,1) = 1;
+                    end
                 else VRED_BS_expansion{i} = [];
                 end
-            end
-            %part4部分D2D之间
+                V_RED{i+QCellular} = intersect(VRED_BS_expansion{i},D2D_link);
+                % if flag == 1
+                % 	V_RED{i+QCellular} = [10000,V_RED{i+QCellular}];
+                % end
 
-
-
-
-
-
-
-
-            for i = QCellular+1:Q
-                if ~isempty(V_nbor_RU{i})
-                    RUtable = tabulate(V_nbor_RU{i});   %统计分配不同资源块的个数
-                    RU_one_time_include0 = RUtable(find(RUtable(:,2)==1),1);     %出现一次资源块标号（可能有0，即没分配）
-                    RU_one_time = setdiff(RU_one_time_include0,0);            %出现一次资源块标号，列向量
-                    for j = 1:length(RU_one_time) %找出附近的D2D link
-                        if(find(RU)==RU_one_time(j)>QCellular)
-                            nb_link_include_cellular = V_true{i}(find(V_nbor_RU{i}==RU_one_time(j)));
-                            nb_link_D2D = intersect(nb_link_include_cellular,D2D_link_type);
-                            V_RED{i} = [V_RED{i} nb_link_D2D];
-                        end
-                    end
-                else V_RED{i} = [];
-                end
             end
 
-            for i = 1:QCellular
-                if ~isempty(V_RED{i})
-                    for j = 1:length(V_RED{i})
-                        VREDCellularMat(i,V_RED{i}(j)) = 1;
+            for i = 1:QD2D
+                if ~isempty(V_RED{i+QCellular})
+                    for j = 1:length(V_RED{i+QCellular})
+                        % if  intersect(V_RED{i+QCellular}(j),10000) == 10000
+                        %     VREDD2DMat(i,1) = 1;
+                        % else
+                            VREDD2DMat(i,V_RED{i+QCellular}(j)-QCellular+1) = 1;
+                        % end
                     end
                 end
             end
-
 
             compare_True_RED_cellular = (VREDCellularMat == VtrueCellularMat); %比较真实干扰图与协议干扰图的矩阵 
             compare_True_RED_D2D = (VREDD2DMat == VtrueD2DMat);%比较真实干扰图与协议干扰图的矩阵
+
             Nq = Nq+1
             sum((sum(compare_True_RED_cellular))')
             sum((sum(compare_True_RED_D2D))')
-            sum(compare_True_RED_D2D(:,1))
+            %sum(compare_True_RED_D2D(:,1))
         end
         Nq_pool{s} = [Nq_pool{s} Nq];    %第round次循环时候得到的Nq
         Nqavg_pool{s} = [Nqavg_pool{s} mean(Nq_pool{s})];
