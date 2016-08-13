@@ -4,179 +4,187 @@
 clear;
 clc;
 tic;
-load data_of_link;                   %'D2D_loc','d_broadcast','X_Yr','D','b','arr_frame','lev_frame'
+%load data_of_link;                   %'D2D_loc','d_broadcast','X_Yr','D','b','arr_frame','lev_frame'
 r_cell = 300;                        %小区半径
-QD2D = 700;                          %D2D链路对数
+QD2D = 500;                          %D2D链路对数
 QCellular = 30;                      %cellular链路对数
 N = 50;                              %资源块个数
 M = 2;                               %最大回退延时
 Dmax = 50;                           %D2Dlink最大通信半径
-u_D2D = 200;                         %每秒进入/离开的D2D用户个数
-u_cellular = 20;                     %每秒进入/离开的cellular link用户个数
+u_frame_D2D = 30;                         %每frame进入/离开的D2D用户个数
+u_frame_cellular = 3;                      %每frame进入/离开的cellular link用户个数
 w = 2;
-maxframe = 1200;                     %总帧
-QCellular_arr = maxframe*u_cellular / 100;              %新加入cellular link用户的总个数
-QCellular_lev = QCellular_arr;                          %离开cellular link用户的总个数
-QD2D_arr = maxframe* u_D2D / 100;               %新加入D2D用户的总个数
-QD2D_lev = QD2D_arr;                            %离开D2D用户的总个数
+maxframe = 400;                     %总帧
+
 Q = QD2D + QCellular;
-
-
 V = cell(Q,1);                       %干扰图
-Vtrue = cell(Q,1);                   %真实干扰图(M+1)帧
-Vtrue_1frame = cell(Q,1);                  %真实干扰图1帧
-data_pp = [];                        %存储结果
+Vtrue = cell(Q,1);                  %真实干扰图1帧
+data_pp_M2 = [];                        %存储结果
+
+%%%%%%%%----------          frame=0时候cellular link位置           ----------%%%%%%%%
+cellular_loc = unifrnd(-r_cell,r_cell,QCellular,2);     %小区内每个D2D链路的位置
+for i = 1:QCellular
+    while sum(cellular_loc(i,:).^2) > r_cell*r_cell   %如果随机生成的发射端在圆之外，就继续生成，直到在圆之内为止
+        cellular_loc(i,1)= rand(1)*2*r_cell-r_cell;
+        cellular_loc(i,2)= rand(1)*2*r_cell-r_cell;
+    end
+end
+Dcellular = sqrt(sum(cellular_loc.^2,2));      %发射端与接收端距离
+
+%%%%%%%%----------          frame=0时候D2D link位置           ----------%%%%%%%%
+D2D_loc = unifrnd(-r_cell,r_cell,QD2D,2);    %小区内每个D2D链路的位置
+for i = 1:QD2D
+    while sum(D2D_loc(i,:).^2) > r_cell*r_cell   %如果随机生成的发射端在圆之外，就继续生成，直到在圆之内为止
+        D2D_loc(i,1)= rand(1)*2*r_cell-r_cell;
+        D2D_loc(i,2)= rand(1)*2*r_cell-r_cell;
+    end
+end
+D_D2D = unifrnd(1,Dmax,QD2D,1);      %发射端与接收端距离
+A_D2D = unifrnd(0,2*pi,QD2D,1);      %极坐标角度在0到2pi之间
+
+D = [Dcellular',D_D2D'];
+d_broadcast = D * w;
+
+X_Yr=zeros(QD2D,2);     %接收端坐标
+for i = 1:QD2D
+    X_Yr(i,1)=D2D_loc(i,1)+D(i)*cos( A_D2D(i));
+    X_Yr(i,2)=D2D_loc(i,2)+D(i)*sin( A_D2D(i));
+end
+
+%%%%%%---------          新进入cellular link用户的进入帧，位置            ----------%%%%%%
+
+arr_loc_cellular = unifrnd(-r_cell,r_cell,(u_frame_cellular+1)*(maxframe+1),2); %新用户位置
+for i = 1:(u_frame_cellular+1)*(maxframe+1)
+    while sum(arr_loc_cellular(i,:).^2) > r_cell*r_cell   %如果随机生成的发射端在圆之外，就继续生成，直到在圆之内为止
+        arr_loc_cellular(i,1)= rand(1)*2*r_cell-r_cell;
+        arr_loc_cellular(i,2)= rand(1)*2*r_cell-r_cell;
+    end
+end
+
+%%%%%%---------          新进入D2D用户的进入帧，位置            ----------%%%%%%
+arr_loc_D2D = unifrnd(-r_cell,r_cell,(u_frame_D2D+1)*(maxframe+1),2); %新用户位置
+for i = 1:(u_frame_D2D+1)*(maxframe+1)
+    while sum(arr_loc_D2D(i,:).^2) > r_cell*r_cell   %如果随机生成的发射端在圆之外，就继续生成，直到在圆之内为止
+        arr_loc_D2D(i,1)= rand(1)*2*r_cell-r_cell;
+        arr_loc_D2D(i,2)= rand(1)*2*r_cell-r_cell;
+    end
+end
 
 %%%--------                      变量初始化                     ---------%%%
 d_broadcast_1frame = d_broadcast;
 X_Yr_1frame = X_Yr;
 cellular_loc_1frame = cellular_loc;
 D2D_loc_1frame = D2D_loc;
-slot = 0;
 QD2D_temp = QD2D;
-QD2D_1frame_temp = QD2D;
 QCellular_temp = QCellular;
-QCellular_1frame_temp = QCellular;
 Q_temp = QD2D_temp + QCellular_temp;
-Q_1frame_temp = QD2D_1frame_temp + QCellular_1frame_temp;
-arr_1frame_loc_D2D = arr_loc_D2D;
-arr_1frame_loc_cellular = arr_loc_cellular;
+
+% link_types = [ones(1,QCellular),zeros(1,QD2D)];  %标记链接的类型
+% link_types_1frame = link_types;
+
+d_broadcast_cellular = d_broadcast(1:QCellular);
+d_broadcast_D2D = d_broadcast(QCellular+1:Q);
+d_broadcast_1frame_cellular = d_broadcast_cellular;
+d_broadcast_1frame_D2D = d_broadcast_D2D;
 
 
-link_types = [ones(1,QCellular),zeros(1,QD2D)];  %标记链接的类型
-link_types_1frame = link_types;
-% cellular_link_type = find(link_types==1);
-% D2D_link_tpye = find(link_types==0);
 
 
-while (slot <= maxframe-M-1)
-    %%----------------       每(M+1)帧新进来的cellular link       ----------------%%
-    arrx_cellular = find(arr_frame_cellular > (slot));
-    arry_cellular = find(arr_frame_cellular <= slot+M+1);
-    arr_cellular_temp = intersect(arrx_cellular,arry_cellular);  %当前新加入的link的位置
-    loc_new_cellular = zeros(length(arr_cellular_temp),2);    %n*2的矩阵，坐标为两个值
 
-    if length(arr_cellular_temp) ~= 0
-        for i = 1:length(arr_cellular_temp)
-            loc_new_cellular(i,1) = arr_loc_cellular(arr_cellular_temp(i),1);
-            loc_new_cellular(i,2) = arr_loc_cellular(arr_cellular_temp(i),2);
-        end
-        QCellular_temp = QCellular_temp + length(arr_cellular_temp);
-        loc_cellular_temp = [cellular_loc;loc_new_cellular];
+flag = ones(1,Q);
+count = zeros(1,Q);
 
-        %D_arr = unifrnd(1,Dmax,length(arr_temp),1);
-        D_arr_cellular = sqrt(sum(loc_new_cellular.^2,2));    %cellular link 与基站的距离
-
-        Bro_add_arr_cellular = D_arr_cellular * w;                             %增加link的广播半径
-        d_broadcast = [d_broadcast,Bro_add_arr_cellular'];
-
-        link_types = [link_types,ones(1,length(Bro_add_arr_cellular'))]; %标记增加的类型
-    else
-        loc_cellular_temp = cellular_loc;
-        d_broadcast = d_broadcast;
-        link_types =link_types;
+for slot = 0:maxframe-1
+    %%----------------          每1帧新进来的cellular link         ----------------%%
+    loc_new_cellular = zeros(u_frame_cellular,2);
+    for i = 1:u_frame_cellular
+        loc_new_cellular(i,:) = arr_loc_cellular((slot+1)*u_frame_cellular+i,:);    %n*2的矩阵，坐标为两个值
     end
+    loc_temp_cellular = [D2D_loc_1frame;loc_new_cellular];
+    D_arr_cellular = sqrt(sum(loc_new_cellular.^2,2));    %cellular link 与基站的距离
+    Bro_add_arr_cellular = D_arr_cellular * w;                             %增加link的广播半径
+    d_broadcast_1frame_cellular = [d_broadcast_1frame_cellular,Bro_add_arr_cellular'];
+    % link_types = [link_types,ones(1,length(Bro_add_arr_cellular'))]; %标记增加的类型
 
-    %%----------------       每(M+1)帧新进来的D2Dlink        ----------------%%
-    arrx_D2D = find(arr_frame_D2D > (slot));
-    arry_D2D = find(arr_frame_D2D <= slot+M+1);
-    arr_D2D_temp = intersect(arrx_D2D,arry_D2D);  %当前新加入的link的位置
-    loc_new_D2D = zeros(length(arr_D2D_temp),2);    %n*2的矩阵，坐标为两个值
-    if length(arr_D2D_temp) ~= 0
-        for i = 1:length(arr_D2D_temp)
-            loc_new_D2D(i,1) = arr_loc_D2D(arr_D2D_temp(i),1);
-            loc_new_D2D(i,2) = arr_loc_D2D(arr_D2D_temp(i),2);
-        end
-        QD2D_temp = QD2D_temp + length(arr_D2D_temp);
-        loc_D2D_temp = [D2D_loc;loc_new_D2D];
+    flag = [flag(1:QCellular) ones(1,u_frame_cellular) flag(QCellular+1:Q)];
+    QCellular = QCellular_temp + u_frame_cellular;
+    % flag = [flag ones(1,u_frame_cellular)];
 
-        XYr_arr=zeros(length(arr_D2D_temp),2);                   %新增加link的接收端坐标
-        D_arr_D2D = unifrnd(1,Dmax,length(arr_D2D_temp),1);      %发射端与接收端距离
-        a_arr_D2D = unifrnd(0,2*pi,length(arr_D2D_temp),1);      %极坐标角度在0到2pi之间
-        Bro_add_arr_D2D = D_arr_D2D * w;                         %增加D2D link的广播半径
-        d_broadcast = [d_broadcast,Bro_add_arr_D2D'];
-        link_types = [link_types,zeros(1,length(Bro_add_arr_D2D))]; %标记增加的类型
-
-        for i = 1:length(arr_D2D_temp)
-            XYr_arr(i,1) = loc_new_D2D(i,1)+D_arr_D2D(i)*cos(a_arr_D2D(i));
-            XYr_arr(i,2) = loc_new_D2D(i,2)+D_arr_D2D(i)*sin(a_arr_D2D(i));
-        end
-        XYr_temp = [X_Yr;XYr_arr];    %接收端坐标
-    else
-        XYr_temp = X_Yr;
-        loc_D2D_temp = D2D_loc;
-        d_broadcast = d_broadcast;
-        link_types =link_types;
+    %%----------------          每1帧新进来的D2D link         ----------------%%
+    loc_new_D2D = zeros(u_frame_D2D,2);
+    for i = 1:u_frame_D2D
+        loc_new_D2D(i,:) = arr_loc_D2D((slot+1)*u_frame_D2D+i,:);    %n*2的矩阵，坐标为两个值
     end
+    loc_temp_D2D = [D2D_loc_1frame;loc_new_D2D];
 
-    %%-----------           每(M+1)帧离开的cellular link          ----------------%%
-    levx_cellular = find(lev_frame_cellular > (slot));
-    levy_cellular = find(lev_frame_cellular <= slot+M+1);
-    lev_num_cellular = length(intersect(levx_cellular,levy_cellular));  %离开cellular link的个数
-    if length(lev_num_cellular) ~= 0
-        lev_link_cellular = randi([1 QCellular_temp],1,lev_num_cellular);
-        tempIndex1 = [];
-        cellular_link = find(link_types == 1);
-        for i = 1:length(lev_link_cellular)
-            %loc_temp(lev_link_cellular(i),:) = [];
-            %XYr_temp(lev_link_cellular(i),:) = [];
-            loc_cellular_temp(lev_link_cellular(i),:) = [];
-            tempIndex1 = [tempIndex1,cellular_link(lev_link_cellular(i))];
-        end
-        d_broadcast(tempIndex1) = [];
-        link_types(tempIndex1) = [];
-        QCellular_true = QCellular_temp - lev_num_cellular;
-        cellular_loc = loc_cellular_temp;
-        d_broadcast = d_broadcast;
-        link_types = link_types;
+    D_arr_D2D = unifrnd(1,Dmax,u_frame_D2D,1);      %发射端与接收端距离
+    A_arr_D2D = unifrnd(0,2*pi,u_frame_D2D,1);      %极坐标角度在0到2pi之间
+    Bro_add_arr_D2D = D_arr_D2D * w;                             %增加link的广播半径
+    d_broadcast_1frame_D2D = [d_broadcast_1frame_D2D,Bro_add_arr_D2D'];
+    % link_types = [link_types,zeros(1,length(Bro_add_arr_D2D))]; %标记增加的类型
 
-    else
-        QCellular_true = QCellular_temp;    %求当下真实干扰图需要更新的变量（4个）
-        cellular_loc = loc_cellular_temp;
-        d_broadcast = d_broadcast;
-        link_types = link_types;
+    XYr_arr_1frame = zeros(u_frame_D2D,2);
+    for i = 1:u_frame_D2D
+        XYr_arr_1frame(i,1) = loc_new_D2D(i,1)+D_arr_D2D(i)*cos(A_arr_D2D(i));
+        XYr_arr_1frame(i,2) = loc_new_D2D(i,2)+D_arr_D2D(i)*sin(A_arr_D2D(i));
     end
-    %%-----------           每(M+1)帧离开的D2D link          ----------------%%
-    levx_D2D = find(lev_frame_D2D > (slot));
-    levy_D2D = find(lev_frame_D2D <= slot+M+1);
-    lev_num_D2D = length(intersect(levx_D2D,levy_D2D));  %离开link的个数
-    if length(lev_num_D2D) ~= 0
-        lev_link_D2D = randi([1 QD2D_temp],1,lev_num_D2D);
-        D2D_link = find(link_types == 0);
-        tempIndex2 =[];
-        for i = 1:length(lev_link_D2D)
-            loc_D2D_temp(lev_link_D2D(i),:) = [];
-            XYr_temp(lev_link_D2D(i),:) = [];
-            tempIndex2 = [tempIndex2,D2D_link(lev_link_D2D(i))];
-        end
-        d_broadcast(tempIndex2) = [];
-        D2D_loc = loc_D2D_temp;
-        X_Yr = XYr_temp;
-        d_broadcast = d_broadcast;
-        QD2D_true = QD2D_temp - lev_num_D2D;
-        link_types = link_types;
-    else
-        QD2D_true = QD2D_temp - lev_num_D2D;    %求当下真实干扰图需要更新的变量（5个）
-        D2D_loc = loc_D2D_temp;
-        X_Yr = XYr_temp;
-        d_broadcast = d_broadcast;
-        link_types = link_types;
+    XYr_temp = [X_Yr_1frame;XYr_arr_1frame];    %接收端坐标
+    QD2D = QD2D_temp + u_frame_D2D;
+    flag = [flag ones(1,u_frame_D2D)];
+
+    Q = QD2D + QCellular;
+
+    %%-----------             每1帧离开的cellular link             ----------------%%
+    lev_num_cellular = u_frame_cellular;
+    all_link_cellular = randperm(QCellular);
+    lev_link_cellular_unsort = all_link_cellular(1:u_frame_cellular);
+    lev_link_cellular = sort(lev_link_cellular_unsort);
+
+    lev_link_cellular_index =[];
+    for i = 1:u_frame_cellular
+        lev_link_cellular_index =[lev_link_cellular_index,lev_link_cellular(u_frame_cellular-i+1)];
     end
+    loc_temp_cellular(lev_link_cellular_index,:) = [];
+    d_broadcast_1frame_cellular(lev_link_cellular_index) = [];
+    % flag(lev_link_cellular_index) =[];
+
+    %%-----------             每1帧离开的D2D link             ----------------%%
+    lev_num_D2D = u_frame_D2D;
+    all_link_D2D = randperm(QD2D);
+    lev_link_D2D_unsort = all_link_D2D(1:u_frame_D2D);
+    lev_link_D2D = sort(lev_link_D2D_unsort);
+
+    lev_link_D2D_index =[];
+    for i = 1:u_frame_D2D
+        lev_link_D2D_index =[lev_link_D2D_index,lev_link_D2D(u_frame_D2D-i+1)];
+    end
+    loc_temp_D2D(lev_link_D2D_index,:) = [];
+    XYr_temp(lev_link_D2D_index,:) = [];
+    d_broadcast_1frame_D2D(lev_link_D2D_index) = [];
+
+    lev_link_flag_index =[lev_link_cellular_index,lev_link_D2D_index + QCellular];
+    flag(lev_link_flag_index) =[];
 
 
+    D2D_loc_1frame = loc_temp_D2D;
+    cellular_loc_1frame = loc_temp_cellular;
+    X_Yr_1frame = XYr_temp;
 
-    %-------------------         构建真实干扰图         -------------------%
-    Q_true = QD2D_true + QCellular_true;
-    for i = 1:Q_true      %初始化Vtrue
+    d_broadcast_1frame = [d_broadcast_1frame_cellular,d_broadcast_1frame_D2D];
+
+    QCellular = QCellular - lev_num_cellular;
+    QD2D = QD2D - lev_num_D2D;
+    Q = QD2D + QCellular;
+
+    %-------------------          构建真实干扰图        -------------------%
+    for i = 1:Q      %初始化Vtrue
         Vtrue{i} = [];
     end
-    d_broadcast_cellular = d_broadcast(find(link_types == 1));
-    d_broadcast_D2D = d_broadcast(find(link_types == 0));
-    d_broadcast_sort = [d_broadcast_cellular,d_broadcast_D2D];
+
     %类型1：cellular之间
     %所有的蜂窝链接都是相邻的
-    for i = 1:QCellular_true
-        for j = 1:QCellular_true
+    for i = 1:QCellular
+        for j = 1:QCellular
             if i~=j
                 Vtrue{i} = [Vtrue{i} j];
             end
@@ -184,9 +192,9 @@ while (slot <= maxframe-M-1)
     end
 
     %类型2：D2D受到cellular干扰
-    for i = 1:QCellular_true
-        for j = QCellular_true+1:Q_true
-            if (cellular_loc(i,1)-X_Yr(j-QCellular_true,1))^2+(cellular_loc(i,2)-X_Yr(j-QCellular_true,2))^2<(d_broadcast_sort(i))^2 &&i~=j
+    for i = 1:QCellular
+        for j = QCellular+1:Q
+            if (cellular_loc(i,1)-X_Yr(j-QCellular,1))^2+(cellular_loc(i,2)-X_Yr(j-QCellular,2))^2<(d_broadcast(i))^2 &&i~=j
                 Vtrue{i} = [Vtrue{i} j];
             end
         end
@@ -194,206 +202,208 @@ while (slot <= maxframe-M-1)
 
     %类型3：celllular受到D2D之间
 
-    for i = QCellular_true+1:Q_true
-        if D2D_loc(i-QCellular_true,1)+D2D_loc(i-QCellular_true,2)^2 < (d_broadcast_sort(i))^2 && i~=j
+    for i = QCellular+1:Q
+        if D2D_loc(i-QCellular,1)+D2D_loc(i-QCellular,2)^2 < (d_broadcast(i))^2 && i~=j
             Vtrue{i} = [Vtrue{i} 10000]; %用一个特殊的数字表示基站
         end
     end
 
     %类型4：D2D之间
-    for i = QCellular_true+1:Q_true
-        for j = QCellular_true+1:Q_true
-            if (D2D_loc(i-QCellular_true,1)-X_Yr(j-QCellular_true,1))^2+(D2D_loc(i-QCellular_true,2)-X_Yr(j-QCellular_true,2))^2<(d_broadcast_sort(i))^2 &&i~=j
+    for i = QCellular+1:Q
+        for j = QCellular+1:Q
+            if (D2D_loc(i-QCellular,1)-X_Yr(j-QCellular,1))^2+(D2D_loc(i-QCellular,2)-X_Yr(j-QCellular,2))^2<(d_broadcast(i))^2 &&i~=j
                 Vtrue{i} = [Vtrue{i} j];
             end
         end
     end
-    num_true = 0;     %真实干扰边的个数
-    for i = 1:Q_true
+    %--------------     统计边数      --------------%
+    num_true = 0;
+    for i = 1 : Q
         num_true = num_true + length(Vtrue{i});
     end
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%     stage1     %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    link_tpyes = [ones(1,QCellular),zeros(1,QD2D)];  %标记链接的类型
+    cellular_link_type = find(link_tpyes==1);
+    D2D_link_tpye = find(link_tpyes==0);
 
-    %%----------------          每1帧新进来的 cellular link         ----------------%%
-    arrx_1frame_cellular = find(arr_frame_cellular > (slot));
-    arry_1frame_cellular = find(arr_frame_cellular <= slot+1);
-    arr_1frame_cellular_temp = intersect(arrx_1frame_cellular,arry_1frame_cellular);  %当前新加入的link的位置
-    loc_new_1frame_cellular = zeros(length(arr_1frame_cellular_temp),2);    %n*2的矩阵，坐标为两个值
-
-    if length(arr_1frame_cellular_temp) ~= 0
-        for i = 1:length(arr_1frame_cellular_temp)
-            loc_new_1frame_cellular(i,1) = arr_1frame_loc_cellular(arr_1frame_cellular_temp(i),1);
-            loc_new_1frame_cellular(i,2) = arr_1frame_loc_cellular(arr_1frame_cellular_temp(i),2);
-        end
-        QCellular_1frame_temp = QCellular_1frame_temp + length(arr_1frame_cellular_temp);
-        loc_cellular_1frame_temp = [cellular_loc_1frame;loc_new_1frame_cellular];
-
-        %D_arr = unifrnd(1,Dmax,length(arr_temp),1);
-        D_arr_1frame_cellular = sqrt(sum(arr_1frame_cellular_temp.^2,2));    %cellular link 与基站的距离
-        Bro_add_arr_1frame_cellular = D_arr_1frame_cellular * w;                             %增加link的广播半径
-        d_broadcast_1frame = [d_broadcast_1frame,Bro_add_arr_1frame_cellular'];
-        link_types_1frame = [link_types_1frame,ones(1,length(Bro_add_arr_1frame_cellular))]; %标记增加的类型
-    else
-        loc_cellular_1frame_temp = cellular_loc_1frame;
-        d_broadcast_1frame = d_broadcast_1frame;
-        link_types_1frame =link_types_1frame;
+    %-------   初始化V_nbor(每个D2D链路广播范围内的其他D2D链路)   -------%
+    V_nbor_all = Vtrue; %V_nbor用于存放每个D2D链路能收到广播范围内的【所有】D2Dlink
+    V_nbor = cell(Q,1); %V_nbor用于存放每个D2D链路能收到广播范围内的D2Dlink（不断变化）
+    for i =1:Q
+        V_nbor{i} = V_nbor_all{i};
     end
-    %%----------------       每1帧新进来的D2Dlink        ----------------%%
-    arrx_1frame_D2D = find(arr_frame_D2D > (slot));
-    arry_1frame_D2D = find(arr_frame_D2D <= slot+1);
-    arr_1frame_D2D_temp = intersect(arrx_1frame_D2D,arry_1frame_D2D);  %当前新加入的link的位置
-    loc_new_1frame_D2D = zeros(length(arr_1frame_D2D_temp),2);    %n*2的矩阵，坐标为两个值
-    if length(arr_1frame_D2D_temp) ~= 0
-        for i = 1:length(arr_1frame_D2D_temp)
-            loc_new_1frame_D2D(i,1) = arr_1frame_loc_D2D(arr_1frame_D2D_temp(i),1);
-            loc_new_1frame_D2D(i,2) = arr_1frame_loc_D2D(arr_1frame_D2D_temp(i),2);
-        end
-        QD2D_1frame_temp = QD2D_1frame_temp + length(arr_1frame_D2D_temp);
-        loc_D2D_1frame_temp = [D2D_loc_1frame;loc_new_1frame_D2D];
+    link = find(flag==1);   %flag = 1的link,行向量
 
-        XYr_arr_1frame = zeros(length(arr_1frame_D2D_temp),2);                   %新增加link的接收端坐标
-        D_arr_1frame_D2D = unifrnd(1,Dmax,length(arr_1frame_D2D_temp),1);      %发射端与接收端距离
-        a_arr_1frame_D2D = unifrnd(0,2*pi,length(arr_1frame_D2D_temp),1);      %极坐标角度在0到2pi之间
-        Bro_add_arr_1frame_D2D = D_arr_1frame_D2D * w;                         %增加D2D link的广播半径
-        d_broadcast_1frame = [d_broadcast_1frame,Bro_add_arr_1frame_D2D'];
-        link_types_1frame = [link_types_1frame,zeros(1,length(Bro_add_arr_1frame_D2D))]; %标记增加的类型
+    cellular_link = intersect(cellular_link_type,link);
 
-        for i = 1:length(arr_1frame_D2D_temp)
-            XYr_arr_1frame(i,1) = loc_new_1frame_D2D(i,1)+D_arr_1frame_D2D(i)*cos(a_arr_1frame_D2D(i));
-            XYr_arr_1frame(i,2) = loc_new_1frame_D2D(i,2)+D_arr_1frame_D2D(i)*sin(a_arr_1frame_D2D(i));
-        end
-        XYr_1frame_temp = [X_Yr_1frame;XYr_arr_1frame];    %接收端坐标
-    else
-        XYr_1frame_temp = X_Yr_1frame;
-        loc_D2D_1frame_temp = D2D_loc_1frame;
-        d_broadcast_1frame = d_broadcast_1frame;
-        link_types_1frame = link_types_1frame;
-    end
-    %%-----------           每1帧离开的cellular link          ----------------%%
-    levx_1frame_cellular = find(lev_frame_cellular >= (slot));
-    levy_1frame_cellular = find(lev_frame_cellular <= slot+1);
-    lev_num_1frame_cellular = length(intersect(levx_1frame_cellular,levy_1frame_cellular));  %离开cellular link的个数
-    if length(lev_num_1frame_cellular) ~= 0
-        lev_link_1frame_cellular = randi([1 QCellular_1frame_temp],1,lev_num_1frame_cellular);
-        tempIndex1_1frame = [];
-        cellular_link_1frame = find(link_types_1frame == 1);
-        for i = 1:length(lev_link_1frame_cellular)
-            %loc_temp(lev_link_cellular(i),:) = [];
-            %XYr_temp(lev_link_cellular(i),:) = [];
-            loc_cellular_1frame_temp(lev_link_1frame_cellular(i),:) = [];
-            tempIndex1_1frame = [tempIndex1_1frame,cellular_link_1frame(lev_link_1frame_cellular(i))];
-        end
-        d_broadcast_1frame(tempIndex1_1frame) = [];
-        link_types_1frame(tempIndex1_1frame) = [];
-        cellular_loc_1frame = loc_cellular_1frame_temp;
-        d_broadcast_1frame = d_broadcast_1frame;
-        QCellular_1frame_true = QCellular_1frame_temp - lev_num_1frame_cellular;
-        link_types_1frame = link_types_1frame;
-
-    else
-        QCellular_1frame_true = QCellular_1frame_temp;    %求当下真实干扰图需要更新的变量（4个）
-        cellular_loc_1frame = loc_cellular_1frame_temp;
-        d_broadcast_1frame = d_broadcast_1frame;
-        link_types_1frame = link_types_1frame;
-    end
-    %%-----------           每1帧离开的D2D link          ----------------%%
-    levx_1frame_D2D = find(lev_frame_D2D >= (slot));
-    levy_1frame_D2D = find(lev_frame_D2D <= slot+1);
-    lev_num_1frame_D2D = length(intersect(levx_1frame_D2D,levy_1frame_D2D));  %离开link的个数
-    if length(lev_num_1frame_D2D) ~= 0
-        lev_link_1frame_D2D = randi([1 QD2D_temp],1,lev_num_1frame_D2D);
-        D2D_link_1frame = find(link_types_1frame == 0);
-        tempIndex2_1frame =[];
-        for i = 1:length(lev_link_1frame_D2D)
-            loc_D2D_1frame_temp(lev_link_1frame_D2D(i),:) = [];
-            XYr_1frame_temp(lev_link_1frame_D2D(i),:) = [];
-            tempIndex2_1frame = [tempIndex2_1frame,D2D_link_1frame(lev_link_1frame_D2D(i))];
-        end
-        d_broadcast_1frame(tempIndex2_1frame) = [];
-        D2D_loc_1frame = loc_D2D_1frame_temp;
-        X_Yr_1frame = XYr_1frame_temp;
-        d_broadcast_1frame = d_broadcast_1frame;
-        QD2D_1frame_true = QD2D_1frame_temp - lev_num_1frame_D2D;
-        link_types_1frame = link_types_1frame;
-    else
-        QD2D_1frame_true = QD2D_1frame_temp - lev_num_1frame_D2D;    %求当下真实干扰图需要更新的变量（5个）
-        D2D_loc_1frame = loc_D2D_1frame_temp;
-        X_Yr_1frame = XYr_1frame_temp;
-        d_broadcast_1frame = d_broadcast_1frame;
-        link_types_1frame = link_types_1frame;
+    %---------------------      分配资源    -----------------------%
+    RU = zeros(1,Q);   %行向量,每条flag=1链路的资源分配情况
+    for i = 1:length(link)
+        RU(1,link(1,i)) = randi([1,N],1,1);
     end
 
-    %-------------------         构建真实干扰图         -------------------%
-    Q_1frame_true = QD2D_1frame_true + QCellular_1frame_true;
-    for i = 1:Q_1frame_true      %初始化Vtrue
-        Vtrue_1frame{i} = [];
-    end
-    d_broadcast_1frame_cellular = d_broadcast_1frame(find(link_types_1frame == 1));
-    d_broadcast_1frame_D2D = d_broadcast_1frame(find(link_types_1frame == 0));
-    d_broadcast_1frame_sort = [d_broadcast_1frame_cellular,d_broadcast_1frame_D2D];
-    %QCellular_1frame = QCellular_1frame_true;
-    %类型1：cellular之间
-    %所有的蜂窝链接都是相邻的
-    for i = 1:QCellular_1frame_true
-        for j = 1:QCellular_1frame_true
-            if i~=j
-                Vtrue_1frame{i} = [Vtrue_1frame{i} j];
+    link0 = find(RU == 0);      %未分配资源的link
+    [Ulink,U1] = cw_stage1(RU,link0); %Ulink为重复的RU的link，U1为重复RU（去0）
+
+    K = setdiff(RU,[U1 0]);     %不重复的RU，为行向量
+                                %setdiff函数为求两个元素的差，相当于 集合K = 集合RU - 集合[U1 0]
+
+    [tf H] = ismember(K,RU);    %H返回不重复RU的link，为行向量，与K同维
+                                %tf返回一个0、1集合，如果元素在RU里面则为1，否则为0
+
+
+    %--------------  求重复的link和RU（邻居范围内的）  -------------%
+    V_nbor_RU = cell(Q,1);      %广播范围内的link所分配的RU
+    for i = 1:Q
+        V_nbor_RU{i} = [];
+        for j = 1:length(V_nbor{i})
+            if V_nbor{i}(j)==10000
+                V_nbor_RU{i} = [V_nbor_RU{i} RU(cellular_link)];
+            else
+                V_nbor_RU{i} = [V_nbor_RU{i} RU(V_nbor{i}(j))];
             end
         end
     end
 
-    %类型2：D2D受到cellular干扰
-    for i = 1:QCellular_1frame_true
-        for j = QCellular_1frame_true+1:Q_1frame_true
-            if (cellular_loc_1frame(i,1)-X_Yr_1frame(j-QCellular_1frame_true,1))^2+(cellular_loc_1frame(i,2)-X_Yr_1frame(j-QCellular_1frame_true,2))^2<(d_broadcast_1frame_sort(i))^2 &&i~=j
-                Vtrue_1frame{i} = [Vtrue_1frame{i} j];
+    U_nbor = cell(Q,1);    %重复的RU,即Uq(供stage2使用)
+    for i = 1:Q
+        if ~isempty(V_nbor_RU{i})
+            b = tabulate(V_nbor_RU{i});
+            c = b(find(b(:,2)>1),1);
+            U_nbor{i} = setdiff(c',0);     %行向量
+        else
+            U_nbor{i} = [];
+        end
+    end
+
+    %----------------        初步构建干扰图       -----------------%
+    V1 = cell(Q,1);
+    for i = 1:Q
+        V1{i} = intersect(V_nbor{i},H);     %查用法是否无误
+    end
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%     stage2     %%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    %----------------------      分配时延    ----------------------%
+    AckDelay = [];
+    AckDelay = unidrnd(M,1,Q);  %给每个D2D链路均分配一个随机回退的延时用于发送ACK协议
+
+    [mk] = cw_stage2(AckDelay);   %mu为被分配多个link的时延,mu_link为对应的link
+    [tf1 mk_link] = ismember(mk,AckDelay);  %mk_link为只分配一个link的时延对应的link
+
+    Ack_nbor_Delay = cell(Q,1);   %邻居分配的时延
+    for i = 1:Q
+        Ack_nbor_Delay{i} = [];   %初始化为空
+        for j = 1:length(V_nbor{i})
+            if V_nbor{i}(j)==10000
+                Ack_nbor_Delay{i} = [Ack_nbor_Delay{i} AckDelay(cellular_link)];
+            else
+                Ack_nbor_Delay{i} = [Ack_nbor_Delay{i} AckDelay(V_nbor{i}(j))];
             end
         end
     end
 
-    %类型3：celllular受到D2D之间
-
-    for i = QCellular_1frame_true+1:Q_1frame_true
-        if D2D_loc_1frame(i-QCellular_1frame_true,1)+D2D_loc_1frame(i-QCellular_1frame_true,2)^2 < (d_broadcast_1frame_sort(i))^2 && i~=j
-            Vtrue_1frame{i} = [Vtrue_1frame{i} 10000]; %用一个特殊的数字表示基站
+    V_Delay_Fenlei = cell(Q,1);   %将一个延时有多个link的归类（cell套cell）
+    for i =1:Q
+        if ~isempty(Ack_nbor_Delay{i})
+            b = tabulate(Ack_nbor_Delay{i});
+            c = b(find(b(:,2)>1),1);
+            c = c';     %行向量
+            ca = cell(length(c),1);
+            for j = 1:length(c)
+                d = [];
+                d = intersect(find(AckDelay == c(j)),V_nbor{i});
+                ca{j} = [c(j) d];
+            end
+            V_Delay_Fenlei{i} = ca;
+        else
+            V_Delay_Fenlei{i} = [];
         end
     end
 
-    %类型4：D2D之间
-    for i = QCellular_1frame_true+1:Q_1frame_true
-        for j = QCellular_1frame_true+1:Q_1frame_true
-            if (D2D_loc_1frame(i-QCellular_1frame_true,1)-X_Yr(j-QCellular_1frame_true,1))^2+(D2D_loc(i-QCellular_1frame_true,2)-X_Yr_1frame(j-QCellular_1frame_true,2))^2<(d_broadcast_1frame_sort(i))^2 &&i~=j
-                Vtrue_1frame{i} = [Vtrue_1frame{i} j];
+    %------------------     相同时延下的ACK    --------------------%
+    V_Delay_Fenlei_U = cell(Q,1);       %同一时延下发送的U的集合（存放RU）（cell套cell）
+    V_Delay_Fenlei_UU = cell(Q,1);      %同一时延下发送的重复的U的集合（cell套cell）
+    V_Delay_Fenlei_Ulink = cell(Q,1);   %同一时延下发送的重复的U的集合的link（cell套cell）
+    V_Delay_Fenlei_uu = cell(Q,1);      %所有重复U的集合
+    V_Delay_Fenlei_ulink = cell(Q,1);   %所有重复U的集合的link
+
+    for i = 1:Q      %V_Delay_Fenlei_U
+        for j = 1:size(V_Delay_Fenlei{i},1)
+            V_Delay_Fenlei_U{i}{j,1} = [];
+            for k = 2:length(V_Delay_Fenlei{i}{j,1})
+                V_Delay_Fenlei_U{i}{j,1} = [V_Delay_Fenlei_U{i}{j,1} U_nbor{(V_Delay_Fenlei{i}{j,1}(k))}];
+            end
+        end     %到此循环，V_Delay_Fenlei_U{i}就得到了
+    end
+
+    for i = 1:Q   %V_Delay_Fenlei_UU
+        for j = 1:size(V_Delay_Fenlei_U{i},1)
+            if ~isempty(V_Delay_Fenlei_U{i}{j})
+                ua = tabulate(V_Delay_Fenlei_U{i}{j,1});
+                ub = ua(find(ua(:,2)>1),1);
+                V_Delay_Fenlei_UU{i}{j,1} = ub';   %行向量
             end
         end
     end
-    num_1frame_true = 0;     %真实干扰边的个数
-    for i = 1:Q_1frame_true
-        num_1frame_true = num_1frame_true + length(Vtrue_1frame{i});
+
+    for i = 1:Q    %V_Delay_Fenlei_Ulink
+        for j = 1:size(V_Delay_Fenlei_UU{i},1)
+            ux = [];     %临时存储link
+            for k = 1:length(V_Delay_Fenlei_UU{i}{j,1})
+                ux = [ux find(RU == V_Delay_Fenlei_UU{i}{j,1}(k))];
+            end
+            V_Delay_Fenlei_Ulink{i}{j,1} = intersect(V_nbor{i},ux);   %可能邻居之外的link也使用同样的RU，故求交集
+        end
     end
 
-    % for i = 1:Q_true1
-    %     Vtrue1{i} = [];
-    %     for j = 1:Q_true1
-    %         if (D2D_loc1(i,1)-X_Yr1(j,1))^2+(D2D_loc1(i,2)-X_Yr1(j,2))^2<(d_broadcast1(i))^2 &&i~=j
-    %             Vtrue1{i} = [Vtrue1{i} j];
-    %         end
-    %     end
-    % end
-    % num_true1 = 0;     %真实干扰边的个数
-    % for i = 1:Q_true_1frame
-    %     num_true1 = num_true1 + length(Vtrue1{i});
-    % end
-    %Q_temp = Q_true;   %不加这句编译就出错!
-    %Q_1frame_temp = Q_true_1frame;
-    QD2D_temp = QD2D_true;
-    QCellular_temp = QCellular_true;
-    QD2D_1frame_temp = QD2D_1frame_true;
-    QCellular_1frame_temp = QCellular_1frame_true;
-    mis_edge = abs(num_1frame_true-num_true);
+    for i = 1:Q   %V_Delay_Fenlei_uu
+        V_Delay_Fenlei_uu{i}= [];
+        for j = 1:size(V_Delay_Fenlei_UU{i},1)
+            V_Delay_Fenlei_uu{i} = [V_Delay_Fenlei_uu{i} V_Delay_Fenlei_UU{i}{j}];  %将UU中的cell变成一个行向量
+        end
+        V_Delay_Fenlei_uu{i} = unique(V_Delay_Fenlei_uu{i});
+    end
+
+    for i = 1:Q   %V_Delay_Fenlei_ulink
+        V_Delay_Fenlei_ulink{i} = [];
+        for j = 1:size(V_Delay_Fenlei_Ulink{i},1)
+            V_Delay_Fenlei_ulink{i} = [V_Delay_Fenlei_ulink{i} V_Delay_Fenlei_Ulink{i}{j}];  %将UU中的cell变成一个行向量
+        end
+        V_Delay_Fenlei_ulink{i} = unique(V_Delay_Fenlei_ulink{i});
+    end
+
+    %-----------------------    更新干扰图   ----------------------%
+    for i = 1:Q
+        V{i} = union(setdiff(V_nbor_all{i},V_Delay_Fenlei_ulink{i}),V1{i});
+    end
+    %----------------------    更新flag     ----------------------%
+    count = zeros(1,Q);
+    for i = 1:Q
+        if flag(i) ~=0 && length(setdiff(V_Delay_Fenlei_uu{i},RU(i)))~= length(V_Delay_Fenlei_uu{i})  %RU(i)在V_Delay_Fenlei_ulink{i}中
+            count(i) = 1;
+        end
+    end
+    flag = count;
+    %----------------------  更新V_nbor    -----------------------%
+    count_link = find(count==1);    %flag=1(即count=1)的link
+    for i =1:Q
+        V_nbor{i} = intersect(V_nbor{i},count_link);
+    end
+    num_simu = 0;    %协议干扰边的个数
+    for i = 1:Q
+        num_simu = num_simu +length(V{i});
+    end
+    Q_temp1 = Q;
+    mis_edge = abs(num_true-num_simu);
     pp = mis_edge/num_true;
-    data_pp = [data_pp pp]
-    slot = slot + M + 1;
-    save data_construction,'data_pp';
+    data_pp_M2 = [data_pp_M2 pp]
+    slot = slot + 1;
+    save data_pp_M2_30,'data_pp_M2';
+
 end
 
 toc;
