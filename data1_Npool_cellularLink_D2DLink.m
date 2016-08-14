@@ -90,3 +90,63 @@ plot(interationtimes,a_150_90_500_fix,'b--+');
 plot(interationtimes,a_150_120_500_fix,'m-.+');
 legend('QD2D=100,QCellular=60','QD2D=100,QCellular=90','QD2D=100,QCellular=120','QD2D=300,QCellular=60','QD2D=300,QCellular=90','QD2D=300,QCellular=120','QD2D=500,QCellular=60','QD2D=500,QCellular=90','QD2D=500,QCellular=120');
 
+
+a_50_10_100_fix = [a_50_10_100 zeros(1,MaxTimes1-length(a_50_10_100))]; 
+a_50_20_100_fix = [a_50_20_100 zeros(1,MaxTimes1-length(a_50_20_100))]; 
+a_50_30_100_fix = [a_50_30_100 zeros(1,MaxTimes1-length(a_50_30_100))]; 
+a_50_40_100_fix = [a_50_40_100 zeros(1,MaxTimes1-length(a_50_40_100))]; 
+
+a_50_10_300_fix = [a_50_10_300 zeros(1,MaxTimes1-length(a_50_10_300))]; 
+a_50_20_300_fix = [a_50_20_300 zeros(1,MaxTimes1-length(a_50_20_300))]; 
+a_50_30_300_fix = [a_50_30_300 zeros(1,MaxTimes1-length(a_50_30_300))];  
+a_50_40_300_fix = [a_50_40_300 zeros(1,MaxTimes1-length(a_50_40_300))]; 
+
+a_50_10_500_fix = [a_50_10_500 zeros(1,MaxTimes1-length(a_50_10_500))]; 
+a_50_20_500_fix = [a_50_20_500 zeros(1,MaxTimes1-length(a_50_20_500))];
+a_50_30_500_fix = [a_50_30_500 zeros(1,MaxTimes1-length(a_50_30_500))];
+a_50_40_500_fix = [a_50_40_500 zeros(1,MaxTimes1-length(a_50_40_500))];
+
+plot(interationtimes,a_50_10_100_fix,'-o');  hold on;  xlabel('迭代的次数')，ylabel('需要重播的比例');
+plot(interationtimes,a_50_20_100_fix,':.o');
+plot(interationtimes,a_50_30_100_fix,':o');
+plot(interationtimes,a_50_10_300_fix,'-*');
+plot(interationtimes,a_50_20_300_fix,':.*');
+plot(interationtimes,a_50_30_300_fix,':*');
+plot(interationtimes,a_50_10_500_fix,'-+');  
+plot(interationtimes,a_50_20_500_fix,':.+');
+plot(interationtimes,a_50_30_500_fix,':+');
+
+
+plot(interationtimes,a_50_40_100_fix,'-');  hold on;  xlabel('迭代的次数')，ylabel('需要重播的比例');
+plot(interationtimes,a_50_40_300_fix,'-');  hold on;  xlabel('迭代的次数')，ylabel('需要重播的比例');
+plot(interationtimes,a_50_40_500_fix,'-');  hold on;  xlabel('迭代的次数')，ylabel('需要重播的比例');
+%%%%-------------------------%%%%%
+a_100_20_100_fix = [a_100_20_100 
+a_100_40_100_fix = [a_100_40_100 
+a_100_60_100_fix = [a_100_60_100 
+a_100_80_100_fix = [a_100_80_100 
+
+a_100_20_300_fix = [a_100_20_300 
+a_100_40_300_fix = [a_100_40_300 
+a_100_60_300_fix = [a_100_60_300 
+a_100_80_300_fix = [a_100_80_300 
+
+a_100_20_500_fix = [a_100_20_500 
+a_100_40_500_fix = [a_100_40_500 
+a_100_60_500_fix = [a_100_60_500 
+a_100_80_500_fix = [a_100_80_500 
+
+%%%%-------------------------%%%%%
+a_150_30_100_fix = [a_150_30_100 
+a_150_60_100_fix = [a_150_60_100 
+a_150_90_100_fix = [a_150_90_100 
+a_150_120_100_fix = [a_150_120_100
+a_150_30_300_fix = [a_150_30_300 
+a_150_60_300_fix = [a_150_60_300 
+a_150_90_300_fix = [a_150_90_300 
+a_150_120_300_fix = [a_150_120_300
+a_150_30_500_fix = [a_150_30_500 
+a_150_60_500_fix = [a_150_60_500 
+a_150_90_500_fix = [a_150_90_500 
+a_150_120_500_fix = [a_150_120_500 
+
