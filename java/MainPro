@@ -1,0 +1,731 @@
+package research;
+//运行环境jre7
+//11月19日
+//基本无错的程序
+import java.util.*;
+//import java.util.Set;
+//import java.util.TreeSet;
+//import java.util.*;
+class Data {
+    // 需要保留的参数
+    int    mPool[];
+    int    rCell;
+    int    dMax;
+    int    QD2D;
+    int    QCellular;
+    int    N;
+    int    M = 10;
+    double w;
+    int    maxFrame;
+    int    Q;
+    int    uFrameD2D;
+    int    uFrameCellular;
+    double dataPP[][];
+
+    double cellularLoc[][];
+    double dCellular[];
+    double d2dLoc[][];
+    double dD2D[];
+    double aD2D[];
+    double xyRec[][];
+    double arrLocCellular[][];
+    double arrLocD2D[][];
+
+    double cellularLocPerFrame[][];
+    double d2dLocPerFrame[][];
+    double xyRecPerFrame[][];
+    double dBroPerFrameD2D[];
+    double dBroPerFrameCellular[];
+
+    int    vGraphTrue[][];
+    int    vGraphFind[][];
+    int    flag[];
+    int    count[];
+    int    times;
+    int    ru[];
+    int    ackDelay[];
+    int	   ackGraph[][][];
+    int    numTrue;
+    int    numFind;
+    int    numOfAllLink;
+
+    // 设置每帧进出的D2D link数量
+    void initValue(){
+        this.w = 2;
+        this.rCell = 300;
+        this.dMax = 50;
+        this.QD2D = 500;
+        this.QCellular = 30;
+        this.Q = this.QD2D + this.QCellular;
+        this.N = 50;
+        this.maxFrame = 40000;
+        this.mPool = new int[]{1,2};
+        this.numTrue = 0;
+        this.numFind = 0;
+        this.dataPP = new double[this.mPool.length][this.maxFrame];
+    }
+
+    void setFrameD2D(int uFrameD2D){
+        this.uFrameD2D = uFrameD2D;
+    }
+    // 设置每帧进出的cellular link数量
+    void setFrameCellular(int uFrameCellular){
+        this.uFrameCellular = uFrameCellular;
+    }
+    // 生成cellular link 发射端的位置信息
+    // 以及相应的dCellular
+    void createCellularLoc(){
+        this.cellularLoc = new double[this.QCellular][2];
+        this.dCellular = new double[this.QCellular];
+        Random rand = new Random();
+        rand.setSeed(System.nanoTime());
+        for(int i = 0; i < this.QCellular; i++){
+            this.cellularLoc[i][0] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+            this.cellularLoc[i][1] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+            double sumTemp = Math.pow(this.cellularLoc[i][0],2) + Math.pow(this.cellularLoc[i][1],2);
+            while(sumTemp > Math.pow(this.rCell,2)){
+                this.cellularLoc[i][0] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+                this.cellularLoc[i][1] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+                sumTemp = Math.pow(this.cellularLoc[i][0],2) + Math.pow(this.cellularLoc[i][1],2);
+             }
+             this.dCellular[i] = Math.sqrt(sumTemp);
+         }
+    }
+    // 生成D2D link 发射端的位置信息
+    // 以及相应的dD2D,aD2D
+    void created2dLoc(){
+        this.d2dLoc = new double[this.QD2D][2];
+        this.dD2D = new double[this.QD2D];
+        this.aD2D = new double[this.QD2D];
+        Random rand = new Random();
+        rand.setSeed(System.nanoTime());
+        for(int i = 0; i < this.QD2D; i++){
+            this.d2dLoc[i][0] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+            this.d2dLoc[i][1] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+            double sumTemp = Math.pow(this.d2dLoc[i][0],2) + Math.pow(this.d2dLoc[i][1],2);
+            while(sumTemp > Math.pow(this.rCell,2)){
+                this.d2dLoc[i][0] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+                this.d2dLoc[i][1] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+                sumTemp = Math.pow(this.d2dLoc[i][0],2) + Math.pow(this.d2dLoc[i][1],2);
+             }
+             this.dD2D[i] = rand.nextDouble() * this.dMax;
+             this.aD2D[i] = rand.nextDouble() * Math.PI * 2;
+         }
+    }
+
+    //生成D2D接收端的坐标
+    void createD2DxyRec(){
+        this.xyRec = new double[this.QD2D][2];
+        for(int i = 0; i < this.QD2D; i++){
+            this.xyRec[i][0] = this.d2dLoc[i][0] + Math.cos(this.aD2D[i]) * this.dD2D[i];
+            this.xyRec[i][1] = this.d2dLoc[i][1] + Math.sin(this.aD2D[i]) * this.dD2D[i];
+        }
+    }
+    // 生成arrLocCellular 即新进入cellular link用户的进入帧，位置
+    void createArrLocCellular(){
+        this.arrLocCellular = new double[(this.uFrameCellular+1) * (this.maxFrame+1)][2];
+        Random rand = new Random();
+        rand.setSeed(System.nanoTime());
+        for(int i = 0; i < this.arrLocCellular.length; i++){
+            this.arrLocCellular[i][0] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+            this.arrLocCellular[i][1] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+            double sumTemp = Math.pow(this.arrLocCellular[i][0],2) + Math.pow(this.arrLocCellular[i][1],2);
+            while(sumTemp > Math.pow(this.rCell,2)){
+                this.arrLocCellular[i][0] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+                this.arrLocCellular[i][1] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+                sumTemp = Math.pow(this.arrLocCellular[i][0],2) + Math.pow(this.arrLocCellular[i][1],2);
+             }
+         }
+    }
+    // 生成arrLocD2D 即新进入D2D用户的进入帧，位置
+    void createArrLocD2D(){
+        this.arrLocD2D = new double[(this.uFrameD2D+1) * (this.maxFrame+1)][2];
+        Random rand = new Random();
+        rand.setSeed(System.nanoTime());
+        for(int i = 0; i < this.arrLocD2D.length; i++){
+            this.arrLocD2D[i][0] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+            this.arrLocD2D[i][1] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+            double sumTemp = Math.pow(this.arrLocD2D[i][0],2) + Math.pow(this.arrLocD2D[i][1],2);
+            while(sumTemp > Math.pow(this.rCell,2)){
+                this.arrLocD2D[i][0] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+                this.arrLocD2D[i][1] = rand.nextDouble() * 2 * this.rCell - this.rCell;
+                sumTemp = Math.pow(this.arrLocD2D[i][0],2) + Math.pow(this.arrLocD2D[i][1],2);
+             }
+            //  System.out.println(sumTemp);
+         }
+    }
+    void initOtherValue(){
+        // this.setFrameD2D(3);
+        // this.setFrameCellular(10);
+        this.createCellularLoc();
+        this.created2dLoc();
+//        this.createDBroadcast();
+        this.createD2DxyRec();
+        this.createArrLocCellular();
+        this.createArrLocD2D();
+    }
+
+    void initInteration(){
+        this.xyRecPerFrame = new double[this.QD2D + this.uFrameD2D][2];
+        for(int i = 0; i < this.xyRec.length; i++){
+            this.xyRecPerFrame[i][0] = this.xyRec[i][0];
+            this.xyRecPerFrame[i][1] = this.xyRec[i][1];
+        }
+
+        this.cellularLocPerFrame = new double[this.QCellular + this.uFrameCellular][2];
+        for(int i = 0; i < this.cellularLoc.length; i++){
+            this.cellularLocPerFrame[i][0] = this.cellularLoc[i][0];
+            this.cellularLocPerFrame[i][1] = this.cellularLoc[i][1];
+        }
+
+        this.d2dLocPerFrame = new double[this.QD2D + this.uFrameD2D][2];
+        for(int i = 0; i < this.d2dLoc.length; i++){
+            this.d2dLocPerFrame[i][0] = this.d2dLoc[i][0];
+            this.d2dLocPerFrame[i][1] = this.d2dLoc[i][1];
+        }
+
+        this.dBroPerFrameCellular = new double[this.QCellular + this.uFrameCellular];
+        for(int i = 0; i < this.QCellular; i++){
+            this.dBroPerFrameCellular[i] = this.dCellular[i] * this.w;
+        }
+
+        this.dBroPerFrameD2D = new double[this.QD2D + this.uFrameD2D];
+        for(int i = 0; i < this.QD2D; i++){
+            this.dBroPerFrameD2D[i] = this.dD2D[i] * this.w;
+        }
+
+        // int numOfAllLink = this.Q + this.uFrameCellular + this.uFrameD2D;
+        numOfAllLink = this.Q + this.uFrameCellular + this.uFrameD2D;
+        this.vGraphFind = new int [numOfAllLink][numOfAllLink];
+        this.vGraphTrue = new int [numOfAllLink][numOfAllLink];
+        this.ru = new int [numOfAllLink];
+        this.ackDelay = new int [numOfAllLink];
+        this.ackGraph = new int[numOfAllLink][this.M + 1][2];
+        this.flag  = new int[this.numOfAllLink];
+        for(int i = 0; i < this.numOfAllLink; i++){
+            this.flag[i] = 1;
+        }
+    }
+
+
+    //新进来了cellular link之后
+    //更新数据:dBroPerFrameCellular
+    //        cellularLocPerFrame
+    //        flag
+    //        vGraphFind
+    void newInCellular(){
+        double x;
+        double y;
+        double dBro;
+        for(int i = 0; i < this.uFrameCellular; i++){
+            x = arrLocCellular[this.times * this.uFrameCellular + i][0];
+            y = arrLocCellular[this.times * this.uFrameCellular + i][1];
+            dBro = Math.sqrt(x * x + y * y) * this.w;
+            // System.out.println(this.dBroPerFrameCellular.length);
+            this.dBroPerFrameCellular[i + this.QCellular] = dBro;
+            this.cellularLocPerFrame[i + this.QCellular][0] = x;
+            this.cellularLocPerFrame[i + this.QCellular][1] = y;
+            //跟新flag
+            this.flag[i+this.QCellular] = 1;
+            //更新vGraphFind
+        }
+    }
+    //新出去了cellular link之后
+    //更新数据:dBroPerFrameCellular
+    //        cellularLocPerFrame
+    //        flag
+    //        vGraphFind
+    void newOutCellular(){
+        // 产生随机要删除的uFrameCellular个数
+        Random rand = new Random();
+        rand.setSeed(System.nanoTime());
+        Set<Integer> leaveSet = new TreeSet<Integer>();
+        while (leaveSet.size() < this.uFrameCellular) {
+            int leaveIndex = rand.nextInt(this.QCellular + this.uFrameCellular);
+            leaveSet.add(leaveIndex);
+        }
+        Set<Integer> keepSet = new TreeSet<>();
+        for(int i = 0; i < this.QCellular + this.uFrameCellular; i++){
+            keepSet.add(i);
+        }
+        keepSet.removeAll(leaveSet);
+        // System.out.println(keepSet);
+
+        // 处理保留的index
+        int index = 0;
+        for(Integer keepIndex : keepSet){
+            this.dBroPerFrameCellular[index] = this.dBroPerFrameCellular[keepIndex];
+            this.cellularLocPerFrame[index][0] = this.cellularLocPerFrame[keepIndex][0];
+            this.cellularLocPerFrame[index][1] = this.cellularLocPerFrame[keepIndex][1];
+            this.flag[index] = this.flag[keepIndex];
+            //更新出去的vFind
+            int a = this.QCellular + this.uFrameCellular;
+            // 只需要更新第二部分的link
+            for(int i = 0; i < this.QD2D; i++){
+                // this.vGraphFind[i][index+a] = this.vGraphFind[i][keepIndex+a];
+                this.vGraphFind[index][i+a] = this.vGraphFind[keepIndex][i+a];
+            }
+            // int index2 = 0;
+            // for(Integer keepIndex2 : keepSet){
+            //     this.vGraphFind[index][index2] = this.vGraphFind[keepIndex][keepIndex2];
+            //     index2++;
+            // }
+            // for(int i = 0; i < this.QCellular; i++){
+            //     this.vGraphFind[index][i] = this.vGraphFind[keepIndex][i];
+            // }
+            index++;
+        }
+        for(int i = this.QCellular; i < this.QCellular + this.uFrameCellular; i++){
+            this.flag[i] = 0;
+        }
+    }
+
+    //新进来了D2D link之后
+    //更新数据:dBroPerFrameD2D
+    //        d2dLocPerFrame
+    //        xyRecPerFrame
+    //        flag
+    //        vGraphFind
+    void newInD2D(){
+        double x;
+        double y;
+        double dBro;
+        double disD2D;
+        Random rand = new Random();
+        rand.setSeed(System.nanoTime());
+        for(int i = 0; i < this.uFrameD2D; i++){
+            x = arrLocD2D[this.times * this.uFrameD2D + i][0];
+            y = arrLocD2D[this.times * this.uFrameD2D + i][1];
+            disD2D = rand.nextDouble() * this.dMax;
+            dBro = disD2D * this.w;
+            double aD2D = rand.nextDouble() * 2 * Math.PI;
+            this.dBroPerFrameD2D[i + this.QD2D] = dBro;
+            this.d2dLocPerFrame[i + this.QD2D][0] = x;
+            this.d2dLocPerFrame[i + this.QD2D][1] = y;
+            this.xyRecPerFrame[i + this.QD2D][0] = x + disD2D * Math.cos(aD2D);
+            this.xyRecPerFrame[i + this.QD2D][1] = y + disD2D * Math.sin(aD2D);
+            //跟新flag
+            // System.out.println(this.flag.length + " place 2");
+            this.flag[i + this.Q + this.uFrameCellular] = 1;
+            //更新vGraph
+        }
+    }
+    //新出去了D2D link之后
+    //更新数据:dBroPerFrameD2D
+    //        d2dLocPerFrame
+    //        flag
+    //        vGraphFind
+    void newOutD2D(){
+        // 产生随机要删除的uFrameD2D个数
+        Random rand = new Random();
+        rand.setSeed(System.nanoTime());
+        Set<Integer> leaveSet = new TreeSet<>();
+        while (leaveSet.size() < this.uFrameD2D) {
+            int leaveIndex = rand.nextInt(this.QD2D + this.uFrameD2D);
+            leaveSet.add(leaveIndex);
+        }
+        Set<Integer> keepSet = new TreeSet<>();
+        for(int i = 0; i < this.QD2D + this.uFrameD2D; i++){
+            keepSet.add(i);
+        }
+        keepSet.removeAll(leaveSet);
+
+        // 处理保留的index
+        int index = 0;
+        for(Integer keepIndex : keepSet){
+            this.dBroPerFrameD2D[index] = this.dBroPerFrameD2D[keepIndex];
+            this.d2dLocPerFrame[index][0] = this.d2dLocPerFrame[keepIndex][0];
+            this.d2dLocPerFrame[index][1] = this.d2dLocPerFrame[keepIndex][1];
+            this.xyRecPerFrame[index][0] = this.xyRecPerFrame[keepIndex][0];
+            this.xyRecPerFrame[index][1] = this.xyRecPerFrame[keepIndex][1];
+            // 处理保留的index
+            int a = this.QCellular + this.uFrameCellular;//调整下标参数
+            this.flag[index+a] = this.flag[keepIndex+a];
+            // 更新第二部分link
+            for(int i = 0; i < this.QCellular; i++){
+                this.vGraphFind[i][index+a] = this.vGraphFind[i][keepIndex+a];
+            }
+            // 更新第三部分link
+            for(int i = 0; i < this.QCellular; i++){
+                this.vGraphFind[index+a][i] = this.vGraphFind[keepIndex+a][i];
+            }
+            // 更新第四部分link
+            int index2 = 0;
+            for(Integer keepIndex2 : keepSet){
+                this.vGraphFind[index+a][index2+a] = this.vGraphFind[keepIndex+a][keepIndex2+a];
+                index2++;
+            }
+            index++;
+        }
+
+    }
+
+
+    // 建立真正的干扰图
+    void createVGraphTrue(){
+    	this.vGraphTrue = new int [this.numOfAllLink][this.numOfAllLink];
+        // 类型1：cellular之间
+        // 所有的蜂窝链接都是相邻的
+        double x1;
+        double y1;
+        double x2;
+        double y2;
+        double dBro;
+        for(int i = 0; i < this.QCellular; i++){
+            for(int j = 0; j < this.QCellular; j++){
+                this.vGraphTrue[i][j] = 1;
+            }
+        }
+        // 类型2：D2D受到cellular干扰
+        for(int i = 0; i < this.QCellular; i++){
+            x1 = this.cellularLocPerFrame[i][0];
+            y1 = this.cellularLocPerFrame[i][1];
+            dBro = this.dBroPerFrameCellular[i];
+            for(int j = 0; j < this.QD2D; j++){
+                x2 = this.xyRecPerFrame[j][0];
+                y2 = this.xyRecPerFrame[j][1];
+                double x = x1 - x2;
+                double y = y1 - y2;
+                if(x*x + y*y <= dBro * dBro){
+                    this.vGraphTrue[i][j + this.QCellular + this.uFrameCellular] = 1;
+                    // this.vGraphTrue[j + this.QCellular + this.uFrameCellular][i] = 1;
+                }
+            }
+        }
+        // 类型3：celllular受到D2D之间
+        for(int i = 0; i < this.QD2D; i++){
+            x1 = this.d2dLocPerFrame[i][0];
+            y1 = this.d2dLocPerFrame[i][1];
+            dBro = this.dBroPerFrameD2D[i];
+            if(x1*x1 + y1*y1 <= dBro * dBro){
+                for(int j = 0; j < this.QCellular; j++){
+                    this.vGraphTrue[i + this.QCellular + this.uFrameCellular][j] = 1;
+                    // this.vGraphTrue[j][i + this.QCellular + this.uFrameCellular] = 1;
+                }
+            }
+        }
+
+        // 类型4：D2D之间
+        for(int i = 0; i < this.QD2D; i++){
+            x1 = this.d2dLocPerFrame[i][0];
+            y1 = this.d2dLocPerFrame[i][1];
+            // dBro = this.dBroPerFrameD2D[i];
+            double x3 = this.xyRecPerFrame[i][0];
+            double y3 = this.xyRecPerFrame[i][1];
+            dBro = 2 * Math.sqrt((x1-x3) * (x1-x3)  + (y1-y3) * (y1-y3) );
+            for(int j = 0; j < this.QD2D; j++){
+                x2 = this.xyRecPerFrame[j][0];
+                y2 = this.xyRecPerFrame[j][1];
+                double x = x1 - x2;
+                double y = y1 - y2;
+                int adjust = this.QCellular + this.uFrameCellular;
+                if(x*x + y*y <= dBro * dBro){
+                    this.vGraphTrue[i + adjust][j + adjust] = 1;
+                    // this.vGraphTrue[j + adjust][i + adjust] = 1;
+                }
+            }
+        }
+        //令自己和它本身是不相邻的
+        for(int i = 0; i < this.numOfAllLink; i++){
+            this.vGraphTrue[i][i] = 0;
+        }
+    }
+    void countNumTrue(){
+        this.numTrue = 0;
+        for(int i = 0; i < this.numOfAllLink; i++){
+            for(int j = 0; j < this.numOfAllLink; j++){
+                this.numTrue += this.vGraphTrue[i][j];
+            }
+        }
+    }
+
+    void allocRu(){
+        this.ru = new int [this.numOfAllLink];
+        Random rand = new Random();
+        rand.setSeed(System.nanoTime());
+        for(int i = 0; i < this.QCellular; i++){
+//            if(rand.nextDouble() > 0.5){this.flag[i] = 1;}
+            if(this.flag[i] == 0)   continue;
+            this.ru[i] = rand.nextInt(this.N) + 1;
+        }
+        for(int i =  this.QCellular+ this.uFrameCellular; i < this.Q + this.uFrameCellular; i++){
+//            if(rand.nextDouble() > 0.5){this.flag[i] = 1;}
+            if(this.flag[i] == 0)   continue;
+            this.ru[i] = rand.nextInt(this.N) + 1;
+        }
+    }
+    void allocDelay(){
+        this.ackDelay = new int [this.numOfAllLink];
+        Random rand = new Random();
+        rand.setSeed(System.nanoTime());
+        for(int i = 0; i < this.QCellular; i++){
+            this.ackDelay[i] = rand.nextInt(this.M) + 1;
+        }
+        for(int i =  this.QCellular+ this.uFrameCellular; i < this.Q + this.uFrameCellular; i++){
+            this.ackDelay[i] = rand.nextInt(this.M) + 1;
+        }
+    }
+
+
+    // 计算vGraphTrue
+    //处理每一个节点的邻居ru
+    void dealwithNode(int i){
+        //找出邻居范围内，没有其他link和它使用相同ru的link
+
+        //numRU每个link所受到干扰link的数目,及被几个link干扰
+
+        //找出i所收到的广播中，使用ru[j]的对应的数量为numRu[j]
+        int[] numRu = new int[this.N + 1];
+        for(int j = 0; j < this.numOfAllLink; j++){
+            if(this.vGraphTrue[j][i] == 1){
+                numRu[this.ru[j]]++;
+            }
+        }
+
+        // 按分配的RU来分类节点邻居的link
+        //ruLink[分配的RU][分配该RU的link]
+        int[][] ruLink = new int[this.N + 1][0];
+        for(int j = 0; j < this.N + 1; j++){
+            ruLink[j] = new int[numRu[j]];
+        }
+        int[] ruIndex = new int[this.N + 1];
+        for(int j = 0; j < this.numOfAllLink; j++){
+            if(this.vGraphTrue[j][i] == 1){
+                // 统计节点邻居RU
+                int ruAlloc = this.ru[j];
+                // if(ruAlloc == 0){continue;}
+                ruLink[ruAlloc][ruIndex[ruAlloc]] = j;
+                ruIndex[ruAlloc]++;
+            }
+        }
+        //找出邻居内没有没有ru冲突的点
+        for(int j = 1; j < this.N + 1; j++){
+            if(ruIndex[j] == 1){
+                // if(this.vGraphTrue[i][ruLink[j][0]] == 1){
+                    // this.vGraphFind[i][ruLink[j][0]] = 1;
+                    // link i在link j的广播范围内
+                    this.vGraphFind[ruLink[j][0]][i] = 1;
+                // }
+            }
+            //如果一个ru分配给了邻居内的多个link
+            // this.ackGraph[link的编号][分配的ack延时][0:该延时下link数目，1:对应的link编号]
+            else if(ruIndex[j] > 1){
+                for(int k = 0; k < ruIndex[j]; k++){
+                    this.ackGraph[ruLink[j][k]][this.ackDelay[i]][0]++;
+                    this.ackGraph[ruLink[j][k]][this.ackDelay[i]][1] = i;
+                }
+            }
+        }
+    }
+    void stage1(){
+    	this.allocRu();
+    	this.allocDelay();
+        for(int i = 0; i < this.QCellular; i++){
+            this.dealwithNode(i);
+        }
+        for(int i =  this.QCellular+ uFrameCellular; i < this.Q + uFrameCellular; i++){
+            this.dealwithNode(i);
+        }
+    }
+
+    void dealwithAck(int i){
+        for(int j = 1; j < this.M + 1; j++){
+            if(this.ackGraph[i][j][0] == 0){continue;}
+            else if(this.ackGraph[i][j][0] == 1){
+                // if(this.vGraphTrue[this.ackGraph[i][j][1]][i] == 1){
+                this.vGraphFind[i][this.ackGraph[i][j][1]] = 1;
+                // this.vGraphFind[this.ackGraph[i][j][1]][i] = 1;
+                // }
+            } else if(this.ackGraph[i][j][0] > 1){
+                this.flag[i] = 1;
+            }
+        }
+    }
+    void stage2(){
+    	for(int i = 0; i < this.numOfAllLink; i++){
+    		this.flag[i] = 0;
+    	}
+        for(int i = 0; i < this.QCellular; i++){
+            this.dealwithAck(i);
+        }
+        for(int i =  this.QCellular+ uFrameCellular; i < this.Q + uFrameCellular; i++){
+            this.dealwithAck(i);
+        }
+    }
+
+    void countNumFind(){
+        //调节出去的邻居
+        for(int i = 0; i < this.numOfAllLink; i++){
+            int sum = 0;
+            for(int j = 0; j < this.QCellular + this.uFrameCellular; j++){
+                sum = sum + this.vGraphFind[i][j];
+            }
+            if(sum > 0){
+                for(int j = 0; j < this.QCellular; j++){
+                    this.vGraphFind[i][j] = 1;
+                }
+            }
+        }
+        for(int i = 0; i < this.numOfAllLink; i++){
+            this.vGraphFind[i][i] = 0;
+        }
+        this.numFind = 0;
+        for(int i = 0; i < this.numOfAllLink; i++){
+            for(int j = 0; j < this.numOfAllLink; j++){
+                this.numFind += this.vGraphFind[i][j];
+            }
+        }
+    }
+    int countNumFind1(){
+        int numFind1 = 0;
+        for(int i = 0; i < this.QCellular; i++){
+            for(int j = 0; j < this.QCellular; j++){
+                numFind1 += this.vGraphFind[i][j];
+            }
+        }
+        return numFind1;
+    }
+    int countNumFind2(){
+        int numFind1 = 0;
+        for(int i = 0; i < this.QCellular; i++){
+            for(int j = 0; j < this.QD2D; j++){
+                numFind1 += this.vGraphFind[i][j+ this.QCellular + this.uFrameCellular];
+            }
+        }
+        return numFind1;
+    }
+    int countNumFind3(){
+        int numFind1 = 0;
+        for(int i = 0; i < this.QCellular; i++){
+            for(int j = 0; j < this.QD2D; j++){
+                numFind1 += this.vGraphFind[j+ this.QCellular + this.uFrameCellular][i];
+            }
+        }
+        return numFind1;
+    }
+    int countNumFind4(){
+        int numFind1 = 0;
+        int a = this.QCellular + this.uFrameCellular;
+        for(int i = 0; i < this.QD2D; i++){
+            for(int j = 0; j < this.QD2D; j++){
+                numFind1 += this.vGraphFind[j + a][i + a];
+            }
+        }
+        return numFind1;
+    }
+    int countNumTrue1(){
+        int numTrue1 = 0;
+        for(int i = 0; i < this.QCellular; i++){
+            for(int j = 0; j < this.QCellular; j++){
+                numTrue1 += this.vGraphTrue[i][j];
+            }
+        }
+        return numTrue1;
+    }
+    int countNumTrue2(){
+        int numTrue1 = 0;
+        for(int i = 0; i < this.QCellular; i++){
+            for(int j = 0; j < this.QD2D; j++){
+                numTrue1 += this.vGraphTrue[i][j+ this.QCellular + this.uFrameCellular];
+            }
+        }
+        return numTrue1;
+    }
+    int countNumTrue3(){
+        int numTrue1 = 0;
+        for(int i = 0; i < this.QCellular; i++){
+            for(int j = 0; j < this.QD2D; j++){
+                numTrue1 += this.vGraphTrue[j+ this.QCellular + this.uFrameCellular][i];
+            }
+        }
+        return numTrue1;
+    }
+    int countNumTrue4(){
+        int numTrue1 = 0;
+        int a = this.QCellular + this.uFrameCellular;
+        for(int i = 0; i < this.QD2D; i++){
+            for(int j = 0; j < this.QD2D; j++){
+                numTrue1 += this.vGraphTrue[j + a][i + a];
+            }
+        }
+        return numTrue1;
+    }
+
+
+
+    void resetData(){
+        // this.numFind = 0;
+        // this.numTrue = 0;
+        // this.vGraphFind = new int [this.numOfAllLink][this.numOfAllLink];
+        this.vGraphTrue = new int [this.numOfAllLink][this.numOfAllLink];
+        // this.ackDelay = new int [this.numOfAllLink];
+        this.ackGraph = new int[this.numOfAllLink][this.M + 1][2];
+    }
+
+
+
+
+    void interation(){
+        this.resetData();
+        this.newInCellular();
+        this.newOutCellular();
+        this.newInD2D();
+        this.newOutD2D();
+        this.createVGraphTrue();
+        this.countNumTrue();
+        this.stage1();
+        this.stage2();
+        this.countNumFind();
+        System.out.print(this.times + " : ");
+        System.out.println(this.numTrue + " : " + this.numFind+ "++" );
+        System.out.println(this.countNumFind1() + " -- " + this.countNumFind2() + " -- " + this.countNumFind3() + " -- " + this.countNumFind4());
+        System.out.println(this.countNumTrue1() + " -- " + this.countNumTrue2() + " -- " + this.countNumTrue3() + " -- " + this.countNumTrue4());
+        System.out.print("  pp =                                 ");
+        System.out.println((double)(this.numTrue-this.numFind) / this.numTrue);
+        ++this.times;
+        // this.resetData();
+        //前面xyRec有问题
+    }
+
+
+
+    // 初始化参数
+    Data(){
+    	this.initValue();
+        this.initOtherValue();
+        this.initInteration();
+//        this.count = new int[this.Q];
+        // this.interation();
+    }
+
+
+
+}
+public class MainPro {
+    public static void main(String[] args){
+        Data uCell3D2D10 = new Data();
+        uCell3D2D10.setFrameD2D(0);
+        uCell3D2D10.setFrameCellular(0);
+
+//    	this.initValue();
+//        uCell3D2D10.initOtherValue();
+        uCell3D2D10.initInteration();
+
+        System.out.println(uCell3D2D10.uFrameD2D);
+//        System.out.println(uCell3D2D10.uFrame);
+//        for(int i = 0; i < 200; i++){
+        int sumFlag = 1;
+//        int i = 0;
+//      for(int i = 0; i < 200; i++){
+        while(sumFlag != 0.01){
+            uCell3D2D10.interation();
+            sumFlag = 0;
+            for(int j = 0; j < uCell3D2D10.numOfAllLink;j++){
+                sumFlag += uCell3D2D10.flag[j];
+            	// System.out.print(uCell3D2D10.flag[j]);
+            }
+            System.out.println(" sumFlag= " + sumFlag);
+        }
+    }
+
+}
