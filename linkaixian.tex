@@ -87,137 +87,335 @@
 	\section{引言}
 	蜂窝D2D通信指蜂窝小区中的一对D2D通信用户在基站的控制下直接进行通信，而不需要经过基站，这样的一对进行直接D2D通信的用户称为一条D2D通信链路。
 	
-	所谓干扰图指的把小区的蜂窝链路和D2D链路对抽象成一个集合，记作G=（V，E），V为点集合，代表一条蜂窝链路或D2D链路，E为边集合代表一条存在的干扰边，如果连两条链路之间干扰超过一点的限度，则定义它们之间存在干扰边，本文使用的干扰图为有向图。需要为每条D2D链路分配合适的时频资源，最简单的思路就是让距离较远的D2D链路使用相同的时频资源，而对于距离较近的D2D链路，为了减少通信冲突，应当分配不同的时频资源，从而达到空间复用的效果。基于干扰图的蜂窝D2D通信资源分配方法指的就是建立干扰图后使用图论的数学方法为小区的链路分配资源。而基于干扰图的蜂窝D2D通信资源分配方法均需要涉及到小区的D2D干扰图构建问题，因此，构建小区的蜂窝D2D链路干扰图至关重要。
-	
-
-	\[{p_{miss}} = \frac{{Nu{m_{edgeTrue}} - Nu{m_{edgeFind}}}}{{Nu{m_{edgeTrue}}}}*100\% \]
-	
-	
-	
-	\begin{equation}\label{eq2.1}
-		{p_{miss}} = \frac{{Nu{m_{edgeTrue}} - Nu{m_{edgeFind}}}}{{Nu{m_{edgeTrue}}}}*100\% 
-	\end{equation}
+	所谓干扰图指的把小区的蜂窝链路和D2D链路对抽象成一个集合，记作$G = (V,E)$，$V$为点集合，代表一条蜂窝链路或D2D链路，$E$为边集合代表一条存在的干扰边，如果连两条链路之间干扰超过一点的限度，则定义它们之间存在干扰边，本文使用的干扰图为有向图。需要为每条D2D链路分配合适的时频资源，最简单的思路就是让距离较远的D2D链路使用相同的时频资源，而对于距离较近的D2D链路，为了减少通信冲突，应当分配不同的时频资源，从而达到空间复用的效果。基于干扰图的蜂窝D2D通信资源分配方法指的就是建立干扰图后使用图论的数学方法为小区的链路分配资源。而基于干扰图的蜂窝D2D通信资源分配方法均需要涉及到小区的D2D干扰图构建问题，因此，构建小区的蜂窝D2D链路干扰图至关重要。
 	
 	基于上述问题，本章提出了一种蜂窝D2D通信系统快速高效的实时干扰图构建算法。
 	
 	\section{系统模型}
-	本文研究的蜂窝D2D通信系统为overlay inband D2D模型，D2D通信复用的是蜂窝链路上行通信的频率。小区中存在的两种链路，即蜂窝链路和D2D链路分别用 和 表示。不同的链路之间通过唯一的ID标识进行区分，用 表示ID标识为i的链路。每条链路均由发射端(T端)和接收端(R端)构成，其中所有蜂窝链路的R端均为基站。链路的T端发送信号，携带信息为相应链路的ID。在干扰图模型中，如果一条链路 的发射端的广播信息能够被另一条链路 的接收端接收，其中链路既可以是蜂窝链路也可以是D2D链路，那么在干扰图中表示为两条链路 与 之间存在一条有向边，即 是 的邻居。存在邻居关系的两条链路不能够使用同一时频的资源，否则将会在通信过程中产生干扰，从而降低通信效率，构建高效准确的干扰图能够提高无线资源的使用效率。
+	本文研究的蜂窝D2D通信系统为overlay inband D2D模型，D2D通信复用的是蜂窝链路上行通信的频率。小区中存在的两种链路，即蜂窝链路和D2D链路分别用$cellularLink$和$d2dlink$表示。不同的链路之间通过唯一的ID标识进行区分，用$lin{k_i}$表示ID标识为i的链路。每条链路均由发射端(T端)和接收端(R端)构成，其中所有蜂窝链路的R端均为基站，链路的T端发送信号，携带信息为相应链路的ID。在干扰图模型中，如果一条链路$lin{k_i}$的发射端的广播信息能够被另一条链路$lin{k_j}$的接收端接收，这条链路既可以是蜂窝链路也可以是D2D链路，那么在干扰图中表示为两条链路$lin{k_i}$与$lin{k_j}$之间存在一条有向边，即$lin{k_i}$是$lin{k_j}$的邻居。存在邻居关系的两条链路不能够使用同一时频的资源，否则将会在通信过程中产生干扰，从而降低通信效率，构建高效准确的干扰图能够提高无线资源的使用效率。
+	\subsection{无线资源}
+	\subsection{小区构成}
+	一个小区内的通信链路由蜂窝链路和D2D链路构成，在通信过程中，每条链路都由发射端和接收端构成。由于复用的是上行通信，所以在这里所有蜂窝链路的接收端都相同，均为基站。
+	\begin{itemize}
+	\item 链路发射端：蜂窝链路和D2D链路的发射端随机分布于在整个小区之中，链路的发射端在基站的控制下进行广播，基站可以决定链路的发射端是否进行广播以及选择什么样的频率资源进行广播，链路每次广播的时候将会携带相应D2D链路的ID，每次发送信号都学要占用一个时隙和一个频率单元。由于链路发射端的发射功率会随着链路通信距离的增加而增大，因此干扰半径也会随着通信距离增加而增大。一方面，小区中的蜂窝通信的距离往往会远大于D2D的通信距离，因此蜂窝链路的干扰半径通常也会远大于D2D链路的干扰半径，从而导致蜂窝链路发射端干扰半径范围内链路接收端的数量会远远大于D2D链路干扰半径范围内的链路接收端数量。
+
+	\item D2D链路接收端：D2D链路的接收端分布在小区中，D2D链路的接收端在干扰图的构建中起两个作用，一个是监听所有频率的情况，同时D2D链路接收端具备向基站汇报数据的能力，既可以向基站汇报冲突的情况也可以向基站汇报正确接收的频率单元等信息。构建干扰图的时候需要将这些数据汇报到基站进行处理。
+
+	\item 基站：基站是所有蜂窝链路的共同接收端，位于小区的中央。基站除了作为蜂窝链路的接收端监听所有频率单元的情况外，基站还保留完整的干扰图信息，以及其他的附加信息。基站可以接收D2D链路的接收端汇报上来的数据，进行干扰图数据和附加数据的处理，同时也可以决定下一帧各个链路的资源分配。
 	
-	本模板在 \TeX{Live} 2015(Windows 7 和 LinuxMint 17.1 环境下) 通过\hologo{XeLaTeX} 编译通过。
-	如有您在使用中有任何问题，欢迎与我联系。
+	\end{itemize}
+	
+	\subsection{算法性能描述}
+	对于一个实时干扰图构建算法最主要的是所构建干扰图的准确性，准确性可以用一个参数：少边率$pmiss$进行描述，即定义
+	
+	
+	
+	\begin{equation}\label{eq2.1}
+		{pmiss} = \frac{{Nu{m_{edgeTrue}} - Nu{m_{edgeFind}}}}{{Nu{m_{edgeTrue}}}}*100\% 
+	\end{equation}
+	
+	其中$Nu{m_{edgeTrue}}$代表真实存在的干扰边数量，$Nu{m_{edgeFind}}$代表已经发现的干扰边数量。
+	
+	同时因为所有蜂窝链路的接收端均为基站，因此所有蜂窝链路之间肯定都是相互干扰的，不管采取何种算法，基站都可以直接确定所有的蜂窝链路之间均存在干扰边，这部分干扰边的数量可能较大，且对这部分的数据分析不具有意义，为了更好得对干扰图进行数据分析。干扰图分析的时候并不考虑这部分的数据，只考虑3种类型的干扰边，即蜂窝链路对D2D链路的干扰边，D2D链路对蜂窝链路的干扰边，以及D2D链路之间的干扰边。其中对于D2D链路对蜂窝链路的干扰边部分，如果一条D2D链路发射端的广播信息能够被基站接收，那么就认为该D2D链路将会干扰所有的蜂窝链路。由于不同类型的干扰边之间的分析相对独立，因此可以进一步分析各个类型干扰边的性能情况。
+	
+	\section{干扰图构建算法}
+	本文所提出的算法是一个迭代的过程，将时域划分为帧，每一帧为一个循环过程，在每一帧结束时从基站端获取当前帧的干扰图信息。
+	
+	\subsection{数据模型}
+	干扰图构建算法需要D2D链路的发射端，D2D链路的接收端，蜂窝链路的发射端以及基站之间进行数据传输和处理。干扰图相关的数据信息只保留在基站，而蜂窝链路的发射端和D2D链路的发射端只在基站控制下广播频率，而D2D的接收端也只负责监控当前帧的频率冲突情况。
+	
+	对于蜂窝链路，基站通过ID标识实时维护每一条蜂窝链路的优先权等级，并对蜂窝链路采用优先权轮播的方式进行资源分配，在经过蜂窝链路广播和链路接收端向基站反馈汇报数据后，基站端进行计算和进行干扰图更新。
+	
+	\begin{enumerate}
+	\item 蜂窝链路
+
+
+	关于蜂窝链路，基站保存小区蜂窝链路集合的$cLinkSet$信息，每一条$cellularLink$的$cellularLin{k_i}$、${H_i}$ 信息，以及基站的$cNborDConfSe{t_{bs}}$，$cUnNborDConfSe{t_{bs}}$，$List < dNborSe{t_{possiable}}{ > _{bs}}$等信息。其中各个符号含义如下：
+
+	\begin{itemize}
+	\item $cLinkSet$：当前小区的蜂窝链路集合。
+	\item $cellularLin{k_i}$：ID标识为i的蜂窝链路，通过唯一的ID区别唯一的蜂窝链路。
+	\item ${H_i}$：$cellularLin{k_i}$的优先权等级，并设置取值区间为$\left[ {{H_{\min }},{H_{\max }}} \right]$，初始值预设为${H_{\max }}$。
+	\item $cNborDConfSe{t_{bs}}$：基站的D2D链路邻居集合，即广播信息能被基站接收的D2D链路集合。
+	\item $cUnNborDConfSe{t_{bs}}$：基站的D2D链路非邻居集合，即广播信息无法被基站接收的D2D链路集合。
+	\item $List < dNborSe{t_{possiable}}{ > _{bs}}$：基站可能D2D链路邻居集合$dNborSe{t_{possiable}}$列表，其中一个$dNborSe{t_{possiable}}$包含3个$d2dLink$。
+	\end{itemize}
+
+
+	\item D2D链路
+
+	关于D2D链路基站保存$dLinkSet$信息，每一条$d2dLink$的$d2dLin{k_k}$，$dNborDConfSe{t_k}$，$dUnNborDConfSe{t_k}$，$dNborCConfSe{t_k}$，$List < dNborSe{t_{possiable}}{ > _k}$等信息。其中各个符号的含义如下：
+	\begin{itemize}
+	\item $dLinkSet$：当前小区的D2D链路集合。
+	\item $d2dLin{k_k}$：ID标识为k的D2D链路，通过唯一的ID区别唯一的D2D链路。
+	\item $dNborDConfSe{t_k}$：$d2dLin{k_k}$的D2D链路邻居集合，即广播信息能被$d2dLin{k_k}$的R端所接收的D2D链路集合。
+	\item $dUnNborDConfSe{t_k}$：$d2dLin{k_k}$的D2D链路非邻居集合，即广播信息无法被$d2dLin{k_k}$的R端所接收的D2D链路集合。
+	\item $dNborCConfSe{t_k}$：$d2dLin{k_k}$的蜂窝链路邻居集合，即广播信息能被$d2dLin{k_k}$的R端所接收的蜂窝链路集合。
+	\item $List < dNborSe{t_{possiable}}{ > _k}$：$d2dLin{k_k}$可能D2D链路邻居集合$dNborSe{t_{possiable}}$列表，其中一个$dNborSe{t_{possiable}}$包含3个$d2dLink$。
+	\end{itemize}
+
+	\end{enumerate}
+	
+	\subsection{干扰图构建算法的流程}
+	
+
+	算法的具体实现可划分为获取和更新干扰图链路信息、蜂窝链路资源分配、蜂窝链路广播与基站计算、D2D链路资源分配和D2D链路广播与基站计算等过程。把干扰图的干扰边按照T端和R端的链路类型划分成蜂窝链路对D2D链路的干扰，即CToD类型、D2D链路之间的干扰即DToD类型和D2D链路对蜂窝链路的干扰，即DToC类型。而蜂窝链路之间的干扰,即CToC类型由于任意两条的蜂窝链路接收端均相同，必然存在干扰，因此这部分干扰图不进行分析和统计。假设小区的可用频率单元为$Ru$，频率单元的数量为$numRu$，其中划分给CToD类型干扰图构建的频率单元为$R{u_{cellular}}$，该部分频率单元数量为$numR{u_{cellular}}$，即划分给蜂窝链路进行广播的数量为$numR{u_{cellular}}$，划分给DToD和DToC类型干扰图构建的频率单元为$R{u_{d2d}}$，该部分频率单元数量为$numR{u_{d2d}}$，即划分给D2D链路进行广播的数量为$numR{u_{d2d}}$。
+
+
+	\begin{enumerate}
+	\item 基站获取和更新干扰图链路信息
+	
+	从基站获取了上一帧的完整的干扰图信息后，基站根据前一帧进出小区的链路更新基站的蜂窝链路信息和D2D链路信息。
+	假设，前一帧离开小区的蜂窝链路集合为$cLinkSe{t_{out}}$，前一帧加入小区的蜂窝链路集合为$cLinkSe{t_{in}}$，前一帧离开小区的D2D链路集合为$dLinkSe{t_{out}}$，前一帧加入小区的D2D链路集合为$dLinkSe{t_{in}}$。
+	
+	首先，将$cLinkSe{t_{out}}$中所有的$cellularLink$从中$cLinkSet$移除，同时移除$cLinkSe{t_{out}}$中每一个$cellularLink$对应的$cellularLin{k_i}$，${H_i}$信息。将$dLinkSe{t_{out}}$中所有的$d2dLink$从$dLinkSet$中移除，同时移除$dLinkSe{t_{out}}$中每一个$d2dLink$对应的$d2dLin{k_k}$，$dNborDConfSe{t_k}$，$dUnNborDConfSe{t_k}$，$dNborCConfSe{t_k}$，$List < dNborSe{t_{possiable}}{ > _k}$信息。
+	
+	其次，将包含在$cLinkSe{t_{out}}$的$cellularLink$元素从每一条D2D链路对应的$dNborCConfSe{t_i}$中移除。将包含在$dLinkSe{t_{out}}$的$d2dLink$从$cNborDConfSe{t_{bs}}$，$cUnNborDConfSe{t_{bs}}$，以及每一条D2D链路对应的$dNborDConfSe{t_k}$和$dUnNborDConfSe{t_k}$中移除。
+	
+	然后，对于$List < dNborSe{t_{possiable}}{ > _{bs}}$中的每一个D2D链路集合$dNborSe{t_{possiable}}(m)$，如果$dNborSe{t_{possiable}}(m)$包含了$dLinkSe{t_{out}}$中的$d2dLink$，则将该D2D链路集合$dNborSe{t_{possiable}}(m)$从$List < dNborSe{t_{possiable}}{ > _{bs}}$中移除。同样，对于每一个D2D链路对应的$List < dNborSe{t_{possiable}}{ > _k}$，如果该D2D链路集合 包含了 中的 ，则将该D2D链路集合$dNborSe{t_{possiable}}(m)$从$List < dNborSe{t_{possiable}}{ > _k}$中移除。
+	
+	最后，将$cLinkSe{t_{in}}$中所有的$cellularLink$加入$cLinkSet$，并初始化 中所有的$cellularLink$，初始化一条$cellularLink$的步骤为记录ID号标记为$cellularLin{k_i}$，初始化$cellularLin{k_i}$的优先权等级${H_i}$为${H_{\max }}$。将$dLinkSe{t_{in}}$中所有的$d2dLink$加入$dLinkSet$中并初始化$dLinkSe{t_{in}}$中所有的$d2dLink$，初始化一条$d2dLink$的步骤为，记录ID号标记为$d2dLin{k_k}$，初始化$d2dLin{k_k}$的$dNborDConfSe{t_k}$，$dUnNborDConfSe{t_k}$和$dNborCConfSe{t_k}$为空集，同时初始化列表$List < dNborSe{t_{possiable}}{ > _k}$为空列表。
+	
+	\item CToD类型干扰图的构建
+	
+	本文CToD类型干扰图的构建采用算法称为优先权轮播算法，具体的算法实现如下：
+	
+	基站将$cLinkSet$中的$cellularLink$，按照蜂窝链路的优先权等级${H_i}$的大小进行排序，选取排位前$2*numR{u_{cellular}}$的蜂窝链路。如果小区中的蜂窝链路数量总数不大于$2*numR{u_{cellular}}$，则全部选取。如果两条或者多条蜂窝链路的优先权大小${H_i}$相同，则排序按照它们加入小区的顺序。这样选取出一个有序的蜂窝链路序列，基站将分配给蜂窝链路的频率单元循环分配给这些蜂窝链路的发射端进行广播，并更新它们的优先权等级，如果基站为某一条蜂窝链路$cellularLin{k_i}$分配了频率资源，那么更新它的优先权等级${H_i}$为${H_{\min }}$,否则，更新它的优先权等级为$\min ({H_i} + 1,{H_{\max }})$，其中，${H_{\min }}$和${H_{\max }}$分别为预设的最低优先权等级和最高优先权等级。
+	
+	如果基站为$cellularLin{k_i}$分配了频率单元$r{u_i}$，那么$cellularLin{k_i}$的发射端将在该频率单元上发送广播信号，广播信号携带$cellularLin{k_i}$的链路ID信息。
+	
+	所有D2D链路的R端都实时监听$R{u_{cellular}}$所有的频率单元，如果$d2dLin{k_m}$的R端在频率单元$ru$上能够正确识别蜂窝链路的id，则标记该频率单元$ru$为蜂窝频率类型$RuType{1_{cellular}}$，并记录识别的蜂窝链路的ID信息。如果$d2dLin{k_m}$的R端在频率单元$ru$上检测到广播冲突，则标记该频率单元 为蜂窝频率类型$RuType{2_{cellular}}$，否则，说明$d2dLin{k_m}$的R端在频率单元 上没有收到任何信息，标记频率单元$ru$为蜂窝频率类型$RuType{0_{cellular}}$。D2D链路的R端将检测到的$R{u_{cellular}}$所有频率单元的蜂窝频率类型和识别链路ID等信息上报给基站。
+	
+	基站统计所有的$d2dLink$上报的数据进行 类型干扰图更新。
+	
+	如果$d2dLin{k_m}$上报$ru$的类型为蜂窝频率类型$RuType{1_{cellular}}$以及链路ID对应的蜂窝链路$cellularLin{k_i}$，那么此时基站更新$d2dLin{k_m}$的$dNborCConfSe{t_m}$为：
+	
+	
+	\begin{equation}\label{eq2.1}
+	dNborCConfSe{t_m} = dNborCConfSe{t_m} \cup cellularLin{k_i}
+	\end{equation}
+	
+	如果$d2dLin{k_m}$上报$ru$的类型为蜂窝频率类型$RuType{2_{cellular}}$，因为本文采取优先权轮播算法循环分配频率单元，该算法一个频率单元最多被两条蜂窝链路使用，而此时$d2dLin{k_m}$在频率单元$ru$上检测到广播冲突，那么冲突的广播只能来自使用频率单元$ru$进行广播的两条链路，设$cSet(ru)$表示使用分配频率单元 的蜂窝链路集合，那么此时基站更新$d2dLin{k_m}$的$cNborConfirmSe{t_m}$为：
+	
+	\begin{equation}\label{eq2.1}
+	dNborCConfSe{t_m} = dNborCConfSe{t_m} \cup cSet(ru)
+	\end{equation}
+	
+	如果$d2dLin{k_m}$上报$ru$的类型为蜂窝频率类型$RuType{0_{cellular}}$，则无需进行任何操作。
+	
+	\item DToD和DToC类型干扰图的构建
+	基站根据前一帧的干扰图信息构建D2D链路之间的冲突权重表，然后按照D2D链路加入小区的顺序对所有的D2D链路进行排序，形成一个序列，然后计算干扰图的冲突权重和，并基于最小冲突权重和的原则依次分配频率单元给D2D链路。D2D链路的发射端根据基站分配的频率单元进行广播。
+	
+	冲突权重表
+	
+	本文算法使用冲突权重$confic{t_{weight}}$来表示用来描述链路之间的广播冲突情况，定义两条D2D链路$d2dLin{k_m}$和$d2dLin{k_n}$的冲突权重为$confic{t_{weight}}(m,n)$，其中$confic{t_{weight}}(m,n)$的含义是根据现有的干扰图信息，同时与$d2dLin{k_m}$和$d2dLin{k_n}$的T端存在干扰关系的R端数量，包含蜂窝链路的R端和D2D链路的R端。这样根据D2D链路两两之间的冲突权重就构建出了小区的冲突权重表。
+	用$isConfict(m,n,k)$表示$d2dLin{k_m}$，$d2dLin{k_n}$的广播在$d2dLin{k_k}$的冲突情况。定义$d2dLin{k_m}$，$d2dLin{k_n}$与$d2dLin{k_k}$的$isConfict(m,n,k)$：
+	
+	\begin{equation}\label{eq2.1}
+	isConfict(m,n,k) = \left\{ \begin{array}{l}
+	0,d2dLin{k_m} \notin dNborDConfSe{t_k} \cup d2dLin{k_n} \notin dNborDConfSe{t_k}\\
+	1,d2dLin{k_m} \in dNborDConfSe{t_k} \cap d2dLin{k_n} \in dNborDConfSe{t_k}
+	\end{array} \right.
+	\end{equation}
+	
+	用$isConfict(m,n,bs)$表示$d2dLin{k_m}$，$d2dLin{k_n}$的广播在基站的冲突情况。定义$d2dLin{k_m}$，$d2dLin{k_n}$与基站的$isConfict(m,n,bs)$：
+	
+	\begin{equation}\label{eq2.1}
+	isConfict(i,j,bs) = \left\{ \begin{array}{l} 0,d2dLin{k_m} \notin cNborDConfSe{t_{bs}} \cup d2dLin{k_n} \notin cNborDConfSe{t_{bs}}\\nu{m_{cellular}},d2dLin{k_m} \in cNborDConfSe{t_{bs}} \cap d2dLin{k_n} \in cNborDConfSe{t_{bs}} \end{array} \right.
+	\end{equation}
+	
+	其中$nu{m_{cellular}}$表示小区中蜂窝链路的数量。
+	那么，$d2dLin{k_m}$和$d2dLin{k_n}$的冲突权重$confic{t_{weight}}(m,n)$为：
+	
+	\begin{equation}\label{eq2.1}
+	\begin{array}{l}
+	confic{t_{weight}}(m,n) = isConfict(m,n,bs) + \sum\limits_{k = 1}^{k = nu{m_{D2D}}} {isConfict(m,n,k)} \\\end{array}
+	\end{equation}
+	
+	
+	其中$nu{m_{d2d}}$表示小区的D2D数量。
+	
+	最小频率冲突和
+	
+	定义$d2dLin{k_m}$和$d2dLin{k_n}$的同频冲突标志$flag(m,n,r{u_m},r{u_n})$为：
+	
+	\begin{equation}\label{eq2.1}
+	flag(m,n,r{u_m},r{u_n}) = \left\{ \begin{array}{l} 0,r{u_m} \ne r{u_n}\\1,r{u_m} = r{u_n}\end{array} \right.
+	\end{equation}
+	
+	定义$dLinkSet(ru,m - 1)$表示已经分配频率单元的$m-1$条D2D链路中，基站为其分配的频率单元为$ru$的D2D链路集合。显然当且仅当$d2dLin{k_n} \in dLinkSet(r{u_m},m - 1)$的时候，才有$flag(m,n,r{u_m},r{u_n}){\rm{ = }}1$。
+	定义第$m$个分配频率单元的D2D链路 在频率单元$ru$上的频率冲突和$confictSu{m_{weight}}(m,ru)$为：
+	
+	\begin{equation}\label{eq2.1}
+	confictSu{m_{weight}}(m,ru) = \sum\limits_{n = 1}^{m - 1} {(confic{t_{weight}}(m,n)} *flag(m,n,ru,r{u_n}))
+	\end{equation}
+	
+	本文采用最小冲突和算法为D2D链路分配资源，基站分配使得$confictSu{m_{weight}}(m,ru)$取得最小值的频率单元$ru$给$confictSu{m_{weight}}(m,ru)$进行广播。即有
+	
+	\begin{equation}\label{eq2.1}
+	confictSu{m_{weight}}(m,r{u_m}) = \min (confictSu{m_{weight}}(m,ru))
+	\end{equation}
+	
+	如果存在多个$ru$值，使得$confictSu{m_{weight}}(m,ru)$的取值等于最小值，则定义频率单元$ru$在$d2dLin{k_m}$分配资源之前是被重复使用的次数$reuseTimes(ru,m - 1)$：
+	
+	\begin{equation}\label{eq2.1}
+	reuseTimes(ru,m - 1) = \sum\limits_{n = 1}^{m - 1} {confictFlag(n,{n_j})}
+	\end{equation}
+	
+	其中:
+	\begin{equation}\label{eq2.1}
+	confictFlag(r{u_m},r{u_n}) = \left\{ \begin{array}{l}
+	0,r{u_m} \ne r{u_n}\\
+	1,r{u_m} = r{u_n}
+	\end{array} \right.
+	\end{equation}
+	
+	如果$d2dLin{k_m}$存在多个频率单元的频率冲突和相等，那么基站将分配使得$reuseTimes(ru,m - 1)$的值最小的频率单元$ru$给$d2dLin{k_m}$进行广播，如果再存在多个$ru$使得$reuseTimes(ru,m - 1)$取得最小值，则随机从这些$ru$进行选择。
+	
+	
+	D2D链路广播与基站计算
+	
+	
+	如果基站为$d2dLin{k_m}$分配了频率单元$r{u_m}$，那么$d2dLin{k_m}$的发射端将在该频率单元上发送广播信号，广播信号携带$d2dLin{k_m}$的链路ID信息。
+	
+	所有D2D链路的R端都实时监听$R{u_{d2d}}$所有的频率单元，如果$d2dLin{k_k}$的R端在频率单元$ru$上能够正确识别D2D的id，则标记该频率单元$ru$为D2D频率类型$RuType{1_{d2d}}$，并记录识别的D2D链路的ID信息。如果$d2dLin{k_k}$的R端在频率单元$ru$上检测到广播冲突，则标记该频率单元$ru$为D2D频率类型$RuType{2_{d2d}}$，否则，说明$d2dLin{k_k}$的R端在频率单元$ru$上没有收到任何信息，标记频率单元$ru$为D2D频率类型$RuType{0_{d2d}}$。D2D链路的R端将检测到的$R{u_{d2d}}$所有频率单元的D2D频率类型和识别链路ID等信息上报给基站。
+	
+	基站也实时监听$R{u_{d2d}}$所有的频率单元，如果基站在频率单元$ru$上能够正确识别D2D的id，则标记该频率单元$ru$为D2D频率类型$RuType{1_{d2d}}$，并记录识别的D2D链路的ID信息。如果基站在频率单元$ru$上检测到广播冲突，则标记该频率单元$ru$为D2D频率类型$RuType{2_{d2d}}$，否则，标记频率单元$ru$为D2D频率类型$RuType{0_{d2d}}$。
+	用$dLinkSet(ru)$表示所有的$d2dLink$中，分配频率单元$ru$的$d2dLink$集合。
+	
+	
+	DToD类型干扰图更新
+	
+	如果$d2dLin{k_k}$上报频率单元$ru$的类型为$RuType{1_{d2d}}$以及识别的D2D链路$d2dLin{k_m}$，此时更新$d2dLin{k_k}$的干扰图信息：
+	
+	\begin{equation}\label{eq2.1}
+	dNborDConfSe{t_m} = dNborDConfSe{t_m} \cup d2dLin{k_m}
+	\end{equation}
+	
+	此时，基站还可以推断出用$dLinkSet(ru)$中除了$d2dLin{k_m}$，其他D2D链路T端的广播信号$d2dLin{k_k}$的R端均无法收到。即：
+	
+	\begin{equation}\label{eq2.1}
+	dNborDConfSe{t_k} = dNborDConfSe{t_k} \cup (dLinkSet(ru) - d2dLin{k_m})
+	\end{equation}
+	
+	
+	
+	如果$d2dLin{k_k}$上报频率单元$ru$的类型为$RuType{2_{d2d}}$，此时基站可以推断出$d2dLin{k_k}$的R端在频率单元$ru$上广播冲突了，并且此时基站利用已知的干扰图信息计算可能的冲突来源，此时，更新$d2dLin{k_k}$的干扰图信息：
+	首先计算可能的冲突集合$ConfictSet{(k,ru)_{possiable}}$:
+	
+	\begin{equation}\label{eq2.1}
+	ConfictSet{(k,ru)_{possiable}} = dLinkSet(ru) - dUnNborDConfSe{t_k}
+	\end{equation}
+	
+	因为存在广播冲突，所以$ConfictSet{(k,ru)_{possiable}}$的元素个数肯定不小于2。
+	当$ConfictSet{(k,ru)_{possiable}}$的D2D链路的数量正好等于2个时候，那个基站可以推断集合中的两个D2D链路都能干扰到$d2dLin{k_k}$，即：
+	
+	\begin{equation}\label{eq2.1}
+	dNborDConfSe{t_k} = dNborDConfSe{t_k} \cup ConfictSet{(k,ru)_{possiable}}
+	\end{equation}
+	
+	当$ConfictSet{(k,ru)_{possiable}}$的D2D链路的数量等于3个时候，那个基站尚无法推断集合中的D2D链路与$d2dLin{k_k}$的干扰关系，基站将该集合作为附件信息储存成$dNborSe{t_{possiable}}$保存，即：
+	
+	\begin{equation}\label{eq2.1}
+	List < dNborSe{t_{possiable}}{ > _k} = List < dNborSe{t_{possiable}}{ > _k} + ConfictSet{(k,ru)_{possiable}}
+	\end{equation}
+	
+	当$ConfictSet{(k,ru)_{possiable}}$的D2D链路的数量大于3个时候，则视为无用信息直接丢弃，不进行处理。
+	
+	
+	如果$d2dLin{k_k}$上报频率单元$ru$的类型为$RuType{0_{d2d}}$，则基站可以推断出$dLinkSet(ru)$中所有的D2D链路T端的广播信号$d2dLin{k_k}$的R端均无法收到。
+	此时基站更新$d2dLin{k_k}$的干扰图信息：
+	
+	\begin{equation}\label{eq2.1}
+	dUnNborDConfSe{t_k} = dUnNborDConfSe{t_k} \cup dLinkSet(ru)
+	\end{equation}
+	
+	同时，当基站以此方式处理完更新所有$d2dLin{k_k}$的$dNborDConfSe{t_k}$和$dUnNborDConfSe{t_k}$信息之后。基站将重新处理所有的$List < dNborSe{t_{possiable}}{ > _k}$。
+	对于所有的$List < dNborSe{t_{possiable}}{ > _k}$中的$dNborSe{t_{possiable}}$，基站先计算$SetA$和$SetB$。其中：
+	\begin{equation}\label{eq2.1}
+	SetA = dNborSe{t_{possiable}} - dUnNborDConfSe{t_k}
+	\end{equation}
+	
+	\begin{equation}\label{eq2.1}
+	SetB = dNborSe{t_{possiable}} \cap dUnNborDConfSe{t_k}
+	\end{equation}
+	
+	若$SetA$中的D2D链路数量为2个，则将$dNborSe{t_{possiable}}$从$List < dNborSe{t_{possiable}}{ > _k}$中移除，同时更新$dNborDConfSe{t_k}$为：
+	
+	\begin{equation}\label{eq2.1}
+	dNborDConfSe{t_k} = dNborDConfSe{t_k} \cup SetA
+	\end{equation}
+	
+	如果$dNborSe{t_{possiable}}$中的元素个数为3个，则将$dNborSe{t_{possiable}}$从$List < dNborSe{t_{possiable}}{ > _k}$中移除。  
+	
+	
+	DToC类型干扰图更新
+	
+	DToC类型干扰图的信息更新过程同DToD类型干扰图。
+	
+	如果基站记录的频率单元$ru$的类型为$RuType{1_{d2d}}$以及识别的D2D链路$d2dLin{k_m}$，此时更新基站的邻居信息：
+	
+	\begin{equation}\label{eq2.1}
+	cNborDConfSe{t_{bs}} = cNborDConfSe{t_{bs}} \cup d2dLin{k_m}
+	\end{equation}
+	
+	\begin{equation}\label{eq2.1}
+	cNborDConfSe{t_{bs}} = cNborDConfSe{t_{bs}} \cup (dLinkSet(ru) - d2dLin{k_m})
+	\end{equation}
+	
+	如果基站记录的频率单元$ru$的类型为$RuType{2_{d2d}}$，此时,首先计算可能的冲突集合$ConfictSet{(bs,ru)_{possiable}}$：
+	
+	\begin{equation}\label{eq2.1}
+	ConfictSet{(bs,ru)_{possiable}} = dLinkSet(ru) - cUnNborDConfSe{t_{bs}}
+	\end{equation}
+	
+	
+	当$ConfictSet{(bs,ru)_{possiable}}$的D2D链路的数量正好等于2时候：
+	
+	\begin{equation}\label{eq2.1}
+	cNborDConfSe{t_{bs}} = cNborDConfSe{t_{bs}} \cup ConfictSet{(bs,ru)_{possiable}}
+	\end{equation}
+	
+	当$ConfictSet{(k,ru)_{possiable}}$的D2D链路的数量等于3个时候：
+	
+	\begin{equation}\label{eq2.1}
+	List < dNborSe{t_{possiable}}{ > _{bs}} = List < dNborSe{t_{possiable}}{ > _{bs}} + ConfictSet{(bs,ru)_{possiable}}
+	\end{equation}
+	
+	
+	如果基站记录的频率单元$ru$的类型为$RuType{0_{d2d}}$，此时
+	
+	\begin{equation}\label{eq2.1}
+	cUnNborDConfSe{t_{bs}} = cUnNborDConfSe{t_{bs}} \cup dLinkSet(ru)
+	\end{equation}
+	
+	按照此方法更新完基站的邻居信息$cNborDConfSe{t_{bs}}$和$cUnNborDConfSe{t_{bs}}$之后，更新$List < dNborSe{t_{possiable}}{ > _{bs}}$，同样令
+	
+	\begin{equation}\label{eq2.1}
+	Set{A_{bs}} = dNborSe{t_{possiable}} - cUnNborDConfSe{t_{bs}}
+	\end{equation}
+	
+	\begin{equation}\label{eq2.1}
+	Set{B_{bs}} = dNborSe{t_{possiable}} \cap cUnNborDConfSe{t_{bs}}
+	\end{equation}
+	
+	若$Set{A_{bs}}$中的D2D链路数量为2个，则将$dNborSe{t_{possiable}}$从 中移除，同时更新$cNborDConfSe{t_{bs}}$为：
+	
+	\begin{equation}\label{eq2.1}
+	cNborDConfSe{t_{bs}} = cNborDConfSe{t_{bs}} \cup Set{A_{bs}}
+	\end{equation}
+	
+	如果$Set{B_{bs}}$中的元素个数为3个，则将$dNborSe{t_{possiable}}$从$List < dNborSe{t_{possiable}}{ > _{bs}}$中移除。 
+	结束此次迭代，进入下一个迭代过程。
+	
+	\end{enumerate}
 	
 	\chapter{使用说明}
-	学位论文应包括如下部分：\\
-	\begin{enumerate}
-		\itshape
-		\item 中文封面
-		\item 中文页面
-		\item 英文页面
-		\item 论文独创性声明和使用授权声明
-		\item 中文内容提要及关键词
-		\item 英文内容提要及关键词
-		\item 目录
-		\item \fbox{符号、变量、缩略词等本论文专用术语的注释表}
-		\item 正文
-		\item 致谢
-		\item 参考文献
-		\item  \fbox{附录}
-		\item \fbox{索引（中、英文）}
-		\item  \fbox{作者简介（包括在学期间发表的论文和取得的学术成果清单）}
-		\item \fbox{后记}
-	\end{enumerate}
-	并按此顺序排列，其中\fbox{加方框的条目}为可选。
-	
 	
 	\section{模板整体框架}
 	使用 \seuthesix 模板的整体框架如下所示，其中\verb+<...>+表示可替换的文本(replacement text)。
 	{\color{magenta}
 		\begin{verbatim}
-		\documentclass[figurelist,tablelist,algorithmlist,nomlist,masters]{seuthesix}
-		%文档开始，指定选项
-		\usepackage{<hologo>}
-		\usepackage{<pdfpages>}
-		%载入更多宏包
-		\categorynumber{<000>} % 分类采用《中国图书资料分类法》
-		\UDC{<000>}            %《国际十进分类法UDC》的类号
-		\secretlevel{<公开>}    %学位论文密级分为"公开"、"内部"、"秘密"和"机密"四种
-		\studentid{<000000>}   %学号要完整，前面的零不能省略。
-		\title{<\seuthesix 用户手册>}{<手册>}{<\seuthesix User Manual>}{<\seuthesix>}
-		%中文标题，中文副标题，英文标题，英文副标题， 副标题没有可以置为空， 
-		%即 \title{<\seuthesix 用户手册>}{}{<\seuthesix User Manual>}{}
-		\author{<\seuthesix 开发组>}{<\seuthesix developer group>}
-		%作者中英文姓名
-		\advisor{<高德纳>}{<教授>}{<Donald E. Knuth>}{<Prof.>}
-		%导师中英文姓名与职称
-		\coadvisor{<兰伯特>}{<副教授>}{<Leslie Lamport>}{<Associate Prof.>} 
-		% 副导师中英文姓名与职称，若没有，可以不使用该命令
-		\degreetype{<\TeX 学硕士>}{<Master of \TeX>} 
-		% 详细学位类型，如工学硕士，Master of Engineering
-		\major{<\TeX>}%一级学科名
-		\submajor{<\LaTeX>}%二级学科名
-		\defenddate{<\today>}%答辩日期
-		\authorizedate{<\today>}%授予学位日期
-		\committeechair{<高德纳>}%答辩委员会主席姓名
-		\reviewer{<Frank Mittlebach>}{<David Carlisle>}%两位评阅人姓名
-		\department{<\TeX{}学院>}{<School of \TeX>}
-		%学院名称
-		\seuthesisthanks{<本课题的研究获\LaTeX{ }project 赞助\url{www.latex-project.org}>}
-		%致谢信息，没有可以不写
-		\makebigcover%生成A3大封面
-		\makecover% 生成封面
-		\begin{abstract}{<\TeX, \LaTeX, 文档类， 学位论文>}
-		<本文介绍如何使用\seuthesix 文档类撰写东南大学学位论文。>
-		\end{abstract}
-		%生成中文摘要和关键词
-		\begin{englishabstract}{<\TeX, \LaTeX, document class， thesis/dissertation>}
-		<This work presents an introduction of how to use \seuthesix document class to 
-		typeset the thesis/dissertation of Southeast University.>
-		\end{englishabstract}
-		%生成英文摘要和关键词
-		\tableofcontents%生成目录
-		\setnomname{<术语表名称>}%设置术语表的名称，用于\listofothers
-		\listofothers%生成图、表等目录，没有可以不写
-		
-		\mainmatter
-		%开始正文
-		
-		\chapter{<绪论>}
-		\section{<研究背景>}
-		\section{<本论文的工作>}
-		...
-		
-		
-		\chapter{<...>}
-		\section{<...>}
-		...
-		
-		
-		...
-		
-		
-		\chapter{<全文总结>}
-		...
-		
-		\acknowledgement
-		<感谢每一个给予帮助的人...>
-		%致谢，没有可以不写
-		
-		\thesisbib{<bib文件名>}
-		%参考文献
-		
-		\appendix
-		\chapter{<...>}
-		...
-		
-		\chapter{<...>}
-		...
-		%附录部分，没有可以不写
-		
-		\resume{<作者简介>}
-		<简介内容...>
-		%作者简介，没有可以不写
-		
-		\end{document}
 		%文档到此结束
 		\end{verbatim}
 	}
