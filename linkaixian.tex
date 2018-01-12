@@ -106,7 +106,7 @@
 	\begin{figure}[htb]
 		\centering
 		% Requires \usepackage{graphicx}
-		\includegraphics[scale =1.4 ]{f21.eps}
+		%\includegraphics[scale =1.4 ]{f21.eps}
 		\caption{资源池示意图}\label{f21}
 	\end{figure}
 	
@@ -188,7 +188,7 @@
 	4）优先权等级更新：如果基站为某一条蜂窝链路$cLink_i$分配了频率资源，那么更新它的优先权等级${H_i}$为${H_{\min }}$,否则，更新它的优先权等级为$\min ({H_i} + 1,{H_{\max }})$，其中，${H_{\min }}$和${H_{\max }}$分别为预设的最低优先权等级和最高优先权等级。
 	
 	\begin{itemize}
-	\item 蜂窝链路广播监听与基站处理
+		\item 蜂窝链路广播监听与基站处理
 	\end{itemize}
 	
 	完成资源分配后，基站控制蜂窝链路的信号的广播，同时D2D链路的接收端监听和向基站汇报冲突情况，基站端更新小区的CToD类型干扰图信息。具体操作如下：
@@ -218,7 +218,7 @@
 	因为DToD和DToC类型干扰图是由原有的DToD和DToC类型干扰图信息共同决定D2D链路的资源分配，这部分的可分为
 	
 	\begin{itemize}
-	\item 链路进出的类型干扰图更新
+		\item 链路进出的类型干扰图更新
 	\end{itemize}
 	
 	类型干扰图更新分为DToD和DToC两种类型干扰图的更新。
@@ -266,7 +266,7 @@
 	\begin{equation}\label{eq2.5}
 	\phi (m,n) = isConfict(m,n,bs) + \sum\limits_{k = 1}^{k = Q_D} {isConfict(m,n,k)} 
 	\end{equation}
-
+	
 	其中$Q_D$表示小区的D2D数量。
 	
 	通过以上步骤根据D2D链路两两之间的冲突权重就构建出了小区的冲突权重表。
@@ -420,11 +420,11 @@
 	\end{itemize}
 	
 	DToC类型干扰图的信息更新过程同DToD类型干扰图，基站处理上报数据分为检测数据直接处理和二次处理两部分。
-
+	
 	1）检测数据的直接处理。根据基站检测到的$RU$类型可分为三种情况。
 	
 	情况一、基站记录的资源块$RU$的类型为$\mathcal{N}_{d1}$以及识别的D2D链路$dLink_m$，则分别更新基站的$cNborD_{bs}$和$cUnNborD_{bs}$邻居信息：
-
+	
 	\begin{equation}\label{eq2.21}
 	cNborD_{bs} = cNborD_{bs} \cup dLink_m
 	\end{equation}
@@ -459,7 +459,7 @@
 	cUnNborD_{bs} = cUnNborD_{bs} \cup dLinkSet(RU)
 	\end{equation}
 	
-
+	
 	2）干扰图信息的二次处理，基站根据监听的数据更新完基站的邻居信息$cNborD_{bs}$和$cUnNborD_{bs}$之后，遍历基站的$List < dNborSet_{p}{ > _{bs}}$，同样令
 	
 	\begin{equation}\label{eq2.27}
@@ -485,169 +485,190 @@
 	
 	\chapter{干扰图构建算法的理论分析}
 	\section{引言}
-	上一章我们详细介绍了本文所提出的蜂窝D2D实时干扰图构建算法的完整实现步骤。将干扰图按照发射端和接收端的链路类型进行了划分，划分成了CToD,DToD和DToC三部分类型干扰边。并通过仿真的角度分析了本文所提算法性能情况。
+	上一章我们叙述了蜂窝D2D通信系统的系统模型，介绍了无线资源和小区的情况，并详细介绍了本文所提出的蜂窝D2D实时干扰图构建算法的实现流程，并对流程中的每一个步骤的实现进行了详细的介绍。本章我们依旧按照干扰边两端链路的类型划分成CToD,DToD和DToC三种不同的干扰边类型进行分析。
 	
-	本章我们将通过建立完整的理论分析模型，对所提算法进行详细的理论分析和验证所提算法的结果。同样本章将会针对3种不同的类型干扰边：CToD,DToD和DToC进行分析。
+	在具体分析之前需要分析一个很重要的变量，即小区中的链路接收端所能接收到的链路的数量，这个也称为链路的度D。
+	
+	
+	本章我们将从理论的角度计算出
+	
+	本章我们将通过建立完整的理论分析模型，对所提算法进行详细的理论分析和验证所提算法的结果。同样本章将会针对3种不同的类型干扰边
 	
 	理论分析的主要参数是少边率，即包含总少边率和类型少边率。
 	
-	\section{CToD类型干扰边分析}
 	假设小区的小区蜂窝链路数为$Q_C$，每帧蜂窝链路进出数为$Q_{vC}$，小区的D2D链路数为$Q_D$，每帧D2D链路进出数为$Q_{vD}$，可用资源块数$N$，划分给D2D链路广播的数量为$N_D$，划分给蜂窝链路广播的数量为$N_C$。
 	
-	\subsection{蜂窝链路的优先级状态}
-	优先级状态指的是每一次迭代过程中，蜂窝链路广播与基站计算阶段结束后，各个蜂窝链路的优先级状态${H_i}$。
 	
-	首先新加蜂窝链路的比例为：
+	
+	小区的新加蜂窝链路的比例为：
 	
 	\begin{equation}\label{eq3.1}
-	{p_{newCLink}} = \frac{{Q_{vC}}}{{Q_C}}
+	{P_{newCLink}} = \frac{{Q_{vC}}}{{Q_C}}
 	\end{equation}
 	
 	原有蜂窝链路的比例为：
-	\begin{equation}\label{eq3.1}
-	{p_{oldCLink}} = 1 - {p_{newCLink}}
+	\begin{equation}\label{eq3.2}
+	{P_{oldCLink}} = 1 - {P_{newCLink}}
 	\end{equation}
-	
-	根据小区的$N_C$，$Q_C$和$Q_C$三者的关系可以划分成三种不同的场景。分别为$Q_{vC} \le 2*N_C < Q_C$，$Q_{vC} \le 2*N_C < Q_C$和$2*N_C \ge Q_C$
-	
-	\subsubsection{场景一：$2*N_C \ge Q_C$}
-	该场景下每一帧所有的蜂窝链路都会被选中广播信息。因此，当该阶段结束之后所有蜂窝链路的优先级状态均处于${H_{\min }}$。
-	
-	\subsubsection{场景二：$Q_{vC} \le 2*N_C < Q_C$}
-	该场景下，每帧基站会选取$2*N_C$条蜂窝链路分配资源块。因此基站更新信息时，会有$2*N$蜂窝链路的优先权状态更新为${H_{\min }}$，其余链路的优先权更新$\min ({H_i} + 1,{H_{\max }})$。同时，每帧小区都将有一定比例的蜂窝链路离开小区和新加入小区。
-	
-	如果上一帧结束的优先权状态为${H_i}$的蜂窝链路数量为$Nu{m_{{H_i}}}$，那么受到蜂窝链路进出的影响，本帧开始经过链路进出更新后时候$Nu{m_{{H_i}}}$的期望更新为
-	
-	\begin{equation}\label{eq3.1}
-	E(Nu{m_{{H_i}}}) = \left\{ \begin{array}{l}
-	Nu{m_{{H_i}}}*{p_{oldCLink}},{H_i} \ne {H_{\max }}\\
-	Nu{m_{{H_i}}}*{p_{oldCLink}} + Q_{vC},{H_i} = {H_{\max }}
-	\end{array} \right.
-	\end{equation}
-	
-	选取的蜂窝链路包含${X_i}$条优先权状态为${H_i}$的蜂窝链路，那么当本帧资源分配结束，蜂窝链路优先权更新后，状态${H_{i + 1}}$的蜂窝链路数更新为
-	
-	\begin{equation}\label{eq3.1}
-	Nu{m_{{H_i}}} = \left\{ \begin{array}{l}
-	2*N_C,{H_i} = 0\\
-	Nu{m_{{H_{i - 1}}}} - {X_i},{H_i} \ne 0
-	\end{array} \right.
-	\end{equation}
-	
-	如果${X_i} \ne 0$，即存在优先权状态为${H_i}$的蜂窝链路被选上，那么不可能有优先权状态为${H_{i - 1}}$的蜂窝链路没有被选上。即
-	
-	\begin{equation}\label{eq3.1}
-	{X_{i + 1}} = Nu{m_{{H_{i + 1}}}},{H_i} < {H_{\max }}
-	\end{equation}
-	
-	如果${X_i} \ne Nu{m_{{H_i}}}$，即存在优先权状态为${H_i}$的蜂窝链路没有被选上，那么不可能有优先权状态为${H_{i - 1}}$的蜂窝链路被选上。即
-	\begin{equation}\label{eq3.1}
-	{X_{i - 1}} = 0,{H_i} > 0
-	\end{equation}
-	由此可以得到，存在${H_{{i_0}}}$使得：
-	\begin{equation}\label{eq3.1}
-	{X_i} = \left\{ \begin{array}{l}
-	0,{H_i} < {H_{{i_0}}}\\
-	Nu{m_{{H_i}}},{H_i} > {H_{{i_0}}}{ }and{ }{H_i} \le {H_{\max }}
-	\end{array} \right.
-	\end{equation}
-	
-	其中$0 \le {X_{{i_0}}} \le H{ & _{{i_0}}}$，然后分析$H{ & _{{i_0}}}$的取值，由公式4-5，4-6和4-9可以知道上一帧结束和这一帧结束$Nu{m_{{H_i}}}$的关系，而当小区的链路进出速度稳定后两者是数值是相等的。
-	
-	\begin{equation}\label{eq3.1}
-	Nu{m_{{H_i}}} = \left\{ \begin{array}{l}
-	2*N_C,{H_i} = 0\\
-	Nu{m_{{H_{i - 1}}}}*{p_{oldCLink}},0 < {H_i} \le {H_{{i_0}}}\\
-	Nu{m_{{H_{{i_0}}}}} - {X_{{i_0}}},{H_i} = {H_{{i_0} + 1}}\\
-	0,{H_i} > {H_{{i_0}}}
-	\end{array} \right.
-	\end{equation}
-	
-	因此由公式4-10的递归关系可以推出，如果${H_{\max }} > {H_{{i_0}}}$，那么：
-	
-	\begin{equation}\label{eq3.1}
-	Nu{m_{{H_i}}} = \left\{ \begin{array}{l}
-	2*N_C*{p_{oldCLink}}^{{H_i}},0 \le {H_i} \le {H_{{i_0}}}\\
-	Q_C - \sum\limits_{{H_i} = 0}^{{H_{i0}}} {Nu{m_{{H_i}}}} ,{H_i} = {H_{{i_0} + 1}}\\
-	0,{H_{{i_0}}} < {H_i} \le {H_{\max }}
-	\end{array} \right.
-	\end{equation}
-	而此时的${H_{{i_0}}}$应该满足公式
-	
-	\begin{equation}\label{eq3.1}
-	\sum\limits_{{H_i} = 0}^{{H_{{i_0}}}} {2*N_C*{p_{oldCLink}}^{{H_i}}}  = \frac{{2*N_C*(1 - {p_{oldCLink}}^{{H_{i0}} + 1})}}{{{p_{newCLink}}}} < Q_C
-	\end{equation}
-	
-	\begin{equation}\label{eq3.1}
-	\sum\limits_{{H_i} = 0}^{{H_{{i_0}}}} {2*N_C*{p_{oldCLink}}^{{H_i}}}  = \frac{{2*N_C*(1 - {p_{oldCLink}}^{{H_{i0}} + 1})}}{{{p_{newCLink}}}} < Q_C
-	\end{equation}
-	
-	为了能达到协议的效果，需要有${H_{\max }} > {H_{{i_0}}}$，同时：
-	
-	\begin{equation}\label{eq3.1}
-	\sum\limits_{i = 0}^{ + \infty } {2*N_C*{p_{oldCLink}}^i}  = \frac{{2*N_C}}{{1 - {p_{oldCLink}}}} = \frac{{2*N_C*Q_C}}{{Q_{vC}}} > Q_C
-	\end{equation}
-	所以此时${H_{{i_0}}}$肯定存在。
-	
-	\subsubsection{场景三：$2*N_C \le Q_{vC}$}
-	此时有：
-	
-	\begin{equation}\label{eq3.1}
-	\sum\limits_{i = 0}^{ + \infty } {2*N_C*{p_{oldCLink}}^i}  = \frac{{2*N_C}}{{1 - {p_{oldCLink}}}} = \frac{{2*N_C*N_C}}{{Q_{vC}}} \le Q_C
-	\end{equation}
-	
-	该场景下会出现一部分的蜂窝链路始终无法分配到资源，这种情况下属于高速的动态变化场景，构建干扰图然后分配资源不具有现实意义，本文算法并不适用。
-	
-	
-	\subsection{CToD类型干扰边少边率计算}
-	假设$dLink_m$能收到$cLink_i$发射端发送的广播信息，那么分析$cLink_i$对$dLink_m$的干扰边还未被发现的概率。
 	
 	小区新加D2D链路的比例为：
 	
-	\begin{equation}\label{eq3.1}
-	{p_{newLinkD2D}} = \frac{{Q_{vD}}}{{Q_D}}
+	\begin{equation}\label{eq3.3}
+	{p_{newDLink}} = \frac{{Q_{vD}}}{{Q_D}}
 	\end{equation}
 	小区的原始D2D链路的比例为：
-	\begin{equation}\label{eq3.1}
-	{p_{oldLinkD2D}} = 1 - {p_{newLinkD2D}}
+	\begin{equation}\label{eq3.4}
+	{p_{oldDLink}} = 1 - {p_{newDLink}}
 	\end{equation}
 	
-	根据协议算法内容，只要基站为$cLink_i$分配资源块进行广播，如果此时$dLink_m$已经存在于小区中，并且能收到$cLink_i$的T端的广播信号，那个该干扰关系肯定能被基站识别。因此，干扰关系不能被识别的情况当且仅当$dLink_m$进入小区之后，基站没有再为$cLink_i$分配资源块。
+	----------------------------这边省略了一些东西----------------------------
 	
-	定义 $\{ newCLink\} $表示新加蜂窝链路集合，当$cLink_i$与$dLink_n$之间存在干扰边，但干扰边未基站识别的概率只与优先权状态${H_i}$的值有关，即该概率$pmis{s_{{H_i}}}$为：
+	\section{CToD类型干扰边分析}
+	CToD类型干扰边的构建的完整性和优先级状态${H}$的分布有关，蜂窝链路${CLink_i}$的${H}$值${H_i}$大小会直接影响以${CLink_i}$为T端的干扰边被发现的概率。
+	
+	\subsection{蜂窝链路的${H}$分布}
+	此时需要分析的优先级状态指的是在每一次迭代过程结束的时候，各个蜂窝链路的优先级状态${H}$。根据小区的$N_C$，$Q_C$和$Q_C$三者的关系可以划分成三种不同的场景。分别为$Q_{vC} \le 2*N_C < Q_C$，$Q_{vC} \le 2*N_C < Q_C$和$2*N_C \ge Q_C$
+	
+	\begin{itemize}
+		\item 场景一：$2*N_C \ge Q_C$
+	\end{itemize}
+	
+	该场景下，在每帧蜂窝链路资源分配的链路选取阶段，序列中所有的蜂窝链路都会被选中并分配资源，因此，当本次迭代过程结束后所有蜂窝链路的优先级状态均处于${H_{\min }}$。
+	
+	\begin{itemize}
+		\item 场景二：$Q_{vC} \le 2*N_C < Q_C$
+	\end{itemize}
+	
+	该场景下，在每帧蜂窝链路资源分配的链路选取阶段，基站会选取序列中的$2*N_C$条蜂窝链路分配资源块。因此基站更新信息时，会有$2*N$蜂窝链路的优先权状态更新为${H_{\min }}$，其余链路的优先权更新$\min ({H_i} + 1,{H_{\max }})$。与此同时，每帧小区都将有一定比例的蜂窝链路离开小区和新加入小区，这个也会影响${H}$分布。
+	
+	
+	用$Q_{\chi }$表示优先权状态为$\chi $的蜂窝链路数量，那么受到蜂窝链路进出的影响，本帧开始经过链路进出更新后时候$Q_{\chi }$的期望更新为
 	
 	\begin{equation}\label{eq3.1}
-	pmis{s_{{H_i}}} = \left\{ \begin{array}{l}
-	1 - {({p_{oldLinkD2D}})^{{H_i}}},cLink_i \notin \{ newCLink\} \\
-	1,cLink_i \in \{ newCLink\} 
+	E(Q_{\chi }) = \left\{ \begin{array}{l}
+	Q_{\chi }*{P_{oldCLink}},{H_{\min }} \le \chi  < {H_{\max }}\\
+	Q_{\chi }*{P_{oldCLink}} + Q_{vC},{\chi } = {H_{\max }}
 	\end{array} \right.
 	\end{equation}
 	
-	定义蜂窝链路的优先权状态等于${H_i}$的概率${p_{{H_i}}}$为：
+	用$X_{\chi }$表示链路选取阶段选取的蜂窝链路中，包含的优先权状态为$\chi $的蜂窝链路数量，那么当本次迭代过程结束后，状态$\chi $的蜂窝链路数量更新为
+	
 	\begin{equation}\label{eq3.1}
-	{p_{{H_i}}} = \frac{{Nu{m_{{H_i}}}}}{{Q_C}}
+	Q_\chi  = \left\{ \begin{array}{l}
+	2*N_C,\chi  = 0\\
+	Q_{\chi  - 1} - X_{\chi - 1},\chi \ne 0
+	\end{array} \right.
 	\end{equation}
 	
-	因此，小区CToD类型干扰边的类型少边率为：
+	关于$X_{\chi }$和$Q_{\chi }$存在两种约束条件。
+		
+		约束一：如果选取序列中存在$H = \chi $的蜂窝链路，即$X_\chi \ne 0$，那么选取序列包含所有的$H = \chi + 1$的蜂窝链路。即有
+		
+		\begin{equation}\label{eq3.1}
+		X_{\chi  + 1} = Q_{\chi  + 1},X_\chi \ne 0 
+	\end{equation}
+	
+	
+	约束二：如果未被选取的链路存在$H = \chi $的蜂窝链路，即$X_{\chi } \ne Q_{\chi }$，选取序列中就不可能存在$H = \chi - 1$的蜂窝链路。即有：
+	
 	\begin{equation}\label{eq3.1}
-	pmis{s_{CToD}} = \sum\limits_{i = {H_{\min }}}^{{H_{\max }}} {{p_{{H_i}}}*pmis{s_{{H_i}}}}
+	X_{\chi  - 1} = 0,X_{\chi } \ne Q_{\chi }
+	\end{equation}
+	
+	由约束一和约束二可以知道，$\exists \chi ^*$使得以下条件成立：
+	
+	
+	\begin{equation}\label{eq3.1}
+	{X_\chi } = \left\{ \begin{array}{l}
+	0,{H_{\min }} \le \chi  < {\chi ^*}\\
+	{Q_\chi } - K,0 \le K < {Q_\chi }\\
+	{Q_\chi },{\chi ^*}{\rm{ <  }}\chi  \le {H_{\max }}
+	\end{array} \right.
+	\end{equation}
+	
+	%其中$0 \le {X_{{i_0}}} \le H{ & _{{i_0}}}$，然后分析$H{ & _{{i_0}}}$的取值，由公式4-5，4-6和4-9可以知道上一帧结束和这一帧结束$Q_i$的关系，而当小区的链路进出速度稳定后两者是数值是相等的。
+	%而当小区的链路进出速度稳定后两者是数值是相等的。
+	由此可以得到$Q_{\chi}$的取值情况：
+	
+	\begin{equation}\label{eq3.1}
+	Q_{\chi } = \left\{ \begin{array}{l}
+	2*N_C,\chi = 0\\
+	Q_{\chi - 1}*{P_{oldCLink}},0 < \chi  \le \chi ^*\\
+	Q_{\chi ^*} - X_{\chi ^*},\chi  = \chi ^* + 1\\
+	0,\chi  > \chi ^* + 1
+	\end{array} \right.
+	\end{equation}
+	
+	递归推出，当$H_{\min } \le \chi ^* < H_{\max }$的时候有；
+	
+	\begin{equation}\label{eq3.1}
+	Q_\chi  = \left\{ \begin{array}{l}
+	2*N_C*{P_{oldCLink}}^{\chi - H_{\min }},H_{\min } \le \chi  \le \chi ^*\\
+	Q_C - \sum\limits_{\chi = H_{\min }}^{\chi ^*} {Q_{\chi }} ,\chi  = {\chi ^* + 1}\\
+	0,\chi ^* + 1 < \chi  \le {H_{\max }}
+	\end{array} \right.
+	\end{equation}
+
+	此时的$\chi ^*$需要满足条件：
+
+	\begin{equation}\label{eq3.1}
+	\sum\limits_{\chi = H_{\min }}^{\chi ^*} {2*Q_C*{P_{oldCLink}}^{\chi ^* - H_{\min }}} < Q_C \le \sum\limits_{\chi = H_{\min }}^{\chi ^* + 1} {2*Q_C*{P_{oldCLink}}^{\chi ^* - H_{\min }}} 
+	\end{equation}
+
+	因为$Q_{vC} \le 2*N_C$，所以有：
+
+	\begin{equation}\label{eq3.1}
+	\sum\limits_{\chi = H_{\min }}^{ + \infty } {2*N_C*{P_{oldCLink}}^(\chi - H_{\min })}  = \frac{{2*N_C}}{{1 - {P_{oldCLink}}}} = \frac{{2*N_C*Q_C}}{{Q_{vC}}} > Q_C
+	\end{equation}
+
+	此时必然存在合适的$\chi ^*$满足条件，而算法所需要初始设定的$H_{\max }$应满足条件$H_{\max } > \chi ^*$
+	
+	\begin{itemize}
+		\item 场景三：$2*N_C \le Q_{vC}$
+	\end{itemize}
+
+	该场景下会出现一部分的蜂窝链路始终无法分配到资源，这种情况下属于高速的动态变化场景，构建干扰图对于分配资源不具有现实意义，本文算法并不适用。
+	
+	
+	\subsection{CToD类型干扰边少边率计算}
+	假设$dLink_m$能收到$cLink_i$发射端发送的广播信息，那么分析该干扰边还未被发现的概率。
+	
+	根据协议算法内容，只要基站为$cLink_i$分配资源块进行广播，如果此时$dLink_m$已经存在于小区中，并且能收到$cLink_i$的T端的广播信号，那个该干扰关系肯定能被基站发现。因此，干扰关系不能被识别的情况当且仅当$dLink_m$进入小区之后，基站没有再为$cLink_i$分配资源块。
+	
+	定义$newCLinkSet$表示新加蜂窝链路集合，当$cLink_i$与$dLink_m$之间存在干扰边，但干扰边未基站识别的概率与优先权状态$H$的值有关，即该概率$Pmiss_{\chi }$为：
+	
+	\begin{equation}\label{eq3.1}
+	Pmiss_{\chi } = \left\{ \begin{array}{l}
+	1 - {({p_{oldDLink}})^{\chi - H_{\min }}},cLink_i \notin newCLinkSet \\
+	1,cLink_i \in newCLinkSet 
+	\end{array} \right.
+	\end{equation}
+	
+	而蜂窝链路的优先权状态等于$\chi $的概率$Pstate_{\chi }$为：
+	\begin{equation}\label{eq3.1}
+	Pstate_{\chi } = \frac{{Q_{\chi }}}{{Q_C}}
+	\end{equation}
+	
+	因此，小区CToD类型干扰边的类型少边率$Pmiss_{CToD}$为：
+	\begin{equation}\label{eq3.1}
+	Pmiss_{CToD} = \sum\limits_{\chi = {H_{\min }}}^{{H_{\max }}} $Pmiss_{\chi }*Pstate_{\chi }
 	\end{equation}
 	
 	
 	\section{DToD类型干扰边分析}
 	对于DToD类型的干扰边，新加的类型干扰边分为两部分，一部分是所有D2D链路对新加D2D链路的干扰，另一部分是新加D2D链路对原始D2D链路的干扰。
 	\begin{itemize}
-		\item ${p_{newLinkD2D}}$：本次迭代过程的新增加$dLink$比例。
-		\item ${p_{oldLinkD2D}}$：本次迭代过程的原始$dLink$比例。
-		\item ${p_{newEdgeD2D}}$：本次迭代过程的DToD类型干扰边的新增加干扰边比例。
-		\item ${p_{oldEdgeD2D}}$：本次迭代过程的DToD类型干扰边的原始干扰边比例。
+		\item ${p_{newDLink}}$：本次迭代过程的新增加$dLink$比例。
+		\item ${p_{oldDLink}}$：本次迭代过程的原始$dLink$比例。
+		\item ${p_{newDEdge}}$：本次迭代过程的DToD类型干扰边的新增加干扰边比例。
+		\item ${p_{oldDEdge}}$：本次迭代过程的DToD类型干扰边的原始干扰边比例。
 		\item ${p_{linkStay(M)}}$：在小区中存在了M帧的$dLink$所占的比例。
 		\item ${p_{edgeStay(M)}}$：在小区中存在了M帧的DToD类型干扰边所占的比例。
 	\end{itemize}
 	
 	新加边与新加链路比例的概率关系为：
 	\begin{equation}\label{eq3.1}
-	{p_{newEdgeD2D}} = {p_{newLinkD2D}}*100\%  + {p_{oldLinkD2D}}*{p_{newLinkD2D}}*100\% 
+	{p_{newDEdge}} = {p_{newDLink}}*100\%  + {p_{oldDLink}}*{p_{newDLink}}*100\% 
 	\end{equation}
 	
 	\subsection{循环随机算法分析}
@@ -687,7 +708,7 @@
 	\end{equation}
 	
 	特别的，当${A = 1}$的时候${p_{situation11} = 1}$。
-
+	
 	\begin{equation}\label{eq3.1}
 	Nu{m_{averUse}} = \frac{{Q_D}}{{N_D}}
 	\end{equation}
@@ -735,7 +756,7 @@
 	因此基站更新链路信息后
 	
 	\begin{equation}\label{eq3.2}
-		pmis{s_{DToD}}(x,stag{e_B}) = pmis{s_{DToD}}(x,stag{e_A})*{p_{oldEdgeD2D}}
+	pmis{s_{DToD}}(x,stag{e_B}) = pmis{s_{DToD}}(x,stag{e_A})*{p_{oldDEdge}}
 	\end{equation}
 	
 	采用最小冲突和分配资源块减少冲突后，在第x帧时候，D2D广播的三种情形的概率变成
@@ -752,7 +773,7 @@
 	{p_{situation\overline A 3}}(new) = 1 - {p_{situation\overline A 1}}(new) - {p_{situation\overline A 2}}(new)
 	\end{equation}
 	
-	因为基站肯定没有D2D新加边的干扰图信息，因此$pmis{s_{DToD}}(x,stag{e_A})$的迭代初始值可以设为${p_{newEdgeD2D}}$，然后再根据公式4-28算出$pmis{s_{DToD}}(x,stag{e_B})$，然后求出$pmis{s_{DToD}}(x,stag{e_C})$。
+	因为基站肯定没有D2D新加边的干扰图信息，因此$pmis{s_{DToD}}(x,stag{e_A})$的迭代初始值可以设为${p_{newDEdge}}$，然后再根据公式4-28算出$pmis{s_{DToD}}(x,stag{e_B})$，然后求出$pmis{s_{DToD}}(x,stag{e_C})$。
 	
 	因为当链路进出稳定的时候，有
 	\begin{equation}\label{eq3.1}
