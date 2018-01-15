@@ -1,7 +1,4 @@
 \documentclass[figurelist,tablelist,algorithmlist,nomlist,masters]{seuthesix}
-
-
-
 \usepackage{hologo}
 \usepackage{pdfpages}
 
@@ -13,7 +10,7 @@
 	\title{蜂窝D2D通信系统实时干扰图构建算法研究}{}{ User Manual}{}
 	\author{林开贤}{Kaixian Lin}
 	\advisor{张\quad 源}{副教授}{Yuan Zhang}{Associate Prof.}
-	\coadvisor{李\quad 强}{高\;\;\;工}{Qiang Li}{Senior Engineer.} 
+	\coadvisor{李\quad 强}{高\;\;\;工}{Qiang Li}{Senior Engineer.}
 	\degreetype{工程硕士}{Master of Engineering} % 详细学位名称
 	\major{电子与通信工程}
 	\submajor{通信与信息系统}
@@ -24,82 +21,82 @@
 	\department{信息学院}{School of Information Science and Engineering}
 	\seuthesisthanks{本课题的研究获郭靖-黄蓉降龙基金、杨过-小龙女黯然销魂基金以及郭襄的倚天基金资助}
 	%\makebigcover
-	
+
 	%%论文的摘要
 	\makecover
 	\begin{abstract}{武功，心法，内功，灵犀一指}
 		灵犀一指是一种非常厉害的武功。
 	\end{abstract}
-	
+
 	%%论文的英文摘要
 	\begin{englishabstract}{Kongfu, theory, fundamental kongfu, powerful fingers}
 		powerful fingers is a kind of powerful kongfu.
 	\end{englishabstract}
-	
+
 	\setnomname{术语与符号约定}
 	\tableofcontents
 	\listofothers
-	
+
 	\mainmatter
-	
+
 	\chapter{绪论}
 	\section{研究背景}
-	
+
 	随着移动互联网技术的飞速发展，移动无线网络在我们生活、学习、娱乐的地位也变得越来越重要，而移动无线通信技术本身也在不断地更新换代。
-	
+
 	移动通信技术发展始于二十世纪七十年代，至今为止，移动通信技术的发展经历了5个阶段，如图\ref{fig:f11}所示
-	
+
 	第一代移动通信技术（1G，1st Generation）采用的主要是频分多址技术（FDMA，Frequency Division Multiple Access）和模拟技术，用于提供模拟语音的业务，相关标准制定于二十世纪八十年代。受传输带宽限制，只能是一种区域性的移动通信系统。主要有美国的AMPS（Advanced Mobile Phone System），英国的TACS（Total Access Communications System），西德的 C-Netz，北欧的NMT（Nordic Mobile Telephone）等。第一代移动通信有许多的不足之处，如制式太多、容量有限、互不兼容、保密性差、提供不了数据业务、通话质量差和无法提供自动漫游等。
-	
-	
+
+
 	第二代移动通信技术（2G，2nd Generation）起源于90年代初期，主要采用数字的时分多址（TDMA，time division multiple access）技术和码分多址（CDMA，Code Division Multiple Access）技术，提供数字话音业务和低速数据业务。可按照所采用多路复用技术的形式分成两类，一类是基于TDMA的系统，如欧洲的GSM（Global System For Mobile Communication）、日本的PDC（Personal Digital Cellular）、美国的D-AMPS（Digital Advanced Mobile Phone System）等，另一类则是基于CDMA规格的系统，如cdmaOne。2G克服了模拟移动通信系统的弱点，大大提高了话音的质量、保密性能，并可进行省内、省际自动漫游，但是由于第二代采用不同的制式，标准不统一，用户只能在同一制式覆盖的范围内进行漫游，而且带宽也限制了数据业务的应用，也无法实现高速率的业务如移动的多媒体业务。
-	
+
 	第三代移动通信技术（3G，3rd Generation）在2G基础上以宽带CDMA技术为主进一步演进，支持高速数据传输的蜂窝网络移动通信技术。除了能同时提供数据业务和话音服务外，3G还是覆盖全球的多媒体移动通信，在数据传输速度上已经大大提升，已经能够处理音乐、图像、视频流等多种数字媒体形式。到本世纪初，存在的3种主流3G标准分别为：基于窄带CDMA技术的宽带CDMA技术CDMA2000，日本支持的WCDMA（Wideband Code Division Multiple Access）、我国提出的TD-SCDMA（Time Division-Synchronous Code Division Multiple Access）。3G系统有着系统容量大、频率规划简单、抗多径能力强、频率复用系数高、软容量、软切换、通信质量好等优点，但依旧存在许多缺点，如缺乏全球统一的标准、承袭了2G的传统电路交换、业务提供和业务管理不灵活、流媒体应用体验性差、高速数据传输不成熟、安全性差等缺陷。
-	
+
 	第四代移动通信系统（4G，4th Generation）是集3G与WLAN 于一体，并能够快速传输数据、高质量、音频、视频和图像等，需要满足IMT-Advanced规范，即国际电信联盟-无线电通信部门（ITU-R）关于全IP、信道带宽、QoS(Quality of Service)、跨不同系统网络、速率、频谱效率、高速移动性环境等方面的要求。4G的两项国际标准分别为LTE-Advanced（Long Term Evolution-Advanced）和WirelessMAN-Advanced（IEEE 802.16m），其中LTE-Advanced成了事实上的唯一主流4G标准，包括TD-LTE和FDD-LTE两种制式。LTE项目是3G的演进，它改进并增强了3G的空中接入技术，采用OFDM和MIMO作为其无线网络演进的唯一标准，4G中以LTE的应用最广泛，LTE相对于3G有了很大的变化，首先是网络架构上，LTE抛弃了2G、3G一直沿用的基站-基站控制器（2G）/无线资源管理器（3G）-核心网这样的网络结构，而改成基站直连核心网，整个网络更加扁平化，降低时延，提升用户感受。核心网方面抛弃了电路域，核心网迈向全IP化，统一由IMS承载原先的业务。空中接口的关键技术也抛弃3G的CDMA而改成OFDM，其在大带宽上比CDMA更加具备可行性和适应性，大规模使用MIMO技术提升了频率复用度，跨载波聚合能获得更大的频谱带宽从而提升速率。4G核心技术主要有：正交频分复用（OFDM，Orthogonal Frequency Division Multiplexing）技术、调制与编码技术、软件无线电、智能天线技术，基于IP的核心网和多输入多输出MIMO（Multiple-Input Multiple-Output）技术等。但随着移动互联网、VR、AR、物联网等技术的诞生和普及，用户数量、设备数量以及网络数据量快速增长，4G移动通信将难以满足未来移动通信的应用需求，同时类似无人驾驶、商用无人机等场景对数据传输的延迟性提出了更高的需求。
-	
+
 	第五代移动通信技术（5G，5th Generation）是4G之后的延伸，为满足物联网、车联网、智慧医疗、VR/AR、工业4.0等关键应用。2017年12月在葡萄牙里斯本召开的3GPP（3rd Generation Partnership Project）第78次会议上，3GPP TSG（Technical Specification Groups）RAN（Radio Access Network）全体会议成功完成了首个可商用部署5G（5th-Generation）NR（New Radio）标准的制定。高通、中兴通讯、华为等业内主流厂商表示，5G NR首发版本完成，5G大规模试验和商用部署将迅速展开。移动无线通信网络的对频谱资源的需求也变得越来越大，频谱资源十分短缺，同时低频段已经十分拥挤，频谱带宽的分配只能朝着高频段发展。然而，高频段的开发面临着很大的困难，这使得高效利用频谱资源更有意义。传统蜂窝系统以基站为中心的网络结构使得小区的覆盖范围和业务提供方式受到很大限制，阻碍了容量的进一步提升，这使得传统网络满足不了这要的需求。因此，能够有效提高频谱使用、提升网络容量、满足本地数据共享需求的D2D技术被引入进来[1][2]。
-	
+
 	\section{D2D通信技术}
-	
+
 	\subsection{D2D通信关键技术}
 	蜂窝系统的D2D通信指的是通信网络中两个近邻设备之间直接进行信息交换，而不经过基站或者核心网络的技术。通信系统或网络中，一旦D2D通信链路建立起来，传输数据就无需核心设备或中间设备的干预，这样可降低通信系统核心网络的数据压力，大大提升频谱利用率和吞吐量，扩大网络容量。在学术上，Y.-D. Lin和Y.-C. Hsu提出了通过D2D通信来减少蜂窝网络的多跳反射时延【3】，然后，K. Doppler,和M. P. Rinne等人研究了在蜂窝网络中使用D2D提高频谱利用率。在那之后，其他的D2D应用场景相继被引入，比如多点广播【9】【10】，peer-to-peer 通信【11】，视频传播【5】【12-14】，machine-to-machine(M2M)，蜂窝卸载等。最通用的场景如图\ref{fig:f11} 所示。
-	
+
 	具体优势可以体现在以下几个方面：
 	（1）设备与设备间的通信距离缩短，用较小的传输功率获得较大的传输速率；
 	（2）传统蜂窝通信方式需要基站进行中继传输，D2D 通信不需要网络中转从而有效减轻基站负担；
 	（3）D2D 通信模式下，用户可以复用小区中其他用户的频谱资源接入网络，从而提高频谱利用率；
 	（4）D2D 通信因为不需要基站中继，因此在基站故障或损坏情况下也能正常通信。
-	
+
 	\subsection{D2D通信关键技术}
 	未来的无线通信系统将向网络融合的方向发展，在传统的蜂窝网络中引入D2D技术，在提高数据传输速率、降低传输功率、提升网络容量的同时，也给通信系统带来新的问题。比如，无线资源分配更加复杂、通信干扰等问题。因此，必须解决D2D通信中的关键技术问题，其中包括：D2D设备发现、资源分配、干扰管理和D2D-MIMO等多种通信网络与通信过程。
-	
+
 	D2D设备发现。D2D设备发现是指一个终端设备识别附近的另一个终端设备的过程，也是D2D通信连接的前提条件。目前 D2D设备的发现方案有两种：基于核心网的发现方案和基于direct空口的发现方案。基于核心网的发现方案中，通过精准的定位技术，核心网可以很快速地获取到移动终端的地理位置信息，因此也可以比较简单的判断一个移动终端附近存在哪些其他移动终端，并将这些位置判决信息，包括移动终端的身份信息告知给有D2D发现请求的移动终端，从而完成发现过程。而基于direct空口的发现，是通过移动终端间直接进行D2D发现信号的发射和检测，来感知并识别相邻的移动终端，这种方案可以降低终端和网络对定位功能的依赖，即使地理位置上并非临近，只要信号可达即可发现。
-	
+
 	D2D资源分配。在D2D通信与传统通信方式并存的网络中，由于D2D复用资源，系统必须保证蜂窝用户通信和D2D用户通信都能顺利进行。而D2D对于资源的复用由基站控制，只要通过合理的功率控制和资源分配，就能够保证D2D和蜂窝用户正常通信。综合考虑用户QoS 需求和功率控制等因素，可根据以下原则进行资源分配：
 	（1）根据用户距离，基站搜索所有可以接入网络的D2D用户，并为其找到所有可供复用通道的蜂窝用户。由于D2D直通链路距离短，用户可以使用较小的发射功率满足其QoS需求，而不损害双方的通信质量，从而提高资源利用效率。
 	（2）在D2D用户和蜂窝用户复用信道时进行最优功率分配。根据凸优化理论得到最优功率值的闭合解。
 	（3）D2D 用户和蜂窝用户最优信道分配。采用图论中加权二部图最优匹配算法，为可接入网络的D2D用户找到最合适的复用搭档以最大化网络中蜂窝用户和D2D用户的总体吞吐量。
-	
+
 	干扰管理。D2D通信与传统通信方式并存的局面也将带来D2D用户与蜂窝用户间的干扰，其中包括蜂窝内干扰与蜂窝间干扰。因此减小用户间干扰，提升通信的 QoS，是D2D通信必须解决的重要问题。目前有效的干扰管理方式主要有：功率控制当一个信道同时被多个用户复用时，由于链路之间的相互干扰，通过功率控制来最大化通信速率；数字信号处理技术通过基站预编码设计，把蜂窝用户的信号集中在D2D用户接收端的零空间上进行传输，从而减小对D2D用户的干扰；调配机制合理地调配时域、频域和空域资源，可以有效减少用户间的干扰；
-	
+
 	D2D-MIMO技术。MIMO(Multiple-Input Multiple-Output) 技术指在发射端和接收端分别使用多个发射天线和接收天线，使信号通过发射端与接收端的多个天线传送和接收，从而改善通信质量。在D2D-MIMO 系统中，通过在基站进行合理的下行预编码，将发射波束对准其复用的蜂窝用户，而在D2D用户方向上形成零陷，从而减小D2D用户和蜂窝用户间的干扰。MIMO 技术的优势还在于通过增大天线的数量来传输信息子流，将多个数据子流同时发送到信道上，各发射信号占用同一频带，从而在不增加频带宽度的情况下增加频谱利用率。同时可以使无线信号的传输距离、天线的接受范围进一步扩大，信号抗干扰性更强，无线传输更为精准快速，提升通信的QoS。
-	
-	
+
+
 	\section{论文的组织结构}
 	本文共分为5章，各章主要内容具体如下：
 	第一章为绪论部分，
 	第二章为本文所提出的的实时干扰图构建算法部分，
 	第三章为干扰图构建算法的
-	
+
 	\chapter{蜂窝D2D通信系统实时干扰图构建算法}
 	\section{引言}
 	蜂窝D2D通信指蜂窝小区中的一对D2D通信用户在基站的控制下直接进行通信，而不需要经过基站，这样的一对进行直接D2D通信的用户称为一条D2D通信链路。目前大量的D2D资源分配和功率控制算法是基于小区的干扰图，在D2D进行资源分配的时候，常见的算法是采用图论的最优匹配算法可以为接入网络可以为小区的D2D用户找到合适的资源复用方式，从而使网络中的D2D用户和蜂窝用户总吞吐量最大。而在功率控制方面，合理的调配频域的资源，利用图着色的理论优化D2D用户和蜂窝用户的信道匹配对能够有效得提高系统的总体性能。所谓干扰图指的把小区的蜂窝链路和D2D链路对抽象成一个集合，记作$G=(V,E)$，$V$为点集合，代表一条蜂窝链路或D2D链路，$E$为边集合代表一条存在的干扰边，如果连两条链路之间干扰超过指定的限度，则定义两条链路之间存在干扰边，本文算法所构造的干扰图为有向图，即干扰边为有向干扰边。
-	
+
 	目前大量的研究主要是集中在已知干扰图的情况下资源分配和功率控制，但小区中链路往往是动态变化的，所基于的干扰图需要能够简单高效得进行实时更新，干扰图构建速度的快慢和完整性都将会直接影响到整个网络资源分配和功率控制的性能，因此，快速构建有效干扰图的算法至关重要。基于direct空口是D2D设备发现重要方式，移动终端直接进行D2D信号的发射和检测，从而感知并识别与之相邻的移动终端，可以降低网络和终端对定位功能的依赖，只要信号可达，即使地理位置上并非临近可发现。同样干扰图的构建也可以可以通过信号的发射和检测进行构建。
-	
+
 	基于上述问题，本章提出了蜂窝D2D通信系统中一种通过信号的发射与检测，快速高效的实时干扰图构建算法。
-	
+
 	\section{系统模型}
 	\subsection{无线资源}
 	假设小区的通信系统采用频分双工的通信方式进行通信，频域划分为$N_{F}$个频域块，时域资源则划分成连续的$N_{T}$个时域块。构建小区的干扰图所需要的资源如图\ref{fig:f21}所示，小区的无线资源划分为数据传输域和控制域两个区域，系统的通信所需要的资源块（RU，Resource Unit）指的就是图中的一小格时域资源块。其中控制域的RU专门用于干扰图的构建，而数据传输域的RU则专门用于蜂窝链路和D2D链路的数据传输，用$\mathcal{N}$表示控制域$N_{F}$个资源块的集合，称为资源池。
@@ -109,26 +106,26 @@
 		%\includegraphics[scale =1.4 ]{f21.eps}
 		\caption{资源池示意图}\label{f21}
 	\end{figure}
-	
+
 	\subsection{小区模型}
 	本文研究的蜂窝D2D通信系统为overlay inband D2D模型，D2D通信复用的是蜂窝链路上行通信的频率。小区中存在的两种链路，即蜂窝链路和D2D链路分别用$cLink$和$dLink$表示。不同的链路之间通过唯一的ID标识进行区分，用$link_i$表示ID标识为i的链路。每条链路均由T端（发射端）和R端（接收端）构成，由于复用的是上行通信，所以在这里所有蜂窝链路的接收端都相同，均为基站。链路的T端发射信号，携带信息为相应链路的ID；链路的接收端检测各个资源块上的接收情况，并基站汇报到基站。在干扰图模型中，如果一条链路$link_i$的发射端的广播信息能够被另一条链路$link_j$的接收端接收到，链路既可以是蜂窝链路也可以是D2D链路，那么在干扰图模型中表示为两条链路$link_i$与$link_j$之间存在一条有向边，即$link_i$是$link_j$的邻居。存在邻居关系的两条链路在分配资源的时候不能够使用同一时频的资源，否则将会在通信过程中产生干扰，从而降低通信效率，快速构建准确的干扰图能够有效地提高无线资源的使用效率。
-	
+
 	蜂窝链路和D2D链路的发射端随机分布于在整个小区之中，链路的发射端在基站的控制下进行广播，基站可以决定链路的发射端是否进行广播以及选择什么样的频率资源进行广播，链路每次广播的时候将会携带相应链路的ID，每次发送信号都学要占用一个时隙和一个资源块。但两种链路之间存在较大的差别，由于链路发射端的发射功率会随着链路通信距离的增加而增大，因此干扰半径也会随着通信距离增加而增大。一方面，D2D通信为近邻通信，通信距离往往小于蜂窝通信的距离，因此蜂窝链路的干扰半径通常也会远大于D2D链路的干扰半径，从而导致蜂窝链路发射端干扰半径范围内链路接收端的数量会远远大于D2D链路干扰半径范围内的链路接收端数量。
-	
+
 	D2D链路的接收端分布在小区中，D2D链路的接收端在干扰图的构建中起两个作用，一个是监听所有频率的情况，同时D2D链路接收端具备向基站汇报数据的能力，既可以向基站汇报冲突的情况也可以向基站汇报正确接收的资源块等信息。构建干扰图的时候需要将这些数据汇报到基站进行处理。
-	
+
 	基站是所有蜂窝链路的共同接收端，位于小区的中央。基站除了作为蜂窝链路的接收端监听所有资源块的情况外，基站还保留完整的干扰图信息，以及其他的附加信息。基站可以接收D2D链路的接收端汇报上来的数据，进行干扰图数据和附加数据的处理，同时也可以决定下一帧各个链路的资源分配。
-	
-	
+
+
 	\section{干扰图构建算法}
-	
+
 	\subsection{干扰图构建算法的流程}
 	本文所提出的算法是一个迭代的过程，将时域划分为帧，每一帧为一个循环过程，在每一帧结束时从基站端获取当前帧的干扰图信息。把干扰图的干扰边按照T端和R端的链路类型划分成蜂窝链路对D2D链路的干扰，即CToD类型、D2D链路之间的干扰即DToD类型和D2D链路对蜂窝链路的干扰，即DToC类型。而蜂窝链路之间的干扰,即CToC类型由于任意两条的蜂窝链路接收端均相同，必然存在干扰，因此这部分干扰图不进行分析和统计。假设小区的可用资源块为$\mathcal{N}$，资源块的数量为$N_T$，其中划分给CToD类型干扰图构建的资源块为$\mathcal{N}_c$，该部分资源块数量为$N_c$，划分给DToD和DToC类型干扰图构建的资源块为$\mathcal{N}_d$，该部分资源块数量为$N_d$。
-	
+
 	资源划分之后干扰图构建算法可相应划分成CToD类型干扰图的构建算法，DToD和DToC类型干扰图的构建算法。干扰图构建算法需要D2D链路的发射端，D2D链路的接收端，蜂窝链路的发射端以及基站之间进行数据传输和处理。干扰图相关的数据信息只保留在基站，而蜂窝链路的发射端和D2D链路的发射端只在基站控制下广播频率，而D2D的接收端也只负责监控当前帧的频率冲突情况。
-	
+
 	关于蜂窝链路，基站保存小区蜂窝链路集合的$cLinkSet$信息，每一条$cLink$的$cLink_i$、${H_i}$ 信息，以及基站的$cNborD_{bs}$，$cUnNborD_{bs}$，$List < dNborSet_{p}{ > _{bs}}$等信息。其中各个符号含义如下：
-	
+
 	\begin{itemize}
 		\item $cLinkSet$：当前小区的蜂窝链路集合。
 		\item $cLink_i$：ID标识为i的蜂窝链路，通过唯一的ID区别唯一的蜂窝链路。
@@ -137,9 +134,9 @@
 		\item $cUnNborD_{bs}$：基站的D2D链路非邻居集合，即广播信息无法被基站接收的D2D链路集合。
 		\item $List < dNborSet_{p}{ > _{bs}}$：基站可能D2D链路邻居集合$dNborSet_{p}$列表，其中一个$dNborSet_{p}$包含3个$dLink$。
 	\end{itemize}
-	
+
 	关于D2D链路基站保存$dLinkSet$信息，每一条$dLink$的$dLink_k$，$dNborD_k$，$dUnNborD_k$，$dNborC_k$，$List < dNborSet_{p}{ > _k}$等信息。其中各个符号的含义如下：
-	
+
 	\begin{itemize}
 		\item $dLinkSet$：当前小区的D2D链路集合。
 		\item $dLink_k$：ID标识为k的D2D链路，通过唯一的ID区别唯一的D2D链路。
@@ -148,103 +145,103 @@
 		\item $dNborC_k$：$dLink_k$的蜂窝链路邻居集合，即广播信息能被$dLink_k$的R端所接收的蜂窝链路集合。
 		\item $List < dNborSet_{p}{ > _k}$：$dLink_k$可能D2D链路邻居集合$dNborSet_{p}$列表，其中一个$dNborSet_{p}$包含3个$dLink$。
 	\end{itemize}
-	
+
 	假设，前一帧离开小区的蜂窝链路集合为$cLinkSet_{out}$，前一帧加入小区的蜂窝链路集合为$cLinkSet_{in}$，前一帧离开小区的D2D链路集合为$dLinkSet_{out}$，前一帧加入小区的D2D链路集合为$dLinkSet_{in}$。
-	
+
 	从基站获取了上一帧的完整的干扰图信息后，基站根据前一帧进出小区的链路更新基站的蜂窝链路信息和D2D链路信息，将$cLinkSet_{out}$中所有的$cLink$从中$cLinkSet$移除，将$cLinkSet_{in}$中所有的$cLink$加入$cLinkSet$，将$dLinkSet_{out}$中所有的$dLink$从$dLinkSet$中移除，将$dLinkSet_{in}$中所有的$dLink$加入$dLinkSet$中。然后蜂窝链路和D2D链路分布根据所分配的资源进行CToD类型干扰图的构建算法、DToD和DToC类型干扰图的构建算法。
-	
+
 	\subsection{CToD类型干扰图的构建}
-	
+
 	对于蜂窝链路，基站通过ID标识实时维护每一条蜂窝链路的优先权等级，并对蜂窝链路采用优先权轮播的方式进行资源分配，在经过蜂窝链路广播和链路接收端向基站反馈汇报数据后，基站端进行计算和进行干扰图更新。
-	
+
 	本文CToD类型干扰图的构建采用算法称为优先权轮播算法，具体的算法实现可分为链路进出的类型干扰图更新、链路的资源分配以及蜂窝链路广播检测与基站处理三个步骤。
-	
+
 	\begin{itemize}
 		\item 链路进出的CToD类型干扰图更新
 	\end{itemize}
-	
+
 	每一帧开始，除了开始时候对整个干扰图进行更新外，需要对CToD部分进行类型的干扰图更新。具体更新的内容如下：
-	
+
 	1）移除$cLinkSet_{out}$中每一个$cLink$对应的${H_i}$信息。
-	
+
 	2）将包含在$cLinkSet_{out}$的$cLink$元素从每一条D2D链路对应的$dNborC_i$中移除。
-	
+
 	3）初始化$dLinkSet_{in}$中所有的$dLink$的$dNborC_k$为空集。
-	
+
 	4）初始化$cLinkSet_{in}$中所有的$cLink$的优先权等级${H}$为${H_{\max }}$。
-	
+
 	\begin{itemize}
 		\item 链路的资源分配
 	\end{itemize}
-	
+
 	在链路进出更新完CToD类型干扰图后，基站通过排序、链路选取、RU分配和优先权等级更新完成链路的资源分配。具体操作步骤如下：
-	
+
 	1）排序：基站将$cLinkSet$中的$cLink$，按照蜂窝链路的优先权等级${H_i}$的大小进行排序，如果两条或者多条蜂窝链路的优先权大小${H_i}$相同，则排序按照它们加入小区的顺序。
-	
+
 	2）链路选取：选取排位前$2*N_c$的蜂窝链路。如果小区中的蜂窝链路数量总数不大于$2*N_c$，则全部选取。
-	
+
 	3）RU分配：基站根据选取的有序链路系列，将$\mathcal{N}_c$的RU循环分配给这些蜂窝链路的发射端进行广播。
-	
+
 	4）优先权等级更新：如果基站为某一条蜂窝链路$cLink_i$分配了频率资源，那么更新它的优先权等级${H_i}$为${H_{\min }}$,否则，更新它的优先权等级为$\min ({H_i} + 1,{H_{\max }})$，其中，${H_{\min }}$和${H_{\max }}$分别为预设的最低优先权等级和最高优先权等级。
-	
+
 	\begin{itemize}
 		\item 蜂窝链路广播监听与基站处理
 	\end{itemize}
-	
+
 	完成资源分配后，基站控制蜂窝链路的信号的广播，同时D2D链路的接收端监听和向基站汇报冲突情况，基站端更新小区的CToD类型干扰图信息。具体操作如下：
-	
+
 	1）发射信号：如果基站为$cLink_i$分配了资源块$RU_i$，那么$cLink_i$的发射端将在该资源块上发送广播信号，广播信号携带$cLink_i$的链路ID信息。
-	
+
 	2）D2D链路的R端监听和汇报：所有D2D链路的R端都实时监听$\mathcal{N}_c$所有的资源块，如果$dLink_m$的R端在资源块$RU$上能够正确识别蜂窝链路的id，则标记该资源块$RU$为蜂窝频率类型$\mathcal{N}_{c1}$，并记录识别的蜂窝链路的ID信息。如果$dLink_m$的R端在资源块$RU$上检测到广播冲突，则标记该资源块 为蜂窝频率类型$\mathcal{N}_{c2}$，否则，说明$dLink_m$的R端在资源块 上没有收到任何信息，标记资源块$RU$为蜂窝频率类型$\mathcal{N}_{c0}$。D2D链路的R端将检测到的$\mathcal{N}_c$所有资源块的蜂窝频率类型和识别链路ID等信息上报给基站。
-	
+
 	3）基站统计数据和CToD类型干扰图更新：基站D2D链路R端上报的数据和基站干扰图数据进行类型干扰图更新。根据$dLink_m$上报$RU$的类型可分为三种情况。
-	
+
 	情况一、$dLink_m$上报$RU$的类型为蜂窝频率类型$\mathcal{N}_{c1}$以及链路ID对应的蜂窝链路$cLink_i$，那么此时基站更新$dLink_m$的$dNborC_m$为：
-	
+
 	\begin{equation}\label{eq2.1}
 	dNborC_m = dNborC_m \cup cLink_i
 	\end{equation}
-	
+
 	情况二、$dLink_m$上报$RU$的类型为蜂窝频率类型$\mathcal{N}_{c2}$，因为本文采取优先权轮播算法循环分配资源块，该算法一个资源块最多被两条蜂窝链路使用，而此时$dLink_m$在资源块$RU$上检测到广播冲突，那么冲突的广播只能来自使用资源块$RU$进行广播的两条链路，设$cSet(RU)$表示使用分配资源块 的蜂窝链路集合，那么此时基站更新$dLink_m$的$cNborConfirmSe{t_m}$为：
-	
+
 	\begin{equation}\label{eq2.2}
 	dNborC_m = dNborC_m \cup cSet(RU)
 	\end{equation}
-	
+
 	情况三、$dLink_m$上报$RU$的类型为蜂窝频率类型$\mathcal{N}_{c0}$，则无需进行任何操作。
-	
-	
+
+
 	\subsection{DToD和DToC类型干扰图的构建}
 	因为DToD和DToC类型干扰图是由原有的DToD和DToC类型干扰图信息共同决定D2D链路的资源分配，这部分的可分为
-	
+
 	\begin{itemize}
 		\item 链路进出的类型干扰图更新
 	\end{itemize}
-	
+
 	类型干扰图更新分为DToD和DToC两种类型干扰图的更新。
-	
+
 	其中DToD的类型干扰图更新步骤如下：
-	
+
 	1）移除$dLinkSet_{out}$中每一个$dLink$对应的$dNborD_k$，$dUnNborD_k$，$List < dNborSet_{p}{ > _k}$信息。
-	
+
 	2）将包含在$dLinkSet_{out}$的$dLink$从每一条D2D链路对应的$dNborD_k$和$dUnNborD_k$中移除。
-	
+
 	3）遍历每一个D2D链路的集合列表$List < dNborSet_{p}{ > _k}$，如果列表元素$dNborSet_{p}(m)$包含了$dLinkSet_{out}$中的$dLink$，则将该D2D链路集合从列表中移除。
-	
+
 	4）初始化$dLinkSet_{in}$中所有的$dLink$的$dNborD_k$，$dUnNborD_k$为空集，同时初始化列表$List < dNborSet_{p}{ > _k}$为空列表。
-	
+
 	DToC的类型干扰图更新步骤如下：
-	
+
 	1）将包含在$dLinkSet_{out}$的$dLink$从$cNborD_{bs}$，$cUnNborD_{bs}$中移除。
-	
+
 	2）遍历基站的集合列表$List < dNborSet_{p}{ > _{bs}}$，如果列表元素$dNborSet_{p}(m)$包含了$dLinkSet_{out}$中的$dLink$，则将该D2D链路集合$dNborSet_{p}(m)$从列表中移除。
-	
+
 	\begin{itemize}
 		\item 构建冲突权重表
 	\end{itemize}
-	
+
 	基站根据前一帧的干扰图信息构建D2D链路之间的冲突权重表，然后按照D2D链路加入小区的顺序对所有的D2D链路进行排序，形成一个D2D序列，然后计算干扰图的冲突权重和，并基于最小冲突权重和的原则依次分配资源块给D2D链路，D2D链路的发射端根据基站分配的资源块进行广播。本文算法使用冲突权重$\phi $来表示用来描述链路之间的广播冲突情况。
-	
+
 	1）计算D2D链路之间$isConfict(m,n,k)$。用$isConfict(m,n,k)$表示$dLink_m$，$dLink_n$的广播在$dLink_k$的冲突情况。定义$dLink_m$，$dLink_n$与$dLink_k$的$isConfict(m,n,k)$：
 	\begin{equation}\label{eq2.3}
 	isConfict(m,n,k) = \left\{ \begin{array}{l}
@@ -252,61 +249,61 @@
 	1,dLink_m \in dNborD_k \land dLink_n \in dNborD_k
 	\end{array} \right.
 	\end{equation}
-	
+
 	2）计算D2D链路与基站之间$isConfict(m,n,bs)$。用$isConfict(m,n,bs)$表示$dLink_m$，$dLink_n$的广播在基站的冲突情况。定义$dLink_m$，$dLink_n$与基站的$isConfict(m,n,bs)$：
-	
+
 	\begin{equation}\label{eq2.4}
 	isConfict(i,j,bs) = \left\{ \begin{array}{l} 0,dLink_m \notin cNborD_{bs} \lor dLink_n \notin cNborD_{bs}\\Q_C,dLink_m \in cNborD_{bs} \land dLink_n \in cNborD_{bs} \end{array} \right.
 	\end{equation}
-	
+
 	其中$Q_C$表示小区中蜂窝链路的数量。
-	
+
 	3）计算$\phi (m,n)$。$\phi (m,n)$的含义是根据现有的干扰图信息，同时与$dLink_m$和$dLink_n$的T端存在干扰关系的R端数量，包含蜂窝链路的R端和D2D链路的R端。定义$dLink_m$和$dLink_n$的冲突权重$\phi (m,n)$为：
-	
+
 	\begin{equation}\label{eq2.5}
-	\phi (m,n) = isConfict(m,n,bs) + \sum\limits_{k = 1}^{k = Q_D} {isConfict(m,n,k)} 
+	\phi (m,n) = isConfict(m,n,bs) + \sum\limits_{k = 1}^{k = Q_D} {isConfict(m,n,k)}
 	\end{equation}
-	
+
 	其中$Q_D$表示小区的D2D数量。
-	
+
 	通过以上步骤根据D2D链路两两之间的冲突权重就构建出了小区的冲突权重表。
-	
+
 	\begin{itemize}
 		\item 最小频率冲突和算法
 	\end{itemize}
-	
+
 	最小冲突和算法是按照D2D链路序列中的链路依次计算最小冲突和分配$RU$。在这里$dLink_m$表示序列中的第$m$个D2D链路。$RU_m$表示$dLink_m$的所分配的$RU$。
-	
+
 	定义$dLink_m$和$dLink_n$的同频冲突标志$flag(m,n,RU_m,RU_n)$为：
-	
+
 	\begin{equation}\label{eq2.6}
 	flag(m,n,RU_m,RU_n) = \left\{ \begin{array}{l} 0,RU_m \ne RU_n\\1,RU_m = RU_n\end{array} \right.
 	\end{equation}
-	
-	
-	
+
+
+
 	本文所提出的最小冲突和算法的步骤如下：
-	
+
 	1）随机为D2D链路序列中第一个D2D链路分配资源块。
-	
+
 	2）计算$dLink_m$在$\mathcal{N}_d$的每一个资源块上的$\psi (m,\gamma _m)$。定义第$m$个分配资源块的D2D链路在资源块$\gamma _m$上的频率冲突和$\psi (m,\gamma _m)$为：
-	
+
 	\begin{equation}\label{eq2.7}
 	\psi (m,\gamma _m) = \sum\limits_{n = 1}^{m - 1} {(\phi (m,n)} *flag(m,n,\gamma _m,RU_n))
 	\end{equation}
-	
+
 	3）获取最佳$RU$向量${\bf{\gamma _{opt}}}$。最小冲突和算法就是分配使得$\psi (m,\gamma _m)$取得最小值的资源块$\gamma _m$给$dLink_m$。即有
-	
+
 	\begin{equation}\label{eq2.8}
 	{\bf{\gamma _{opt}}} = \arg \min \psi (m,\gamma _m) , \gamma _m \in \mathcal{N}_d
 	\end{equation}
-	
+
 	4）获取$RU_m$。如果${\bf{\gamma _{opt}}}$只包含一个元素${\gamma ^{\rm{*}}}$，那么$RU_m = {\gamma ^{\rm{*}}}$。如果存在多个元素则，需要计算${\bf{\gamma _{opt}}}$每一个元素的$T(\gamma _m,m - 1)$，$T(\gamma _m,m - 1)$表示资源块$\gamma _m$在$dLink_m$分配资源之前的$m-1$条链路中被重复使用的次数。则有：
-	
+
 	\begin{equation}\label{eq2.9}
 	T(\gamma _m,m - 1) = \sum\limits_{n = 1}^{m - 1} {\kappa (\gamma _m,RU_n)}
 	\end{equation}
-	
+
 	其中:
 	\begin{equation}\label{eq2.10}
 	\kappa (\gamma _m,RU_n) = \left\{ \begin{array}{l}
@@ -314,270 +311,270 @@
 	1,\gamma _m = RU_n
 	\end{array} \right.
 	\end{equation}
-	
+
 	然后获取使$T(\gamma _m,m - 1)$最小的$RU$向量${\bf{\gamma }}{{\bf{'}}_{{\bf{opt}}}}$，即：
-	
+
 	\begin{equation}\label{eq2.11}
-	{\bf{\gamma }}{{\bf{'}}_{{\bf{opt}}}} = \arg \min T(\gamma _m,m - 1), \gamma _m \in {\bf{\gamma _{opt}}} 
+	{\bf{\gamma }}{{\bf{'}}_{{\bf{opt}}}} = \arg \min T(\gamma _m,m - 1), \gamma _m \in {\bf{\gamma _{opt}}}
 	\end{equation}
-	
+
 	如果${\bf{\gamma }}{{\bf{'}}_{{\bf{opt}}}}$只包含一个元素${\gamma ^{\rm{*}}}$，那么$RU_m = {\gamma ^{\rm{*}}}$，否则这$RU_m$的值从${\bf{\gamma }}{{\bf{'}}_{{\bf{opt}}}}$中随机选取。
-	
+
 	5）重复2），3，4）为D2D序列中的下一条D2D链路分配资源块，直至为序列中的所有D2D链路分配好资源块。
-	
-	
+
+
 	\begin{itemize}
 		\item 链路广播监听与上报
 	\end{itemize}
-	
+
 	D2D链路的T端在基站的控制下进行广播，D2D链路的R端实时监听和上报监听数据，基站也实时监听和记录数据。具体步骤如下：
-	
+
 	1）D2D链路广播。如果基站为$dLink_m$分配了资源块$RU_m$，那么$dLink_m$的发射端将在该资源块上发送广播信号，广播信号携带$dLink_m$的链路ID信息。
-	
+
 	2）D2D链路R端监听和上报。所有D2D链路的R端都实时监听$\mathcal{N}_d$所有的资源块，如果$dLink_k$的R端在资源块$RU$上能够正确识别D2D的id，则标记该资源块$RU$为D2D频率类型$\mathcal{N}_{d1}$，并记录识别的D2D链路的ID信息。如果$dLink_k$的R端在资源块$RU$上检测到广播冲突，则标记该资源块$RU$为D2D频率类型$\mathcal{N}_{d2}$，否则，说明$dLink_k$的R端在资源块$RU$上没有收到任何信息，标记资源块$RU$为D2D频率类型$\mathcal{N}_{d0}$。D2D链路的R端将检测到的$\mathcal{N}_d$所有资源块的D2D频率类型和识别链路ID等信息上报给基站。
-	
+
 	3）基站监听和记录。基站实时监听$\mathcal{N}_d$所有的资源块，如果基站在资源块$RU$上能够正确识别D2D的id，则标记该资源块$RU$为D2D频率类型$\mathcal{N}_{d1}$，并记录识别的D2D链路的ID信息。如果基站在资源块$RU$上检测到广播冲突，则标记该资源块$RU$为D2D频率类型$\mathcal{N}_{d2}$，否则，标记资源块$RU$为D2D频率类型$\mathcal{N}_{d0}$。
-	
-	
-	
+
+
+
 	\begin{itemize}
 		\item DToD类型干扰图更新
 	\end{itemize}
-	
+
 	基站D2D链路R端上报的数据和基站干扰图数据进行类型干扰图更新。基站处理上报数据分为两部分：先是直接通过当前帧反馈信息处理，然后重新处理之前记录的反馈信息。
-	
+
 	1）检测数据的直接处理。用$dLinkSet(RU)$表示所有的$dLink$中，分配资源块$RU$的$dLink$集合，则根据$dLink_k$上报$RU$的类型可分为三种情况。
-	
+
 	情况一、$dLink_k$上报资源块$RU$的类型为$\mathcal{N}_{d1}$以及识别的D2D链路$dLink_m$，则基站更新$dLink_k$的$dNborD_k$干扰图信息为：
-	
+
 	\begin{equation}\label{eq2.12}
 	dNborD_k = dNborD_k \cup dLink_m
 	\end{equation}
-	
+
 	此时，基站还可以推断出用$dLinkSet(RU)$中除了$dLink_m$，其他D2D链路T端的广播信号$dLink_k$的R端均无法收到，更新$dLink_k$的$dUnNborD_k$为：
-	
+
 	\begin{equation}\label{eq2.13}
 	dUnNborD_k = dUnNborD_k \cup (dLinkSet(RU) - dLink_m)
 	\end{equation}
-	
-	
+
+
 	情况二、$dLink_k$上报资源块$RU$的类型为$\mathcal{N}_{d2}$，此时基站可以推断出$dLink_k$的R端在资源块$RU$上广播冲突，需要利用已知的干扰图信息计算可能的冲突来源。
-	
+
 	基站首先计算可能的冲突集合$ConfictSet{(k,RU)_{possiable}}$:
-	
+
 	\begin{equation}\label{eq2.14}
 	ConfictSet{(k,RU)_{possiable}} = dLinkSet(RU) - dUnNborD_k
 	\end{equation}
-	
+
 	因为存在广播冲突，所以$ConfictSet{(k,RU)_{possiable}}$的元素个数肯定不小于2。
-	
+
 	当$ConfictSet{(k,RU)_{possiable}}$的D2D链路的数量正好等于2个时候，那个基站可以推断集合中的两个D2D链路都能干扰到$dLink_k$，即：
-	
+
 	\begin{equation}\label{eq2.15}
 	dNborD_k = dNborD_k \cup ConfictSet{(k,RU)_{possiable}}
 	\end{equation}
-	
+
 	当$ConfictSet{(k,RU)_{possiable}}$的D2D链路的数量等于3个时候，那个基站尚无法推断集合中的D2D链路与$dLink_k$的干扰关系，基站将该集合作为附件信息储存成$dNborSet_{p}$保存，即：
-	
+
 	\begin{equation}\label{eq2.16}
 	List < dNborSet_{p}{ > _k} = List < dNborSet_{p}{ > _k} + ConfictSet{(k,RU)_{possiable}}
 	\end{equation}
-	
+
 	当$ConfictSet{(k,RU)_{possiable}}$的D2D链路的数量大于3个时候，则视为无用信息直接丢弃，不进行处理。
-	
-	
+
+
 	情况三、$dLink_k$上报资源块$RU$的类型为$\mathcal{N}_{d0}$，则基站可以推断出$dLinkSet(RU)$中所有的D2D链路T端的广播信号$dLink_k$的R端均无法收到，此时基站更新$dLink_k$的干扰图信息：
-	
+
 	\begin{equation}\label{eq2.17}
 	dUnNborD_k = dUnNborD_k \cup dLinkSet(RU)
 	\end{equation}
-	
+
 	2）干扰图信息的二次处理。当基站根据监听数据处理完更新所有$dLink_k$的$dNborD_k$和$dUnNborD_k$信息之后。会重新遍历所有$dLink_k$的$List < dNborSet_{p}{ > _k}$来利用之前的监听数据。
-	
+
 	对于所有的$List < dNborSet_{p}{ > _k}$中的$dNborSet_{p}$，基站先计算$SetA$和$SetB$。其中：
-	
+
 	\begin{equation}\label{eq2.18}
 	SetA = dNborSet_{p} - dUnNborD_k
 	\end{equation}
-	
+
 	\begin{equation}\label{eq2.19}
 	SetB = dNborSet_{p} \cap dUnNborD_k
 	\end{equation}
-	
+
 	情况一、$SetA$中的D2D链路数量为2个，则将$dNborSet_{p}$从$List < dNborSet_{p}{ > _k}$中移除，同时更新$dNborD_k$为：
-	
+
 	\begin{equation}\label{eq2.20}
 	dNborD_k = dNborD_k \cup SetA
 	\end{equation}
-	
-	情况二、$dNborSet_{p}$中的元素个数为3个，则将$dNborSet_{p}$从$List < dNborSet_{p}{ > _k}$中移除。  
-	
+
+	情况二、$dNborSet_{p}$中的元素个数为3个，则将$dNborSet_{p}$从$List < dNborSet_{p}{ > _k}$中移除。
+
 	其他情况、则不做任何处理。
-	
-	
+
+
 	\begin{itemize}
 		\item DToD类型干扰图更新
 	\end{itemize}
-	
+
 	DToC类型干扰图的信息更新过程同DToD类型干扰图，基站处理上报数据分为检测数据直接处理和二次处理两部分。
-	
+
 	1）检测数据的直接处理。根据基站检测到的$RU$类型可分为三种情况。
-	
+
 	情况一、基站记录的资源块$RU$的类型为$\mathcal{N}_{d1}$以及识别的D2D链路$dLink_m$，则分别更新基站的$cNborD_{bs}$和$cUnNborD_{bs}$邻居信息：
-	
+
 	\begin{equation}\label{eq2.21}
 	cNborD_{bs} = cNborD_{bs} \cup dLink_m
 	\end{equation}
-	
+
 	\begin{equation}\label{eq2.22}
 	cUnNborD_{bs} = cUnNborD_{bs} \cup (dLinkSet(RU) - dLink_m)
 	\end{equation}
-	
+
 	情况二、基站记录的资源块$RU$的类型为$\mathcal{N}_{d2}$，此时,首先计算可能的冲突集合$ConfictSet{(bs,RU)_{possiable}}$：
-	
+
 	\begin{equation}\label{eq2.23}
 	ConfictSet{(bs,RU)_{possiable}} = dLinkSet(RU) - cUnNborD_{bs}
 	\end{equation}
-	
-	
+
+
 	当$ConfictSet{(bs,RU)_{possiable}}$的D2D链路的数量正好等于2时候：
-	
+
 	\begin{equation}\label{eq2.24}
 	cNborD_{bs} = cNborD_{bs} \cup ConfictSet{(bs,RU)_{possiable}}
 	\end{equation}
-	
+
 	当$ConfictSet{(k,RU)_{possiable}}$的D2D链路的数量等于3个时候：
-	
+
 	\begin{equation}\label{eq2.25}
 	List < dNborSet_{p}{ > _{bs}} = List < dNborSet_{p}{ > _{bs}} + ConfictSet{(bs,RU)_{possiable}}
 	\end{equation}
-	
-	
+
+
 	情况三、基站记录的资源块$RU$的类型为$\mathcal{N}_{d0}$，此时
-	
+
 	\begin{equation}\label{eq2.26}
 	cUnNborD_{bs} = cUnNborD_{bs} \cup dLinkSet(RU)
 	\end{equation}
-	
-	
+
+
 	2）干扰图信息的二次处理，基站根据监听的数据更新完基站的邻居信息$cNborD_{bs}$和$cUnNborD_{bs}$之后，遍历基站的$List < dNborSet_{p}{ > _{bs}}$，同样令
-	
+
 	\begin{equation}\label{eq2.27}
 	Set{A_{bs}} = dNborSet_{p} - cUnNborD_{bs}
 	\end{equation}
-	
+
 	\begin{equation}\label{eq2.28}
 	Set{B_{bs}} = dNborSet_{p} \cap cUnNborD_{bs}
 	\end{equation}
-	
+
 	情况一、$Set{A_{bs}}$中的D2D链路数量为2个，则将$dNborSet_{p}$从 中移除，同时更新$cNborD_{bs}$为：
-	
+
 	\begin{equation}\label{eq2.29}
 	cNborD_{bs} = cNborD_{bs} \cup Set{A_{bs}}
 	\end{equation}
-	
-	情况二、$Set{B_{bs}}$中的元素个数为3个，则将$dNborSet_{p}$从$List < dNborSet_{p}{ > _{bs}}$中移除。 
-	
+
+	情况二、$Set{B_{bs}}$中的元素个数为3个，则将$dNborSet_{p}$从$List < dNborSet_{p}{ > _{bs}}$中移除。
+
 	结束此次迭代，进入下一个迭代过程。
-	
+
 	\section{本章小结}
-	
-	
+
+
 	\chapter{干扰图构建算法的理论分析}
 	\section{引言}
 	上一章我们叙述了蜂窝D2D通信系统的系统模型，介绍了无线资源和小区的情况，并详细介绍了本文所提出的蜂窝D2D实时干扰图构建算法的实现流程，并对流程中的每一个步骤的实现进行了详细的介绍。本章我们依旧按照干扰边两端链路的类型划分成CToD,DToD和DToC三种不同的干扰边类型进行分析。
-	
+
 	在具体分析之前需要分析一个很重要的变量，即小区中的链路接收端所能接收到的链路的数量，这个也称为链路的度D。
-	
-	
+
+
 	本章我们将从理论的角度计算出
-	
+
 	本章我们将通过建立完整的理论分析模型，对所提算法进行详细的理论分析和验证所提算法的结果。同样本章将会针对3种不同的类型干扰边
-	
+
 	理论分析的主要参数是少边率，即包含总少边率和类型少边率。
-	
+
 	假设小区的小区蜂窝链路数为$Q_C$，每帧蜂窝链路进出数为$Q_{vC}$，小区的D2D链路数为$Q_D$，每帧D2D链路进出数为$Q_{vD}$，可用资源块数$N$，划分给D2D链路广播的数量为$N_D$，划分给蜂窝链路广播的数量为$N_C$。
-	
-	
-	
+
+
+
 	小区的新加蜂窝链路的比例为：
-	
+
 	\begin{equation}\label{eq3.1}
 	{P_{newCLink}} = \frac{{Q_{vC}}}{{Q_C}}
 	\end{equation}
-	
+
 	原有蜂窝链路的比例为：
 	\begin{equation}\label{eq3.2}
 	{P_{oldCLink}} = 1 - {P_{newCLink}}
 	\end{equation}
-	
+
 	小区新加D2D链路的比例为：
-	
+
 	\begin{equation}\label{eq3.3}
-	{p_{newDLink}} = \frac{{Q_{vD}}}{{Q_D}}
+	{P_{newDLink}} = \frac{{Q_{vD}}}{{Q_D}}
 	\end{equation}
 	小区的原始D2D链路的比例为：
 	\begin{equation}\label{eq3.4}
-	{p_{oldDLink}} = 1 - {p_{newDLink}}
+	{P_{oldDLink}} = 1 - {P_{newDLink}}
 	\end{equation}
-	
+
 	----------------------------这边省略了一些东西----------------------------
-	
+
 	\section{CToD类型干扰边分析}
 	CToD类型干扰边的构建的完整性和优先级状态${H}$的分布有关，蜂窝链路${CLink_i}$的${H}$值${H_i}$大小会直接影响以${CLink_i}$为T端的干扰边被发现的概率。
-	
+
 	\subsection{蜂窝链路的${H}$分布}
 	此时需要分析的优先级状态指的是在每一次迭代过程结束的时候，各个蜂窝链路的优先级状态${H}$。根据小区的$N_C$，$Q_C$和$Q_C$三者的关系可以划分成三种不同的场景。分别为$Q_{vC} \le 2*N_C < Q_C$，$Q_{vC} \le 2*N_C < Q_C$和$2*N_C \ge Q_C$
-	
+
 	\begin{itemize}
 		\item 场景一：$2*N_C \ge Q_C$
 	\end{itemize}
-	
+
 	该场景下，在每帧蜂窝链路资源分配的链路选取阶段，序列中所有的蜂窝链路都会被选中并分配资源，因此，当本次迭代过程结束后所有蜂窝链路的优先级状态均处于${H_{\min }}$。
-	
+
 	\begin{itemize}
 		\item 场景二：$Q_{vC} \le 2*N_C < Q_C$
 	\end{itemize}
-	
+
 	该场景下，在每帧蜂窝链路资源分配的链路选取阶段，基站会选取序列中的$2*N_C$条蜂窝链路分配资源块。因此基站更新信息时，会有$2*N$蜂窝链路的优先权状态更新为${H_{\min }}$，其余链路的优先权更新$\min ({H_i} + 1,{H_{\max }})$。与此同时，每帧小区都将有一定比例的蜂窝链路离开小区和新加入小区，这个也会影响${H}$分布。
-	
-	
+
+
 	用$Q_{\chi }$表示优先权状态为$\chi $的蜂窝链路数量，那么受到蜂窝链路进出的影响，本帧开始经过链路进出更新后时候$Q_{\chi }$的期望更新为
-	
+
 	\begin{equation}\label{eq3.1}
 	E(Q_{\chi }) = \left\{ \begin{array}{l}
 	Q_{\chi }*{P_{oldCLink}},{H_{\min }} \le \chi  < {H_{\max }}\\
 	Q_{\chi }*{P_{oldCLink}} + Q_{vC},{\chi } = {H_{\max }}
 	\end{array} \right.
 	\end{equation}
-	
+
 	用$X_{\chi }$表示链路选取阶段选取的蜂窝链路中，包含的优先权状态为$\chi $的蜂窝链路数量，那么当本次迭代过程结束后，状态$\chi $的蜂窝链路数量更新为
-	
+
 	\begin{equation}\label{eq3.1}
 	Q_\chi  = \left\{ \begin{array}{l}
 	2*N_C,\chi  = 0\\
 	Q_{\chi  - 1} - X_{\chi - 1},\chi \ne 0
 	\end{array} \right.
 	\end{equation}
-	
+
 	关于$X_{\chi }$和$Q_{\chi }$存在两种约束条件。
-		
-		约束一：如果选取序列中存在$H = \chi $的蜂窝链路，即$X_\chi \ne 0$，那么选取序列包含所有的$H = \chi + 1$的蜂窝链路。即有
-		
-		\begin{equation}\label{eq3.1}
-		X_{\chi  + 1} = Q_{\chi  + 1},X_\chi \ne 0 
+
+	约束一：如果选取序列中存在$H = \chi $的蜂窝链路，即$X_\chi \ne 0$，那么选取序列包含所有的$H = \chi + 1$的蜂窝链路。即有
+
+	\begin{equation}\label{eq3.1}
+	X_{\chi  + 1} = Q_{\chi  + 1},X_\chi \ne 0
 	\end{equation}
-	
-	
+
+
 	约束二：如果未被选取的链路存在$H = \chi $的蜂窝链路，即$X_{\chi } \ne Q_{\chi }$，选取序列中就不可能存在$H = \chi - 1$的蜂窝链路。即有：
-	
+
 	\begin{equation}\label{eq3.1}
 	X_{\chi  - 1} = 0,X_{\chi } \ne Q_{\chi }
 	\end{equation}
-	
+
 	由约束一和约束二可以知道，$\exists \chi ^*$使得以下条件成立：
-	
-	
+
+
 	\begin{equation}\label{eq3.1}
 	{X_\chi } = \left\{ \begin{array}{l}
 	0,{H_{\min }} \le \chi  < {\chi ^*}\\
@@ -585,11 +582,11 @@
 	{Q_\chi },{\chi ^*}{\rm{ <  }}\chi  \le {H_{\max }}
 	\end{array} \right.
 	\end{equation}
-	
+
 	%其中$0 \le {X_{{i_0}}} \le H{ & _{{i_0}}}$，然后分析$H{ & _{{i_0}}}$的取值，由公式4-5，4-6和4-9可以知道上一帧结束和这一帧结束$Q_i$的关系，而当小区的链路进出速度稳定后两者是数值是相等的。
 	%而当小区的链路进出速度稳定后两者是数值是相等的。
 	由此可以得到$Q_{\chi}$的取值情况：
-	
+
 	\begin{equation}\label{eq3.1}
 	Q_{\chi } = \left\{ \begin{array}{l}
 	2*N_C,\chi = 0\\
@@ -598,9 +595,9 @@
 	0,\chi  > \chi ^* + 1
 	\end{array} \right.
 	\end{equation}
-	
+
 	递归推出，当$H_{\min } \le \chi ^* < H_{\max }$的时候有；
-	
+
 	\begin{equation}\label{eq3.1}
 	Q_\chi  = \left\{ \begin{array}{l}
 	2*N_C*{P_{oldCLink}}^{\chi - H_{\min }},H_{\min } \le \chi  \le \chi ^*\\
@@ -612,7 +609,7 @@
 	此时的$\chi ^*$需要满足条件：
 
 	\begin{equation}\label{eq3.1}
-	\sum\limits_{\chi = H_{\min }}^{\chi ^*} {2*Q_C*{P_{oldCLink}}^{\chi ^* - H_{\min }}} < Q_C \le \sum\limits_{\chi = H_{\min }}^{\chi ^* + 1} {2*Q_C*{P_{oldCLink}}^{\chi ^* - H_{\min }}} 
+	\sum\limits_{\chi = H_{\min }}^{\chi ^*} {2*Q_C*{P_{oldCLink}}^{\chi ^* - H_{\min }}} < Q_C \le \sum\limits_{\chi = H_{\min }}^{\chi ^* + 1} {2*Q_C*{P_{oldCLink}}^{\chi ^* - H_{\min }}}
 	\end{equation}
 
 	因为$Q_{vC} \le 2*N_C$，所以有：
@@ -622,180 +619,275 @@
 	\end{equation}
 
 	此时必然存在合适的$\chi ^*$满足条件，而算法所需要初始设定的$H_{\max }$应满足条件$H_{\max } > \chi ^*$
-	
+
 	\begin{itemize}
 		\item 场景三：$2*N_C \le Q_{vC}$
 	\end{itemize}
 
 	该场景下会出现一部分的蜂窝链路始终无法分配到资源，这种情况下属于高速的动态变化场景，构建干扰图对于分配资源不具有现实意义，本文算法并不适用。
-	
-	
+
+
 	\subsection{CToD类型干扰边少边率计算}
 	假设$dLink_m$能收到$cLink_i$发射端发送的广播信息，那么分析该干扰边还未被发现的概率。
-	
+
 	根据协议算法内容，只要基站为$cLink_i$分配资源块进行广播，如果此时$dLink_m$已经存在于小区中，并且能收到$cLink_i$的T端的广播信号，那个该干扰关系肯定能被基站发现。因此，干扰关系不能被识别的情况当且仅当$dLink_m$进入小区之后，基站没有再为$cLink_i$分配资源块。
-	
-	定义$newCLinkSet$表示新加蜂窝链路集合，当$cLink_i$与$dLink_m$之间存在干扰边，但干扰边未基站识别的概率与优先权状态$H$的值有关，即该概率$Pmiss_{\chi }$为：
-	
+
+	当$cLink_i$与$dLink_m$之间存在干扰边，但干扰边未基站识别的概率与优先权状态$H$的值以及是否新加链路有关。因为本文的算法不适用于$2*N_C \le Q_{vC}$的场景，即不可能存在新加链路本次迭代不在选取的序列中。因此本次迭代结束对于所有的$H = \chi $的蜂窝链路为发射端的干扰边未被发现的概率$Pmiss_{\chi }$为：
+
 	\begin{equation}\label{eq3.1}
-	Pmiss_{\chi } = \left\{ \begin{array}{l}
-	1 - {({p_{oldDLink}})^{\chi - H_{\min }}},cLink_i \notin newCLinkSet \\
-	1,cLink_i \in newCLinkSet 
-	\end{array} \right.
+	Pmiss_{\chi } = 1 - {({P_{oldDLink}})^{\chi - H_{\min }}}
 	\end{equation}
-	
+
 	而蜂窝链路的优先权状态等于$\chi $的概率$Pstate_{\chi }$为：
+
 	\begin{equation}\label{eq3.1}
 	Pstate_{\chi } = \frac{{Q_{\chi }}}{{Q_C}}
 	\end{equation}
-	
+
 	因此，小区CToD类型干扰边的类型少边率$Pmiss_{CToD}$为：
 	\begin{equation}\label{eq3.1}
-	Pmiss_{CToD} = \sum\limits_{\chi = {H_{\min }}}^{{H_{\max }}} $Pmiss_{\chi }*Pstate_{\chi }
+	Pmiss_{CToD} = \sum\limits_{\chi = {H_{\min }}}^{{H_{\max }}} Pmiss_{\chi }*Pstate_{\chi }
 	\end{equation}
-	
-	
+
+
 	\section{DToD类型干扰边分析}
 	对于DToD类型的干扰边，新加的类型干扰边分为两部分，一部分是所有D2D链路对新加D2D链路的干扰，另一部分是新加D2D链路对原始D2D链路的干扰。
 	\begin{itemize}
-		\item ${p_{newDLink}}$：本次迭代过程的新增加$dLink$比例。
-		\item ${p_{oldDLink}}$：本次迭代过程的原始$dLink$比例。
-		\item ${p_{newDEdge}}$：本次迭代过程的DToD类型干扰边的新增加干扰边比例。
-		\item ${p_{oldDEdge}}$：本次迭代过程的DToD类型干扰边的原始干扰边比例。
-		\item ${p_{linkStay(M)}}$：在小区中存在了M帧的$dLink$所占的比例。
-		\item ${p_{edgeStay(M)}}$：在小区中存在了M帧的DToD类型干扰边所占的比例。
+		\item ${P_{newDLink}}$：本次迭代过程的新增加$dLink$比例。
+		\item ${P_{oldDLink}}$：本次迭代过程的原始$dLink$比例。
+		\item ${P_{newDEdge}}$：本次迭代过程的DToD类型干扰边的新增加干扰边比例。
+		\item ${P_{oldDEdge}}$：本次迭代过程的DToD类型干扰边的原始干扰边比例。
+		\item ${P_{linkStay(M)}}$：在小区中存在了M帧的$dLink$所占的比例。
+		\item ${P_{edgeStay(M)}}$：在小区中存在了M帧的DToD类型干扰边所占的比例。
 	\end{itemize}
-	
+
 	新加边与新加链路比例的概率关系为：
 	\begin{equation}\label{eq3.1}
-	{p_{newDEdge}} = {p_{newDLink}}*100\%  + {p_{oldDLink}}*{p_{newDLink}}*100\% 
+	{P_{newDEdge}} = {P_{newDLink}}*100\%  + {P_{oldDLink}}*{P_{newDLink}}*100\%
 	\end{equation}
-	
+
 	\subsection{循环随机算法分析}
-	
-	循环随机算法指的是将D2D链路按照指定的方式进行排序后依次将频率资源循环分配给相应的D2D链路。
-	
-	基站循环随机给$dLink$分配资源块，平均每个资源块被$dLink$重复使用的次数$Nu{m_{averUse}}$为： 
-	
+
+	循环随机算法指的是选取了D2D链路形成序列之后，依次将频率资源循环分配给相应的D2D链路。
+
+	基站循环随机给$dLink$分配资源块，平均每个资源块被$dLink$重复使用的次数$T_{use}$为：
+
 	\begin{equation}\label{eq3.1}
-	Nu{m_{averUse}} = \frac{{Q_D}}{{N_D}}
+	T_{use} = \frac{{Q_D}}{{N_D}}
 	\end{equation}
-	
+
 	假设$dLink_m$的R端收到的广播信号的数量为A，$dLink_n$分配的资源块是$RU_n$，$dLink_m$收到了$dLink_n$的广播信号，则会出现三种干扰情形。
-	
-	干扰情形一、$dLink_m$的R端接收到的A个广播信号里面，没有其他的$dLink$与$dLink_n$使用相同资源块，概率为${p_{situationA1}}$。
-	
-	干扰情形二、$dLink_m$的R端接收到的A个广播信号里面，正好还有一条$dLink$与$dLink_n$使用相同资源块，概率为${p_{situationA2}}$。
-	
-	干扰情形三、$dLink_m$的R端接收到的A个广播信号里面，还有多条$dLink$与$dLink_n$使用相同资源块，概率为${p_{situationA3}}$。
-	
-	这个问题可以等效为从袋子中取A个球的概率问题,假设袋子里面有$Q_D$个球，其中有$Nu{m_{averUse}}$个红球，$Q_D - Nu{m_{averUse}}$个白球，问题的等效描述为从袋子中取出一个红球后，又从中取出A-1个球问题的等价情形。
-	
-	等价干扰情形一：从袋子中取出一个红球后，又从中取出的A-1个球里面，没有红球。
-	
-	等价干扰情形二：从袋子中取出一个红球后，又从中取出的A-1个球里面，正好有一个红球。
-	
-	等价干扰情形三：从袋子中取出一个红球后，又从中取出的A-1个球里面，还有多个红球。
-	
+
+	情形一、$dLink_m$的R端接收到的A个广播信号里面，没有其他的$dLink$与$dLink_n$使用相同资源块，概率为$P_{A1}$。
+
+	情形二、$dLink_m$的R端接收到的A个广播信号里面，正好还有一条$dLink$与$dLink_n$使用相同资源块，概率为$P_{A2}$。
+
+	情形三、$dLink_m$的R端接收到的A个广播信号里面，还有多条$dLink$与$dLink_n$使用相同资源块，概率为$P_{A3}$。
+
+	这个问题可以等效为从袋子中取A个球的概率问题,假设袋子里面有$Q_D$个球，其中有$T_{use}$个红球，$Q_D - T_{use}$个白球，问题的等效描述为从袋子中取出一个红球后，又从中取出A-1个球问题的等价情形。
+
+	等价情形一：从袋子中取出一个红球后，又从中取出的A-1个球里面，没有红球。
+
+	等价情形二：从袋子中取出一个红球后，又从中取出的A-1个球里面，正好有一个红球。
+
+	等价情形三：从袋子中取出一个红球后，又从中取出的A-1个球里面，还有多个红球。
+
 	因此：
-	
+
+	% \begin{equation}\label{eq3.1}
+	% \begin{array}{c}
+	% P_{A1} = \frac{{C_{Q_D - T_{use}}^{A - 1}}}{{C_{Q_D - 1}^{A - 1}}}\\
+	% = \frac{{Q_D - T_{use}}}{{Q_D - 1}}*\frac{{Q_D - T_{use} - 1}}{{Q_D - 2}}*...*\frac{{Q_D - T_{use} - A + 2}}{{Q_D - A + 1}}\\
+	% = \prod\limits_{i = 1}^{A - 1} {\frac{{Q_D - T_{use} - i + {1}}}{{Q_D - i}},(A > 1)}
+	% \end{array}
+	% \end{equation}
+
+	% 特别的，当${A = 1}$的时候${P_{situation11} = 1}$。
+
 	\begin{equation}\label{eq3.1}
-	\begin{array}{c}
-	{p_{situationA1}} = \frac{{C_{Q_D - Nu{m_{averUse}}}^{A - 1}}}{{C_{Q_D - 1}^{A - 1}}}\\
-	= \frac{{Q_D - Nu{m_{averUse}}}}{{Q_D - 1}}*\frac{{Q_D - Nu{m_{averUse}} - 1}}{{Q_D - 2}}*...*\frac{{Q_D - Nu{m_{averUse}} - A + 2}}{{Q_D - A + 1}}\\
-	= \prod\limits_{i = 1}^{A - 1} {\frac{{Q_D - Nu{m_{averUse}} - i + {1}}}{{Q_D - i}},(A > 1)} 
-	\end{array}
+	{P_{A1}} = \left\{ \begin{array}{l}
+	1,A = 1\\
+	\frac{{C_{{Q_D} - {T_{use}}}^{A - 1}}}{{C_{{Q_D} - 1}^{A - 1}}} = \prod\limits_{i = 1}^{A - 1} {\frac{{{Q_D} - {T_{use}} - i + 1}}{{{Q_D} - i}},A > 1}
+	\end{array} \right.
 	\end{equation}
-	
-	特别的，当${A = 1}$的时候${p_{situation11} = 1}$。
-	
+
 	\begin{equation}\label{eq3.1}
-	Nu{m_{averUse}} = \frac{{Q_D}}{{N_D}}
+	{P_{A2}} = {\rm{ }}\left\{ \begin{array}{l}
+	0,A = 1\\
+	\frac{{{T_{use}} - 1}}{{{Q_D} - 1}},A = 2\\
+	\frac{{C_{{T_{use}} - 1}^1*C_{{Q_D} - {T_{use}}}^{A - 2}}}{{C_{{Q_D} - 1}^{A - 1}}} = ({T_{use}} - 1)*\frac{{A - 1}}{{{Q_D} - 1}}\prod\limits_{i = 1}^{A - 2} {\frac{{{Q_D} - {T_{use}} - i + 1}}{{{Q_D} - i - 1}},A > 2}
+	\end{array} \right.
 	\end{equation}
-	
-	特别的，当${A=1}$的时候${p_{situationA2}} = 0$，当$A=2$的时候${p_{situationA2}} = \frac{{Nu{m_{averUse}} - 1}}{{Q_D - 1}}$
-	
+
 	\begin{equation}\label{eq3.1}
-	{p_{situationA3}} = 1 - {p_{situationA1}} - {p_{situationA{2}}}
+	P_{A3} = 1 - P_{A1} - P_{A2}
 	\end{equation}
-	
+
 	假设A的最大值为${A_{\max }}$则考虑A的取值概率后，三种情形的概率分别为：
-	
+
 	\begin{equation}\label{eq3.1}
-	{p_{situation\overline A 1}} = \sum\limits_{i = 1}^{{A_{\max }}} {({p_{{A_i}}}*{p_{situationA1}})}
+	{\overline P_{A1}} = \sum\limits_{i = 1}^{{A_{\max }}} {({P_{A = i}}*P_{A1})}
 	\end{equation}
-	
+
 	\begin{equation}\label{eq3.1}
-	{p_{situation\overline A {2}}} = \sum\limits_{i = 1}^{{A_{\max }}} {({p_{Ai}}*{p_{situationA{2}}})}
+	{\overline P_{A2}} = \sum\limits_{i = 1}^{{A_{\max }}} {({P_{A = i}}*{P_{A2}})}
 	\end{equation}
-	
+
 	\begin{equation}\label{eq3.1}
-	{p_{situation\overline A 3}} = \sum\limits_{i = 1}^{{A_{\max }}} {({p_{Ai}}*{p_{situationA{3}}}) = } 1 - {p_{situation1}} - {p_{situation{2}}}
+	{\overline P_{A3}} = \sum\limits_{i = 1}^{{A_{\max }}} {({P_{A = i}}*{P_{A3}}) = } 1 - {\overline P_{A1}} - {\overline P_{A2}}
 	\end{equation}
-	
+
 	\subsection{最小冲突和算法}
-	最小冲突和相当于基于循环随机的基础上的贪婪算法，按照链路加入小区的顺序贪婪分配资源块，使每一次给$dLink$分配的资源块与原有的链路分配的资源块广播冲突最少。
-	
-	假设干扰边完整的情况下，当A的值相对较小的话，通过最小冲突和空间复用资源块基本上可以完全避免冲突使得冲突和为0。但随着A的增大，即小区$dLink$的密度增大避免冲突能力减小，主要适用的场景是A的值普遍低于$N_D$的场景。本文所提出的最小冲突和根据现有的干扰图信息改变了${p_{situation\overline A 1}}$，${p_{situation\overline A 2}}$和${p_{situation\overline A 3}}$三种情形的概率。因为最小冲突和是基于现有干扰图信息的基础上分配资源块，性能取决于干扰图信息的完整性，如果基站没有任何干扰图信息，那么它就退化为循环随机的场景。
-	
+	最小冲突和算法相当于基于循环随机的基础上的贪婪得为序列中的D2D链路分配资源块，每一次给$dLink$分配的资源块与已经分配的资源块的D2D链路广播冲突最少。
+
+	假设干扰边完整的情况下，当A的值相对较小的话，通过最小冲突和空间复用资源块基本上可以完全避免冲突使得冲突和为0。但随着A的增大，即小区$dLink$的密度增大避免冲突能力减小，主要适用的场景是A的值普遍低于$N_D$的场景。本文所提出的最小冲突和根据现有的干扰图信息改变了${\overline P_{A1}}$，${\overline P_{A2}}$和${\overline P_{A3}}$三种情形的概率。因为最小冲突和是基于现有干扰图信息的基础上分配资源块，性能受到干扰图信息的完整性影响，如果基站没有任何干扰图信息，那么算法就退化为循环随机算法。
+
 	主要分析冲突和数值较小的场景，在这里分析时假设基站发现了$dLink_m$对$dLink_n$的干扰边，即$dLink_m \in dNborDConfSe{t_n}$，那么$dLink_m$就不会与$dNborDConfSe{t_n}$里的其他$dLink$在$dLink_n$的接收端广播冲突。
-	
-	首先将时域划分为帧，每一帧为一个迭代过程，定义从每一帧开始到基站获取和更新链路信息前为$stag{e_A}$，基站获取和更新链路信息后到D2D链路广播与基站计算前为$stag{e_B}$，之后到这一帧结束为$stag{e_C}$。
-	
-	\begin{itemize}
-		\item $pmis{s_{DToD}}(x,stage)$：第x帧$stage$阶段的$pmis{s_{DToD}}$。
-		\item $pfin{d_{DToD}}(x,stage)$：第x帧$stage$阶段的$pfin{d_{DToD}}$。
-	\end{itemize}
-	
+
+	首先将时域划分为帧，每一帧为一个迭代过程，定义从每一帧开始到基站获取和更新链路信息前为$S{_A}$，基站获取和更新链路信息后到D2D链路广播与基站计算前为$S{_B}$，之后到这一帧结束为$S{_C}$。
+
+	定义$Pmis{s_{DToD}}(X,S)$为第X帧$S$阶段的$Pmis{s_{DToD}}$，$Pfin{d_{DToD}}(X,S)$为第X帧$S$阶段的$Pfin{d_{DToD}}$。
+	% \begin{itemize}
+	% 	\item
+	% 	\item
+	% \end{itemize}
+
 	显然有：
-	
+
 	\begin{equation}\label{eq3.1}
-	pmis{s_{DToD}}(x,stag{e_C}) = pmis{s_{DToD}}(x + 1,stag{e_A})
+	Pmis{s_{DToD}}(X,S{_C}) = Pmis{s_{DToD}}(X + 1,S{_A})
 	\end{equation}
-	
+
 	因此基站更新链路信息后
-	
+
 	\begin{equation}\label{eq3.2}
-	pmis{s_{DToD}}(x,stag{e_B}) = pmis{s_{DToD}}(x,stag{e_A})*{p_{oldDEdge}}
+	Pmis{s_{DToD}}(X,S{_B}) = Pmis{s_{DToD}}(X,S{_A})*{P_{oldDEdge}}
 	\end{equation}
-	
-	采用最小冲突和分配资源块减少冲突后，在第x帧时候，D2D广播的三种情形的概率变成
-	
+
+	采用最小冲突和分配资源块减少冲突后，在第X帧时候，${\overline P _{A1}}$，${\overline P _{A2}}$和${\overline P _{A3}}$的修正概率变成：
+
 	\begin{equation}\label{eq3.1}
-	{p_{situation\overline A 1}}(new) = pmis{s_{DToD}}{(x,stag{e_B})^2} + {p_{situation\overline A 1}}(1 - pmis{s_{DToD}}{(x,stag{e_B})^2})
+	\acute{\overline P _{A1}} \approx {\overline P _{A1}} + {\overline P _{A1}} * (1 - Pmis{s_{DToD}}{(X,S{_B})^2})
 	\end{equation}
-	
+
 	\begin{equation}\label{eq3.1}
-	{p_{situation\overline A 2}}(new) = {p_{situation\overline A 2}}(1 - pmis{s_{DToD}}{(x,stag{e_B})^2})
+	\acute{\overline P _{A2}} \approx {\overline P _{A1}} * (1 - Pmis{s_{DToD}}{(X,S{_B})^2})
 	\end{equation}
-	
+
 	\begin{equation}\label{eq3.1}
-	{p_{situation\overline A 3}}(new) = 1 - {p_{situation\overline A 1}}(new) - {p_{situation\overline A 2}}(new)
+	\acute{\overline P _{A3}} = 1 - \acute{\overline P _{A1}} - \acute{\overline P _{A2}}
 	\end{equation}
-	
-	因为基站肯定没有D2D新加边的干扰图信息，因此$pmis{s_{DToD}}(x,stag{e_A})$的迭代初始值可以设为${p_{newDEdge}}$，然后再根据公式4-28算出$pmis{s_{DToD}}(x,stag{e_B})$，然后求出$pmis{s_{DToD}}(x,stag{e_C})$。
-	
-	因为当链路进出稳定的时候，有
+
+	而这里$Pmis{s_{DToD}}{(X,S{_B})}$是未知的，由于基站肯定没有D2D新加边的干扰图信息，因此$Pmis{s_{DToD}}(X,S{_A})$的初始值可以设为${P_{newDEdge}}$进行迭代计算得出。
+	迭代效果如图所示(补充迭代效果图)
+
+	因为当链路进出速率相等且系统稳定的时候，有
+
 	\begin{equation}\label{eq3.1}
-	pmis{s_{DToD}}(x - 1,stag{e_C}) = pmis{s_{DToD}}(x,stag{e_C})
+	Pmis{s_{DToD}} = Pmis{s_{DToD}}(X,S{_C}) = Pmis{s_{DToD}}(X + 1,S{_C})
 	\end{equation}
-	
-	又根据公式4-29可以得到
-	
+
+	\subsection{多次反馈计算}
+	$dLink_n$是小区中的一条D2D链路，在小区中存在了T帧，记为$dLink_n(T)$。若$dLink_n(T)$能收到$dLink_m$发射端发送的广播信息，那么令$dLink_m$被识别的概率和未被识别的概率分别记作$Pfind_{linkStay(T)}$和$Pmiss_{linkStay(T)}$。
+
+	如果$T = 1$，即$dLink_n(1)$是新加的D2D链路，那么由于$dLink_n(1)$的$dNborD_n = \emptyset$。因此,基站基本无法通过反馈计算发现冲突干扰边。
+
 	\begin{equation}\label{eq3.1}
-	pmis{s_{DToD}}(x,stag{e_A}) = pmis{s_{DToD}}(x,stag{e_C})
+	Pmiss_{linkStay(1)} = 1 - \overline P _{A1}
 	\end{equation}
-	
-	从而根据公式4-35进行迭代更新$pmis{s_{DToD}}(x,stage)$,当稳定后
-	
+
+	而$Pmiss_{linkStay(T + 1)}$的值可以通过$Pmiss_{linkStay(T)}$的值迭代推出。
+	首先有
 	\begin{equation}\label{eq3.1}
-	pmis{s_{DToD}} = pmis{s_{DToD}}(x,stag{e_C})
+	Pmis{s_{DToD}}(T + 1,S_A) = Pmis{s_{linkStay(T)}}
 	\end{equation}
-	
-	
-	
+
+	\begin{equation}\label{eq3.1}
+		Pfin{d_{DToD}}(T + 1,S_B) = Pfin{d_{DToD}}(T + 1,S_A)*{p_{oldLink}} = (1 - Pmis{s_{DToD}}(T + 1,S_A))*{p_{oldLink}}
+	\end{equation}
+
+	$Pmis{s_{DToD}}(T + 1,S_B) = Pmis{s_{DToD}}(T + 1,S_A)$
+
+
+	小区分配$\chi $的D2D链路集合为$dLinkSet(\chi )$，先计算集合$SetT$的大小，其中
+
+	\begin{equation}\label{eq3.1}
+	SetT  = Size(dLinkSet(\chi ) - dUnNborD_m)
+	\end{equation}
+
+	计算$dLink_m$在这一帧能被识别的情况分为两种：1）$dLink_n(T)$与$dLink_m$是情形一，基站可以直接识别$dLink_m$，该概率$\beta _{T1}$；2）$dLink_n(T)$与$dLink_m$是情形二，并且$Size(SetT) \le 3$，基站有一定概率可以间接计算得出$dLink_m$，概率$\beta _{T2}$。
+
+	对于$\beta _{T1}$，恒有$\beta _{T1} = \acute{\overline P _{A1}}$。而$\beta _{T2}$的值与$Q_{vD}$以及$N_D$的关系有关，当$dLink_n(T)$与$dLink_m$是情形二的时候，
+
+	若有两条及以上的新加D2D链路分配资源块$\chi $，那么这两条链路肯定不会包含在的$dUnNborD_n$里面，而且新加边比例远小于原始边，$P(Size(SetA) \le 3) \approx 0$，基本无法通过反馈计算的方式获得$d2dLin{k_m}$；
+	因此反馈计算算法主要适用于不超过一条新加D2D链路分配资源块$\chi $的情况，定义该概率为$P_{\chi 1}$，最小冲突和算法下的$P_{\chi 1}$与循环随机下的取值接近，因此有：
+
+	\begin{equation}\label{eq3.1}
+	P_{\chi 1} = \left\{ \begin{array}{l}
+	1,Q_D \le N_D\\
+	\frac{{2*N_D - Q_D}}{{N_D}},N_D < Q_D < 2*N_D\\
+	0,Q_D \ge 2*N_D
+	\end{array} \right.
+	\end{equation}
+
+	在该前提下，能够计算得出$dLink_m$需要$dUnNborD_n$至少包含了$dLinkSet(\chi )$中的$Q_{rep} - 3$条链路，该概率大约为：
+	\begin{equation}\label{eq3.1}
+	p(Size(SetA) \le 3) \approx Pfin{d_{DToD}}{(T + 1,X_B)^{^{Q_{rep} - 3}}}
+	\end{equation}
+
+	因此可以求得$\beta _{T2}$的值为：
+	\begin{equation}\label{eq3.1}
+	\beta _{T2} = \acute{\overline P _{A2}} * Pfin{d_{DToD}}{(T + 1,S_B)^{Q_{rep} - 3}}*{p_{s1}}
+	\end{equation}
+
+	这一帧$dLink_m$被基站识别的概率$Pfin{d_T}$为：
+	\begin{equation}\label{eq3.1}
+	Pfin{d_T} = \beta _{T2} + \beta _{T2}
+	\end{equation}
+
+	同时因为：
+	\begin{equation}\label{eq3.1}
+	Pmis{s_{linkStay(T)}} = Pmis{s_{DToD}}(T,S_C) = Pmis{s_{DToD}}(T,S_B)*(1 - Pfin{d_T})
+	\end{equation}
+
+	可以通过$Pmis{s_{linkStay(1)}}$代入递归计算出所有的$Pmis{s_{linkStay(T)}}$。
+
+	对于$Pmis{s_{linkStay(T)}}$，当$T=1$的时候，等于小区新加的D2D链路比例；为了便于分析，设一个合适的$T^*$值，当$T > T^*$时，我们也认为该D2D链路只在小区中存在了$T^*$帧，即：
+
+	因此在小区中存在$T$帧的D2D链路的比例为：
+	\begin{equation}\label{eq3.1}
+	{p_{linkStay(T + 1)}} = \left\{ \begin{array}{l}
+	{p_{newDLink}},T = 1\\
+	{p_{linkStay(T - 1)}}*{p_{oldDLink}},1 < T < T^* \\
+	1 - \sum\limits_{t = 1}^{{T^*} - 1} {{p_{linkStay(t)}}} ,T = T^*
+	\end{array} \right.
+	\end{equation}
+
+	因此该部分的类型少边率：
+	\begin{equation}\label{eq3.1}
+	Pmis{s_{DToD}} = \sum\limits_{T = 1}^{{T^*}} {({p_{linkStay(T)}}*Pmis{s_{linStay(T)}})}
+	\end{equation}
+
+
+	\section{DToC类型干扰边分析}
+	对于DToC类型的干扰边与DToD类型的干扰边分析类似，算法的过程都是D2D链路按照最小冲突和进行资源分配后，D2D链路进行广播，然后链路的接收端监听所有的$/t$频率单元，然后基站统计分析监听单元的频率情况类型情况。因此对于 的分析过程 类似，两者的不同之处有两点：所有蜂窝链路的接收端均为基站和模型中基站处于小区的中心位置。
+
+	首先，因为所有蜂窝链路的接收端均为基站，D2D链路进行广播的时候，只要发现了该D2D链路能干扰到基站，就能确认该D2D链路干扰到所有的蜂窝链路。因此对于任何一条蜂窝链路，因为基站一直存在于小区当中，所以在分析 的时候，相当于所有的蜂窝链路都已经在小区中至少存在了 帧以上。
+
+	其次，所有蜂窝链路的接收端均是位于小区中心位置的基站，而D2D链路的接收端是随机分布在整个小区当中，因为基站在该模型中是处于整个D2D链路随机分布的中心。因此如果忽略掉随机分布带来的影响，两者的数值与分析过程是一样的。
+
+	综合以上两点，\[pmis{s_{DToC}}\]在数值上可以近似等于\[pmis{s_{DToD}}\]分析过程中的\[pmis{s_{linStay({T^*})}}\]，即：$$
+
+	\begin{equation}\label{eq3.1}
+		pmis{s_{DToC}} \approx pmis{s_{linStay({T_0})}}
+	\end{equation}
+
+
+
+
+
 	\chapter{使用说明}
-	
+
 	\section{模板整体框架}
 	使用 \seuthesix 模板的整体框架如下所示，其中\verb+<...>+表示可替换的文本(replacement text)。
 	{\color{magenta}
@@ -803,14 +895,14 @@
 		%文档到此结束
 		\end{verbatim}
 	}
-	
+
 	\section{详细说明}
 	下面对这些命令及其参数进行详细介绍。
 	\subsection{文档类及其选项}
 	下面对这些命令及其参数进行详细介绍。
 	\subsubsection{这个不知道怎么样}
 	subsubsection{这个不知道怎么样}
-	
+
 	{\color{magenta}
 		\begin{verbatim}
 		\documentclass[<class_options>]{seuthesix}
@@ -837,7 +929,7 @@
 	}
 	如果用户还需要载入更多的宏包，可以通过这个命令载入。但是前提是不能破坏\seuthesix 文档类的基本参数设定。
 	一般来讲，是不需要载入其他宏包的，除非用户知道自己到底在干什么。
-	
+
 	\subsection{基本信息设置}
 	{\color{magenta}
 		\begin{verbatim}
@@ -846,15 +938,15 @@
 		\secretlevel{<公开>}    %学位论文密级分为"公开"、"内部"、"秘密"和"机密"四种
 		\studentid{<000000>}   %学号要完整，前面的零不能省略。
 		\title{<\seuthesix 用户手册>}{<手册>}{<\seuthesix User Manual>}{<\seuthesix>}
-		%中文标题，中文副标题，英文标题，英文副标题， 副标题没有可以置为空， 
+		%中文标题，中文副标题，英文标题，英文副标题， 副标题没有可以置为空，
 		%即 \title{<\seuthesix 用户手册>}{}{<\seuthesix User Manual>}{}
 		\author{<\seuthesix 开发组>}{<\seuthesix developer group>}
 		%作者中英文姓名
 		\advisor{<高德纳>}{<教授>}{<Donald E. Knuth>}{<Prof.>}
 		%导师中英文姓名与职称
-		\coadvisor{<兰伯特>}{<副教授>}{<Leslie Lamport>}{<Associate Prof.>} 
+		\coadvisor{<兰伯特>}{<副教授>}{<Leslie Lamport>}{<Associate Prof.>}
 		% 副导师中英文姓名与职称，若没有，可以不使用该命令
-		\degreetype{<\TeX 学硕士>}{<Master of \TeX>} 
+		\degreetype{<\TeX 学硕士>}{<Master of \TeX>}
 		% 详细学位类型，如工学硕士，Master of Engineering
 		\major{<\TeX>}%一级学科名
 		\submajor{<\LaTeX>}%二级学科名
@@ -869,8 +961,8 @@
 		\end{verbatim}
 	}
 	这些命令用来设置基本的参数。这些参数用于生成论文的封面、致谢信息等。
-	
-	
+
+
 	{\color{magenta}
 		\begin{verbatim}
 		\makebigcover
@@ -878,8 +970,8 @@
 		\end{verbatim}
 	}
 	提供了相关信息之后，就可以利用这两条命令来生成A3大封面、中文封面和英文封面。
-	
-	
+
+
 	\subsection{中英文摘要}
 	{\color{magenta}
 		\begin{verbatim}
@@ -892,7 +984,7 @@
 		\end{verbatim}
 	}
 	这两条命令分别用来生成中、英文摘要。
-	
+
 	\subsection{目录与图表目录等}
 	{\color{magenta}
 		\begin{verbatim}
@@ -901,7 +993,7 @@
 	}
 	摘要之后就是目录，如果需要生成论文中使用的术语和符号列表，可以通过这个命令设置列表的名称，如
 	\textit{术语与符号约定}，等等。若不需要该列表，则无需使用该命令。
-	
+
 	{\color{magenta}
 		\begin{verbatim}
 		\tableofcontents
@@ -912,7 +1004,7 @@
 	只有目录时必须的，其他四个目录可选。若需要其中一个或多个，则要使用
 	\verb+\listofothers+命令，同时在文档类选项中指定具体需要哪几个目录。
 	比如，需得到算法目录，需要在文档类选项中提供\texttt{algorithmlist}选项。
-	
+
 	\subsection{正文章节}
 	{\color{magenta}
 		\begin{verbatim}
@@ -933,33 +1025,33 @@
 		3.  介绍目前尚存在的问题；
 		4.  说明本课题的主攻方向。
 		文献总结应达到可独立成为一篇综述文章的要求。>
-		
+
 		....
-		
+
 		\chapter{<...>}
 		<利用研究生本人所掌握的理论知识对所选课题进行科学地、严密地理论分析、
 		数值计算或统计分析，剖析课题，提出自己的见解。>
 		\section{<...>}
 		<利用研究生本人所掌握的理论知识对所选课题进行科学地、严密地理论分析、
 		数值计算或统计分析，剖析课题，提出自己的见解。>
-		
+
 		\chapter{<...>}
 		<列出数据的图或表，并对数据结果进行讨论，对比分析、结果推论要严格准确，
 		避免采用模棱两可的评定语言。对反常的数据要保留并做解释或者说明，不可随意剔
 		除数据做出有违科学公正的行为。>
-		
+
 		\chapter{<...>}
 		...
-		
+
 		\chapter{<...>}
 		...
-		
+
 		\chapter{<全文总结>}
 		...
-		
+
 		\end{verbatim}
 	}
-	
+
 	\subsection{致谢}
 	{\color{magenta}
 		\begin{verbatim}
@@ -976,7 +1068,7 @@
 	}
 	该命令自动生成参考文献，使用\texttt{seuthesix.bst} 指定的文献风格。
 	作为该命令的参数，用户需提供自己的文献数据库文件，即\texttt{.bib}文件。
-	
+
 	\subsection{附录}
 	{\color{magenta}
 		\begin{verbatim}
@@ -995,8 +1087,8 @@
 	}
 	该命令开启一个新的章，用于作者简介。章名称通过参数\texttt{<作者简介>}指定。
 	此后可开始作者简介的具体内容。该部分也自成一章。该部分可选。
-	
-	
+
+
 	\chapter{注意事项}
 	\section{文献引用}
 	根据要求，文献应用应为数字标签(numerical label)，上标形式。但是有时也会用到正常形式，即非
@@ -1015,7 +1107,7 @@
 	用于实现正常(非上标，normal)的数字形式文献引用\citen{mittlebach}。
 	\section{参考文献格式}
 	见\verb+seuthesix.bst+的文档: 本文第\ref{bst}章。
-	
+
 	\section{图表格式处理}
 	图名、表名字体字号已经有文档类 设定好，用户无需再次设定。但是，用户需要让它居中。图名位于图下方，
 	表名位于表上方。图片文件可直接置于当前工作目录，也可置于当前工作目录的\texttt{figures}子目录下(用户根据需要，自己创建该子目录)。
@@ -1037,16 +1129,16 @@
 		...
 		\end{tabular}.
 		\end{table}
-		
+
 		\end{verbatim}
 	}
-	
+
 	\begin{figure}
 		\centering
 		\caption{\seuthesix logo\label{logo}}
 		\chuhao \seuthesix
 	\end{figure}
-	
+
 	\section{算法格式处理}
 	\seuthesix 文档类采用了\texttt{algorithm, algorithmic }两个宏包来设置算法排版格式。
 	详细使用方法参见这两个宏包的手册。这里给出一个简单的例子。
@@ -1063,7 +1155,7 @@
 		\end{algorithm}
 		\end{verbatim}
 	}
-	
+
 	以上代码给出了算法\ref{algoinsight}的排版结果。
 	\begin{algorithm}
 		\caption{\label{algoinsight}如何使用\seuthesix 文档类}
@@ -1074,7 +1166,7 @@
 			\STATE 在使用中熟悉它
 		\end{algorithmic}
 	\end{algorithm}
-	
+
 	\section{术语生成}
 	{\color{magenta}
 		\begin{verbatim}
@@ -1087,21 +1179,21 @@
 	术语生成借助\texttt{nomencl}宏包。以上代码例子的排版结果在术语表中。对于数学符号，为使得它
 	排在普通术语的后面，需要加上\texttt{[noprefix]}选项。
 	编译时，第一次
-	
-	\verb+xelatex <filename>+ 
-	
-	之后执行 
-	
+
+	\verb+xelatex <filename>+
+
+	之后执行
+
 	\verb+makeindex <filename> .nlo -s nomencl.ist -o <filename> .nls+
-	
+
 	然后再次执行
-	
+
 	\verb+xelatex <filename>+
-	
+
 	一次。实际上，考虑到参考文献的生成，最后应该执行
-	
+
 	\verb+xelatex <filename>+
-	
+
 	至少两次。
 	\chapter{\texttt{seuthesix.bst}参考文献格式\label{bst}}
 	\section{简介}
@@ -1111,7 +1203,7 @@
 	该文献格式支持中英文两种语言，采用中英文分离，分别进行处理的思想。对于中文文献的entry，
 	要求在\verb=.bib=文献数据库中该entry 提供\texttt{language} field
 	，其取值任意，但为了保持一致性，建议设为\verb+language={zh}+，或\verb+language="zh"+。
-	
+
 	\section{支持的Entry type}
 	\texttt{seuthesix.bst}支持以下几种不同的entry type。
 	\begin{description}
@@ -1125,17 +1217,17 @@
 		\item[news] 报纸新闻
 		\item[misc] 杂项，包括电子媒体及其他未能识别的entry type
 	\end{description}
-	
+
 	\section{各 entry type 所支持的field}
 	不同的entry type所支持的field 不尽相同。对于每个entry type 而言，其中的field 可分为三类：
 	required, optional, ignored。required field 应该必须出现，否则BibTeX 会发出warning(由bst中的output.check函数发出)，
 	且最终得到的格式不能保证美观。
-	optional field 可选，若未出现，不会导致BibTeX warning。ignored field 
+	optional field 可选，若未出现，不会导致BibTeX warning。ignored field
 	不起任何作用，被BibTeX 忽略。在entry type 对应的bibtex 函数(如 \verb=FUNCTION {article}=)中未使用的 field 都属于 ignored field。
-	
+
 	下面列出各entry type所支持的field(即required field 和optional field)，
 	其中required field使用黑体。如表\ref{entrytable}所示。
-	
+
 	\begin{table}
 		\centering
 		\caption{\label{entrytable}不同entry type支持的field}
@@ -1151,14 +1243,14 @@
 			year, pages, note, {{\bfseries lang}uage}\tabularnewline
 			\hline
 			mastersthesis  &\raggedright{\bfseries author, title, address, school, year, }note, {{\bfseries lang}uage}\tabularnewline
-			\hline 
+			\hline
 			phdthesis  &\raggedright{\bfseries author, title, address, school, year, }note, {{\bfseries lang}uage}\tabularnewline
-			\hline 
+			\hline
 			patent & \raggedright{\bfseries applicant\footnotemark, title, }littype\footnotemark,
-			country, pid\footnotemark, year, month, day, 
+			country, pid\footnotemark, year, month, day,
 			note, {{\bfseries lang}uage}\tabularnewline
 			\hline
-			standard & \raggedright{\bfseries author, title, }stdcode\footnotemark, address, publisher, year, 
+			standard & \raggedright{\bfseries author, title, }stdcode\footnotemark, address, publisher, year,
 			note, {{\bfseries lang}uage}\tabularnewline
 			\hline
 			news & \raggedright{\bfseries author, title, newspaper, }year, month, day, pages, note, {{\bfseries lang}uage}\tabularnewline
@@ -1175,7 +1267,7 @@
 	其取值任意，但建议设为\verb+language={zh}+，或\verb+language="zh"+，以保持一致性。
 	这就是表\ref{entrytable}中的{{\bfseries lang}uage}一半黑体一半非黑体的原因。
 	参考文献部分给出了很多文献格式的例子。
-	
+
 	\nocite{komine2004fundamental}
 	\nocite{dimitrov2015principles}
 	\nocite{fujimoto2014fastest}
@@ -1185,18 +1277,18 @@
 	\nocite{pt}
 	\nocite{thesis:a}
 	\nocite{thesis:b}
-	
+
 	\chapter{全文总结}
 	本文主要介绍了如何使用\seuthesix \LaTeX 文档类来对东南大学硕士与博士学位论文进行排版。
 	当然，\seuthesix 肯定存在许多不足的地方，希望各位读者予以指正。
-	
+
 	\acknowledgement
 	感谢每一个支持\seuthesix 的人。
-	
+
 	\thesisbib{seuthesix}
-	
+
 	\appendix
-	
+
 	\resume{作者简介}
 	\seuthesix 开发组，目前仅有四人(当前活跃用户只有樊智猛一人)，希望感兴趣的同学加入。
 \end{document}
