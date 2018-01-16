@@ -520,6 +520,8 @@
 
 	----------------------------这边省略了一些东西----------------------------
 
+	度的计算
+
 	\section{CToD类型干扰边分析}
 	CToD类型干扰边的构建的完整性和优先级状态${H}$的分布有关，蜂窝链路${CLink_i}$的${H}$值${H_i}$大小会直接影响以${CLink_i}$为T端的干扰边被发现的概率。
 
@@ -823,31 +825,31 @@
 	因此反馈计算算法主要适用于不超过一条新加D2D链路分配资源块$\chi $的情况，定义该概率为$P_{\chi 1}$，最小冲突和算法下的$P_{\chi 1}$与循环随机下的取值接近，因此有：
 
 	\begin{equation}\label{eq3.1}
-	P_{\chi 1} = \left\{ \begin{array}{l}
-	1,Q_D \le N_D\\
-	\frac{{2*N_D - Q_D}}{{N_D}},N_D < Q_D < 2*N_D\\
-	0,Q_D \ge 2*N_D
-	\end{array} \right.
+		P_{\chi 1} = \left\{ \begin{array}{l}
+		1,Q_D \le N_D\\
+		\frac{{2*N_D - Q_D}}{{N_D}},N_D < Q_D < 2*N_D\\
+		0,Q_D \ge 2*N_D
+		\end{array} \right.
 	\end{equation}
 
 	在该前提下，能够计算得出$dLink_m$需要$dUnNborD_n$至少包含了$dLinkSet(\chi )$中的$Q_{rep} - 3$条链路，该概率大约为：
 	\begin{equation}\label{eq3.1}
-	p(Size(SetA) \le 3) \approx Pfin{d_{DToD}}{(T + 1,X_B)^{^{Q_{rep} - 3}}}
+		p(Size(SetA) \le 3) \approx Pfin{d_{DToD}}{(T + 1,X_B)^{^{Q_{rep} - 3}}}
 	\end{equation}
 
 	因此可以求得$\beta _{T2}$的值为：
 	\begin{equation}\label{eq3.1}
-	\beta _{T2} = \acute{\overline P _{A2}} * Pfin{d_{DToD}}{(T + 1,S_B)^{Q_{rep} - 3}}*{p_{s1}}
+		\beta _{T2} = \acute{\overline P _{A2}} * Pfin{d_{DToD}}{(T + 1,S_B)^{Q_{rep} - 3}}*{p_{s1}}
 	\end{equation}
 
 	这一帧$dLink_m$被基站识别的概率$Pfin{d_T}$为：
 	\begin{equation}\label{eq3.1}
-	Pfin{d_T} = \beta _{T2} + \beta _{T2}
+		Pfin{d_T} = \beta _{T2} + \beta _{T2}
 	\end{equation}
 
 	同时因为：
 	\begin{equation}\label{eq3.1}
-	Pmis{s_{linkStay(T)}} = Pmis{s_{DToD}}(T,S_C) = Pmis{s_{DToD}}(T,S_B)*(1 - Pfin{d_T})
+		Pmis{s_{linkStay(T)}} = Pmis{s_{DToD}}(T,S_C) = Pmis{s_{DToD}}(T,S_B)*(1 - Pfin{d_T})
 	\end{equation}
 
 	可以通过$Pmis{s_{linkStay(1)}}$代入递归计算出所有的$Pmis{s_{linkStay(T)}}$。
@@ -876,17 +878,18 @@
 
 	其次，所有蜂窝链路的接收端均是位于小区中心位置的基站，而D2D链路的接收端是随机分布在整个小区当中，因为基站在该模型中是处于整个D2D链路随机分布的中心。因此如果忽略掉随机分布带来的影响，两者的数值与分析过程是一样的。
 
-	综合以上两点，\[pmis{s_{DToC}}\]在数值上可以近似等于\[pmis{s_{DToD}}\]分析过程中的\[pmis{s_{linStay({T^*})}}\]，即：$$
+	综合以上两点，$Pmis{s_{DToC}}$在数值上可以近似等于$Pmis{s_{DToD}}$分析过程中的$Pmis{s_{linStay({T^*})}}$，即：
 
 	\begin{equation}\label{eq3.1}
-		pmis{s_{DToC}} \approx pmis{s_{linStay({T_0})}}
+		Pmis{s_{DToC}} \approx pmis{s_{linStay({T^*})}}
 	\end{equation}
 
+	\section{本章小结}
+	本章主要从理论上分析了干扰图的构建
 
 
 
-
-	\chapter{使用说明}
+	\chapter{干扰图的性能分析}
 
 	\section{模板整体框架}
 	使用 \seuthesix 模板的整体框架如下所示，其中\verb+<...>+表示可替换的文本(replacement text)。
@@ -964,7 +967,7 @@
 
 
 	{\color{magenta}
-		\begin{verbatim}
+		\begin{verbatim}  
 		\makebigcover
 		\makecover
 		\end{verbatim}
