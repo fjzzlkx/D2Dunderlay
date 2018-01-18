@@ -83,10 +83,18 @@
 	D2D-MIMO技术。MIMO(Multiple-Input Multiple-Output) 技术指在发射端和接收端分别使用多个发射天线和接收天线，使信号通过发射端与接收端的多个天线传送和接收，从而改善通信质量。在D2D-MIMO 系统中，通过在基站进行合理的下行预编码，将发射波束对准其复用的蜂窝用户，而在D2D用户方向上形成零陷，从而减小D2D用户和蜂窝用户间的干扰。MIMO 技术的优势还在于通过增大天线的数量来传输信息子流，将多个数据子流同时发送到信道上，各发射信号占用同一频带，从而在不增加频带宽度的情况下增加频谱利用率。同时可以使无线信号的传输距离、天线的接受范围进一步扩大，信号抗干扰性更强，无线传输更为精准快速，提升通信的QoS。
 	
 	
+	\section{研究内容}
+
+	本论文主要研究的是蜂窝D2D通信系统的实时干扰图构建算法，资源分配与功率控制算法是当前D2D研究的两个关键技术，许多的资源分配与功率控制算法是基于小区的干扰图的。而多数的研究是集中在已知小区干扰图的前提下采用最优匹配，图着色等理论而获得性能的提升，但小区的链路往往是动态变化的，而这会导致小区的干扰图的动态变化，如果干扰图不能够实时更新，基于不完整的干扰图进行的资源分配会导致性能的下降，因此本文提出一种。
+
+
 	\section{论文的组织结构}
 	本文共分为5章，各章主要内容具体如下：
+
 	第一章为绪论部分，
+
 	第二章为本文所提出的的实时干扰图构建算法部分，
+
 	第三章为干扰图构建算法的
 	
 	\chapter{蜂窝D2D通信系统实时干扰图构建算法}
@@ -103,7 +111,7 @@
 	\begin{figure}[htb]
 		\centering
 		% Requires \usepackage{graphicx}
-		%\includegraphics[scale =1.4 ]{f21.eps}
+		%\includegraphics[scale =1.4 ]{/eps/f21.eps}
 		\caption{资源池示意图}\label{f21}
 	\end{figure}
 	
@@ -891,19 +899,20 @@
 	
 	\chapter{干扰图构建算法的性能仿真}
 	\section{引言}
-	上一章我们详细地从对本文所提出的算法进行理论上的推导，从分析的结果可以看出本文所提出的算法具有优越的性能。从上一章的分析可以知道小区的蜂窝用户数量、D2D用户数量、用户进入和离开的速率、D2D的通信半径、资源块的数量这些参数都会影响到干扰图构建的性能。为了进一步衡量本文所提出的算法的性能，本章将深入得分析所提算法各种场景下的性能。
-	D2D的通信最大通信距离受到所用技术和设备的影响，该参数会影响链路所能干扰的链路数量进而影响信号广播冲突的概率以及基站识别的概率；小区的D2D链路和蜂窝链路的不同密度下的性能将会直接影响算法的适用场景；本文所提算法主要是能够适应小区用户动态变化的场景，但干扰图的构建具有一点的时延性，这一点在小区用户离开和加入小区的速率变化时候会体现出来；资源池中是从可用的无线资源池中划分出来用于干扰图构建的部分，资源池中资源块数量也会直接影响广播冲突的概率和算法的性能，本章将对这些不同的场景对算法的适用性进行性能分析。
+	上一章我们详细地从对本文所提出的算法进行理论上的推导，从上一章的分析可以知道小区的蜂窝用户数量、D2D用户数量、用户进入和离开的速率、D2D的通信半径、资源块的数量这些参数都会影响到干扰图构建的性能。静态的场景下构建干扰图相对容易，而动态的场景下由于真实的干扰图$G = (V,E)$也是时刻变化的，干扰图的构建需要花费一点的时间，基站端的干扰图数据$\tilde G = (\tilde V,\tilde E)$会落后于真实干扰图$G = (V,E)$，为了进一步衡量本文所提出的算法的适用性，本章将进一步结合仿真数据分析所本文算法各种动态场景下的性能。
+
+
+	D2D用户和蜂窝用户的密度以及用户的流动性是衡量算法性能所主要考虑的场景，本章将深入去探讨分析本算法所支持的用户的密度以及用户流动速度；D2D的通信最大通信距离受到所用技术和设备的影响，通信距离的变化相应会引起通信功率的变化，进而导致链路间的干扰发生变化，本章也深入将会分析通信距离对干扰图的影响；资源池的资源块是从小区的可用无线资源中划分出来的，在保证干扰图构建性能满足要求下尽可能得不浪费资源则是本章对资源块数量分析的意义。
+
+
+	本章将设置一系列的仿真场景来评估所提算法的性能，在仿真的过程中链路的位置随机产生，蜂窝链路和D2D链路的发射端都均匀分布在整个小区中，而D2D链路的接收端则是由通信距离和通信角度决定，$dLink_i$的通信距离$d_i$在$(0,d_{max}]$之间均匀分布，而通信角度$a_i$在$[0,2*\pi )$之间均匀分布。
 	
-	\section{仿真分析}
-	本节通过设置一系列的仿真场景来评估所提算法的性能。蜂窝小区为圆形的单小区，小区半径$R$设置为$300m$，如果没有特别说明，默认小区的D2D链路数量$Q_D = 500$、蜂窝链路数量$Q_C = 120$、资源池中资源块数量$N = 100$、用于D2D部分发射端广播的数量为$N_D = 50$、用于蜂窝部分发射端广播的数目$N_C = 50$、D2D的最大通信距离为$d_{max} = 50m$、每一帧进入和离开小区的D2D链路数均为$Q_{vD} = 50$、每一帧进入和离开小区的蜂窝链路数均为$Q_{vC} = 20$。
-	
-	在仿真的过程中链路的位置随机产生，蜂窝链路和D2D链路的发射端都均匀分布在整个小区中，而D2D链路的接收端则是由通信距离和通信角度决定，$dLink_i$的通信距离$d_i$在$(0,d_max]$之间均匀分布，而通信角度$a_i$在$[0,2*\pi )$之间均匀分布。
-	
-	为了不失一般性，本文的干扰图构建过程中的广播距离基于的模型$r_i = w * d_i$，在这里$w$是一个参数，如果没有特别说明，则仿真实验中$w = 2$。在实验的过程中如果链路$link_i$的发射端与$link_j$的接收端的距离$d_{i,j} <　r_i$，则$link_i$与$link_j$之间存在干扰边。对于每一个参数设置，我们都进行了1000次实验，然后取的平均值。
-	
+	为了不失一般性，本文的干扰图构建过程中的广播距离基于的模型$r_i = w * d_i$，在这里$w$是一个参数，如果没有特别说明，则仿真实验中$w = 2$。在实验的过程中如果链路$link_i$的发射端与$link_j$的接收端的距离$d_{i,j} <　r_i$，则$link_i$与$link_j$之间存在干扰边。对于每一个参数设置，我们都进行了1000次实验，然后取的平均值。本章所进行的仿真分析的参数范围大体表\ref{tab:4.1}所示。
+
+	由于干扰图按照干扰边的类型划分成了CToD，DToD，DToC三部分，一些参数的改变直接影响的是相应的类型干扰图，本章将首先对比RED算法、循环RED算法、最小冲突和算法、无反馈，简单反馈、多次反馈以及优先权轮播算法的性能，然后分析本文算法那在具体的场景下相应类型干扰图构建的性能。
+
 	\begin{table}[!h]
-		\caption{\textsc{仿真参数设置}}
-		\label{tab:4.1}
+		\caption{\textsc{仿真参数设置} \label{tab:4.1}}
 		\centering
 		\begin{tabular}[t]{p{250pt}p{80pt}}
 			\hline\noalign{\smallskip}
@@ -923,95 +932,178 @@
 		\end{tabular}
 	\end{table}
 	
-	由于干扰图划分成了CToD，DToD，DToC三部分，一些参数的改变直接影响的是相应的类型干扰图，为了更好得分析该参数对干扰图构建的影响，在这里我们先分析仿真实验下类型干扰图的性能。本节将对比raw算法、循环raw算法、最小冲突和算法、无反馈，简单反馈、多次反馈以及优先权轮播算法的性能。
+	\section{仿真分析}
+	本节仿真场景中蜂窝小区为圆形的单小区，小区半径$R$设置为$300m$，如果没有特别说明，默认小区的D2D链路数量$Q_D = 500$、蜂窝链路数量$Q_C = 120$、资源池中资源块数量$N = 100$、用于D2D部分发射端广播的数量为$N_D = 50$、用于蜂窝部分发射端广播的数目$N_C = 50$、D2D的最大通信距离为$d_{max} = 50m$、每一帧进入和离开小区的D2D链路数$Q_{arriveD}$和$Q_{leaveD}$均为$Q_{vD} = 50$、每一帧进入$Q_{arriveC}$和$Q_{leaveC}$离开小区的蜂窝链路数均为$Q_{vC} = 20$。
 	
 	
 	\begin{itemize}
-		\item D2D链路进出速度影响
+		\item 算法对比性实验
 	\end{itemize}
 	
-	本组实验改变的参数为$Q_{vD}$，参数的变化范围为：$Q_{vD} = 5,10,15,...,145$。图\ref{fig4.1}、\ref{fig4.2}和\ref{fig4.3}分别对应该参数变化对应的$Pmiss_{DToD}$、$Pmiss_{DToC}$和$Pmiss_{CToD}$。
-
-	如图\ref{fig4.1}所示，在DToD类型干扰图的构建方面，本文所采取的最小冲突和算法和多次反馈的组合，在任意的链路进出速度下性能表现均为最佳，最小冲突和算法远好于raw算法和循环raw算法。算法的性能在$Q_{vD} = N_D$的时候出现拐点，性能下降较大，这一点和第三章的理论一致。简单反馈与多次反馈的差别在于简单反馈不维护$dLink_k$的列表$List < dNborSet_{p}{ > _k}$，当链路进出速度较小的时候，不维护该列表对性能影响较不大，能减少部分的计算量，维护该列表的性能提升主要是在$N_D \le Q_{vD} \le 3 * N_D$这个区间。
-
-	如图\ref{fig4.2}所示，在DToC类型干扰图部分的性能与DToD类型干扰图类似，在任何的链路进出速度下，本文算法性能均为最佳，性能的拐点出现在$Q_{vD} = N_D$的时候，当小于该值的时候少边率趋近于0，这部分干扰图的构建几乎实时完成，体现算法性能的优越性。
-
-	如图\ref{fig4.3}所示，虽然最小冲突和算法和多次反馈的组合能很好解决DToD和DToC类型干扰图的构建，但因为蜂窝链路干扰邻居远比D2D链路多，所以本文针对这个特点提出了优先权轮播算法，该算法相对最小冲突和算法实现简单，而且在性能也更好，在本次仿真实验的过程中，我们将蜂窝链路的最大优先级等级$H_{max} = 5$，采用本文算法$Pmiss_{CToD}$与$Q_{vD}$基本呈线性关系。
+	本组实验改变的参数为$Q_{vD}$，参数的变化范围为：$Q_{vD} = 5,10,15,...,145$。图\ref{fig4_1}、\ref{fig4_2}和\ref{fig4_3}分别对应该参数变化对应的$Pmiss_{DToD}$、$Pmiss_{DToC}$和$Pmiss_{CToD}$。
 	
+	如图\ref{fig4_1}所示，在DToD类型干扰图的构建方面，本文所采取的最小冲突和算法和多次反馈的组合，在任意的链路进出速度下性能表现均为最佳。本文所提出的最小冲突和算法与多次反馈算法在性能上远好于RED算法和循环RED算法，当$Q_{vD} < N_D = 50$的时候，本文的算法在性能上相对于传统的RED算法提升了10倍左右，而就算只采用反馈算法或者最小冲突和算法相对于传统的RED算法也能提升一倍。随着D2D链路的进出速度的增加，当$Q_{vD} > N_D$的时候反馈算法的性能提升效果逐渐减弱，这一点和我们在第三章的理论分析一致，反馈算法受原有干扰图的完整性和D2D链路进出速度的影响更大。简单反馈与多次反馈的差别在于简单反馈不维护$dLink_k$的列表$List < dNborSet_{p}{ > _k}$，当链路进出速度较小的时候，不维护该D2D链路集合列表对$Pmiss_{DToC}$的性能影响较不大，而且能减少部分的计算量，维护该列表的性能提升主要是在$N_D \le Q_{vD} \le 3 * N_D$这个区间，能有$5\%$至$10\%$的性能提升。
 	
 	\begin{figure}[!h]
 		\centering
 		% Requires \usepackage{graphicx}
-		\includegraphics[scale =0.2 ]{f11.eps}
+		\includegraphics[scale = 0.53 ]{/eps/fig4_1.eps}
 		\caption{D2D链路进出速度影响对$DToD$类型干扰图的影响}
-		\label{f11}
+		\label{fig4_1}
 	\end{figure}
+	
+	如图\ref{fig4_2}所示，在DToC类型干扰图部分的性能趋势与DToD类型干扰图类似，同样在任何的链路进出速度下，本文算法的性能均为最佳，当$Q_{vD} < N_D$的时候，本文算法的$Pmiss_{DToC}$趋近于0，这部分干扰图的构建几乎实时完成，远远优于其他的算法。但是当$Q_{vD} > N_D$的时候性能下降很快，在$Q_{vD} = 1.5 * N_D$左右出现变化，当小于该值的时候采取最小冲突和简单反馈也基本能达到本文算法，而高于该值采用循环RED多次反馈也能达到本文算法，但这两种算法均无法在任意链路进出速度下优于本文算法，可见本文所提出的最小冲突和多次反馈算法的组合包含了最小冲突和算法和多次反馈算法的优点，实现了性能上的提升。
 	
 	\begin{figure}[!h]
 		\centering
 		% Requires \usepackage{graphicx}
-		\includegraphics[scale =0.2 ]{f11.eps}
+		\includegraphics[scale = 0.53 ]{/eps/fig4_2.eps}
 		\caption{D2D链路进出速度影响对$DToC$类型干扰图的影响}
-		\label{f11}
+		\label{fig4_2}
 	\end{figure}
-
+	
+	
+	虽然最小冲突和算法与多次反馈的组合能很好解决DToD和DToC类型干扰图的构建，但因为蜂窝链路干扰邻居远比D2D链路多，因此本文针对这个特点提出了优先权轮播算法，该算法相对最小冲突和算法实现更为简单，在本次仿真实验的过程中，我们令蜂窝链路的最大优先级等级$H_{max} = 5$。如图\ref{fig4_3}所示，采用本文算法下，$Pmiss_{CToD}$与$Q_{vD}$基本上呈线性关系，性能相对于最小冲突和算法与多次反馈的组合性能提升$10\%$至$40\%$。根本原因在于在该D2D链路密度下，平均一条蜂窝链路所能干扰到的D2D链路数量超过200，在这种链路密度下，即使通过调整资源块的分配获取到链路的最佳的资源块选择，然后进行广播也无法有效得避免冲突。解决的办法可以是每次广播过程中，选择性让一些链路不进行广播来减少广播冲突，为链路设立优先权等级就是从这个角度出发去进行定量广播链路的选取。
+	
 	\begin{figure}[!h]
 		\centering
 		% Requires \usepackage{graphicx}
-		\includegraphics[scale =0.2 ]{f11.eps}
+		\includegraphics[scale = 0.53 ]{/eps/fig4_3.eps}
 		\caption{D2D链路进出速度影响对$CToD$类型干扰图的影响}
-		\label{f11}
+		\label{fig4_3}
 	\end{figure}
 	
 	\begin{itemize}
 		\item D2D链路总数的影响
 	\end{itemize}
+	
+	本组实验改变的参数为$Q_{D}$，参数的变化范围为：$Q_{D} = 100,200,...,600$，进出小区的速率设为小区D2D链路数的10\%，即$Q_{vD} = 10\% * Q_{D}$。图\ref{fig4_4}、\ref{fig4_5}和\ref{fig4_6}分别对应该参数变化对应的$Pmiss_{DToD}$、$Pmiss_{DToC}$和$Pmiss_{CToD}$。
+	
+	如图\ref{fig4_4}所示，在DToD类型干扰图的构建方面，在每帧链路进出速度等于小区D2D链路数的$10\%$，随着小区D2D链路密度的提升，$Pmiss_{DToD}$的值也跟着上升。如果采用本文的算法，即使小区的链路数量达到$600$，等于$N_{D}$的12倍，$Pmiss_{DToD}$也能维持在$2\%$左右。仿真曲线和我们的理论分析曲线基本一致，随着链路数量的增加如果不对$Pmiss_{DToD}$进行迭代，误差会随之增加，但在该仿真参数设置下基本上只需要通过一次的迭代就能达到接近仿真值的效果。
 
-	本组实验改变的参数为$Q_{D}$，参数的变化范围为：$Q_{D} = 100,200,...,600$，进出小区的速率设为小区D2D链路数的10\%，即$Q_{vD} = 10\% * Q_{D}$。图\ref{fig4.4}、\ref{fig4.5}和\ref{fig4.6}分别对应该参数变化对应的$Pmiss_{DToD}$、$Pmiss_{DToC}$和$Pmiss_{CToD}$。
-
-	如图\ref{fig4.4}所示，在DToD类型干扰图的构建方面，在每帧链路进出速度等于小区D2D链路数的$10\%$，即使小区的链路数量达到$600$，等于$N_{D}$的12倍，$Pmiss_{DToD}$也能维持在$2\%$左右。同时也可以从看出理论分析的曲线基本和仿真曲线基本一致，在该参数设置下，只要通过一次的迭代就能达到接近仿真值的效果。
-
-	如图\ref{fig4.5}所示，本文所提出的算法在DToC类型干扰图的构建方面性能更加优越，如果小区的链路总数小于$300$，少边率几乎为0，在小区的链路数量达到$600$的时候，$Pmiss_{DToC}$也能仅仅在$1\%$附近。可见当小区的链路数量较少的时候，本文所提出的最小冲突和算法与多次反馈的组合基本上避免了不可识别的DToC类型干扰边的出现。
-
-	如图\ref{fig4.6}所示，当除了$Q_{vD}$和$Q_D$的值，其余参数不变，优先权等级$H$值的分布是由$Q_C$和$N_C$的值确定，$Q_C$和$N_C$固定，$Pstate_{\chi }$也能确定了，由公式\ref{eq3.14}可知$Pmiss_{\chi }$的值仅与$Q_{vD}/Q_D$的值有关。因此理论上采用优先权轮播反馈算法的CToD类型部分，$Pmiss_{CToD}$与小区的链路总数无关，理论上仅仅与$Q_{vD}/Q_D$比值有关，而本次仿真$Q_{vD}/Q_D$的值恒定，因此$Pmiss_{CToD}$的理论曲线是一条平行于$X$轴的直线，而仿真曲线基本上证明我们的分析是正确的。
+	\begin{figure}[!h]
+		\centering
+		% Requires \usepackage{graphicx}
+		\includegraphics[scale = 0.53 ]{/eps/fig4_4.eps}
+		\caption{D2D链路数量对$DToD$类型干扰图的影响}
+		\label{fig4_4}
+	\end{figure}
 
 	
+	如图\ref{fig4_5}所示，本文所提出的算法在DToC类型干扰图的构建方面性能更加优越，实际的性能在D2D链路的密度较低的时候优于我们的理论预期，当小区的链路数量较少的时候，本文所提出的最小冲突和算法与多次反馈的组合基本上避免了不可识别的DToC类型干扰边的出现。如果小区的链路总数小于$300$，$Pmiss_{DToC}$几乎为0，即使小区的链路数量达到$600$的时候，$Pmiss_{DToC}$也能仅仅在$1\%$附近。
+	
+
+	\begin{figure}[!h]
+		\centering
+		% Requires \usepackage{graphicx}
+		\includegraphics[scale = 0.53 ]{/eps/fig4_5.eps}
+		\caption{D2D链路数量对$DToC$类型干扰图的影响}
+		\label{fig4_5}
+	\end{figure}
+
+
+	如图\ref{fig4_6}所示，当除了$Q_{vD}$和$Q_D$的值，其余参数不变，$Pmiss_{CToD}$的仿真曲线基本上和理论曲线一样是一条平行于$X$轴的直线。这是因为蜂窝链路的优先权等级$H$值的分布是由$Q_C$和$N_C$的值确定，而$Q_C$和$N_C$固定，$Pstate_{\chi }$也就确定了，再由公式\ref{eqxxxxxx}可知，$Pmiss_{\chi }$的值也仅与$Q_{vD}/Q_D$的值有关，而本次仿真$Q_{vD}/Q_D$的值恒定，因此理论上采用优先权轮播反馈算法的CToD类型部分，$Pmiss_{CToD}$与小区的链路总数无关，是一个固定的值。
+	
+	\begin{figure}[!h]
+		\centering
+		% Requires \usepackage{graphicx}
+		\includegraphics[scale = 0.53 ]{/eps/fig4_6.eps}
+		\caption{D2D链路数量对$DToC$类型干扰图的影响}
+		\label{fig4_6}
+	\end{figure}
+
+
 	\begin{itemize}
 		\item 蜂窝链路进出速度的影响
 	\end{itemize}
+	
+	本组实验改变的参数为$Q_{vC}$，参数的变化范围为：$Q_{vC} = 5,10,...,50$，该参数的改变只会影响CToD类型干扰图。如图\ref{fig4_7}所示，在该参数设置下$Pmiss_{CToD}$的仿真曲线也基本上和理论曲线一样是一条平行于$X$轴的直线，只是因为当除了$Q_{vC}$其余参数不变，同样由于$Pstate_{\chi }$是由$Q_C$和$N_C$的值确定，因此$Pstate_{\chi }$不变，而由于$Q_{vD}$和$Q_D$的值也不变，$Pmiss_{\chi }$的值也就不变，由公式\ref{eqxxxxx}可知$Pmiss_{CToD}$的值也不变。
+	
+	\begin{figure}[!h]
+		\centering
+		% Requires \usepackage{graphicx}
+		\includegraphics[scale = 0.53 ]{/eps/fig4_7.eps}
+		\caption{蜂窝链路进出速度对$CToD$类型干扰图的影响}
+		\label{fig4_7}
+	\end{figure}
 
-	本组实验改变的参数为$Q_{vC}$，参数的变化范围为：$Q_{vC} = 5,10,...,50$，该参数的改变只会影响CToD类型干扰图。如图\ref{fig4.7}所示，当除了$Q_{vC}$其余参数不变，同样由于$Pstate_{\chi }$是由$Q_C$和$N_C$的值确定，因此$Pstate_{\chi }$不变，而由于$Q_{vD}$和$Q_D$的值也不变，$Pmiss_{\chi }$的值也就不变，由公式\ref{eq3.16}可知$Pmiss_{CToD}$的值也不变。
-
+	
 	\begin{itemize}
 		\item 蜂窝链路总数的影响
 	\end{itemize}
-
-	本组实验改变的参数为$Q_{C}$，参数的变化范围为：$Q_{C} = 50,100,...,150$，该参数的改变只会影响CToD类型干扰图。如图\ref{fig4.8}所示，$Q_{C}$的改变会引起$H$的分布和$Pstate_{\chi }$的值，由第三章的分析可知当$Q_{C} \le 2 * N_C$的场景，恒有$Pmiss_{CToD} = 0$，而当蜂窝链路的数量达到$3 * N_{C}$的时候，接近于$3\%$，性能下降较快。
 	
+	本组实验改变的参数为$Q_{C}$，参数的变化范围为：$Q_{C} = 50,100,...,150$，该参数的改变只会影响CToD类型干扰图。如图\ref{fig4_8}所示，$Q_{C}$的改变会引起$H$的分布和$Pstate_{\chi }$的值，由第三章的分析可知当$Q_{C} \le 2 * N_C$的场景，恒有$Pmiss_{CToD} = 0$，而当蜂窝链路的数量达到$3 * N_{C}$的时候，接近于$3\%$，性能下降较快。
 
+	\begin{figure}[!h]
+		\centering
+		% Requires \usepackage{graphicx}
+		\includegraphics[scale = 0.53 ]{/eps/fig4_8.eps}
+		\caption{蜂窝链路数量对$CToD$类型干扰图的影响}
+		\label{fig4_8}
+	\end{figure}
+
+	
 	\begin{itemize}
 		\item D2D的最大通信距离的影响
 	\end{itemize}
-
+	
 	本组实验改变的参数为$D_{max}$，参数的变化范围为：$D_{max} = 30,35,...,70$，由之前的分析可以知道该参数的变化并不会影响$Pmiss_{CToD}$的值，现在主要分析该参数对$Pmiss_{DToD}$、$Pmiss_{DToC}$的影响。
+	
+	如图\ref{fig4_9}与\ref{fig4_10}所示，$D_{max}$的增大会使导致每个D2D链路所能收到的广播数量$A$增大，从而增大冲突的概率，在动态的场景下，导致干扰图构建的实时性降低。因为$A$的值大体上与$D_{max}$呈平方关系，因此随着$D_{max}$的增加，少边率并不是简单的线性增加，而是会出现加速上升的趋势。
 
-	如图\ref{fig4.9}与\ref{fig4.10}所示，$D_{max}$的增大会使导致每个D2D链路所能收到的广播数量$A$增大，从而增大冲突的概率，在动态的场景下，导致干扰图构建的实时性降低。而$A$的值大体上与$D_{max}$呈平方关系，因此随着$D_{max}$的增加，少边率并不是简单的线性增加，而会出现加速上升的趋势。
+	\begin{figure}[!h]
+		\centering
+		% Requires \usepackage{graphicx}
+		\includegraphics[scale = 0.53 ]{/eps/fig4_9.eps}
+		\caption{$D_{max}$对$DToD$类型干扰图的影响}
+		\label{fig4_9}
+	\end{figure}
 
-
+	\begin{figure}[!h]
+		\centering
+		% Requires \usepackage{graphicx}
+		\includegraphics[scale = 0.53 ]{/eps/fig4_10.eps}
+		\caption{$D_{max}$对$DToC$类型干扰图的影响}
+		\label{fig4_10}
+	\end{figure}
+	
+	
 	\begin{itemize}
 		\item 用于D2D链路广播的资源块数量的影响
 	\end{itemize}
+	
+	本组实验改变的参数为$N_{D}$，参数的变化范围为：$N_{D} = 20,25,...,90$，该参数的改变会影响DToD和DToC类型干扰图的性能。如图\ref{fig4_11}与\ref{fig4_12}所示，两者的总体曲线的趋势接近，以$N_{D} = 50$为转折点，当$N_{D} < 50$的时候，性能下降较为明显，同时理论分析值也需要经过多次的迭代才能接近仿真的值。性能下降的主要原因是$Q_{D} / N_{D}$的值迅速上升，导致平均每个资源块被D2D链路使用的迅速上升，大大提高了广播冲突的概率。
 
-	本组实验改变的参数为$N_{D}$，参数的变化范围为：$N_{D}$ = 20,25,...,90$，该参数的改变会影响DToD和DToC类型干扰图的性能。如图\ref{fig4.11}与\ref{fig4.12}所示，两者的总体曲线的趋势接近，以$N_{D} = 50$为转折点，当$N_{D} < 50$的时候，性能下降较为明显，同时理论分析值也需要经过多次的迭代才能接近仿真的值。性能下降的主要原因是$Q_{D} / N_{D}$的值迅速上升，导致平均每个资源块被D2D链路使用的迅速上升，大大提高了广播冲突的概率。
+	\begin{figure}[!h]
+		\centering
+		% Requires \usepackage{graphicx}
+		\includegraphics[scale = 0.53 ]{/eps/fig4_11.eps}
+		\caption{$N_D$对$DToD$类型干扰图的影响}
+		\label{fig4_11}
+	\end{figure}
+
+	\begin{figure}[!h]
+		\centering
+		% Requires \usepackage{graphicx}
+		\includegraphics[scale = 0.53 ]{/eps/fig4_12.eps}
+		\caption{$N_D$对$DToC$类型干扰图的影响}
+		\label{fig4_12}
+	\end{figure}
 
 	\begin{itemize}
-		\item 用于蜂窝链路广播的资源块数量的影响
+	\item 用于蜂窝链路广播的资源块数量的影响
 	\end{itemize}
+	
+	本组实验改变的参数为$N_{C}$，参数的变化范围为：$N_{C} = 35,40,...,65$，该参数的改变只会影响CToD类型干扰图。如图\ref{fig4_13}所示，对于蜂窝链路的资源块
+	
 
-	本组实验改变的参数为$N_{C}$，参数的变化范围为：$N_{C} = 35,40,...,65$，该参数的改变只会影响CToD类型干扰图。如图\ref{fig4.13}所示，对于蜂窝链路的资源块
-
-
-	因此
+	\begin{figure}[!h]
+		\centering
+		% Requires \usepackage{graphicx}
+		\includegraphics[scale = 0.53 ]{/eps/fig4_13.eps}
+		\caption{$N_C$对$CToD$类型干扰图的影响}
+		\label{fig4_13}
+	\end{figure}
 	
 	
 	
@@ -1265,9 +1357,9 @@
 	}
 	
 	\begin{figure}
-		\centering
-		\caption{\seuthesix logo\label{logo}}
-		\chuhao \seuthesix
+	\centering
+	\caption{\seuthesix logo\label{logo}}
+	\chuhao \seuthesix
 	\end{figure}
 	
 	\section{算法格式处理}
@@ -1289,13 +1381,13 @@
 	
 	以上代码给出了算法\ref{algoinsight}的排版结果。
 	\begin{algorithm}
-		\caption{\label{algoinsight}如何使用\seuthesix 文档类}
-		\begin{algorithmic}[1]
-			\STATE if (具备一定的\LaTeX 使用经验) else (stop here)
-			\STATE 有耐心阅读文档
-			\STATE 仔细阅读本文档
-			\STATE 在使用中熟悉它
-		\end{algorithmic}
+	\caption{\label{algoinsight}如何使用\seuthesix 文档类}
+	\begin{algorithmic}[1]
+	\STATE if (具备一定的\LaTeX 使用经验) else (stop here)
+	\STATE 有耐心阅读文档
+	\STATE 仔细阅读本文档
+	\STATE 在使用中熟悉它
+	\end{algorithmic}
 	\end{algorithm}
 	
 	\section{术语生成}
@@ -1338,15 +1430,15 @@
 	\section{支持的Entry type}
 	\texttt{seuthesix.bst}支持以下几种不同的entry type。
 	\begin{description}
-		\item[book] 书籍
-		\item[article] 期刊文章
-		\item[inproceedings/conference] 会议文章
-		\item[mastersthesis] 硕士学位论文
-		\item[phdthesis] 博士学位论文
-		\item[patent] 专利
-		\item[standard] 标准
-		\item[news] 报纸新闻
-		\item[misc] 杂项，包括电子媒体及其他未能识别的entry type
+	\item[book] 书籍
+	\item[article] 期刊文章
+	\item[inproceedings/conference] 会议文章
+	\item[mastersthesis] 硕士学位论文
+	\item[phdthesis] 博士学位论文
+	\item[patent] 专利
+	\item[standard] 标准
+	\item[news] 报纸新闻
+	\item[misc] 杂项，包括电子媒体及其他未能识别的entry type
 	\end{description}
 	
 	\section{各 entry type 所支持的field}
@@ -1360,35 +1452,35 @@
 	其中required field使用黑体。如表\ref{entrytable}所示。
 	
 	\begin{table}
-		\centering
-		\caption{\label{entrytable}不同entry type支持的field}
-		\begin{tabular}{|c||p{10cm}|}
-			\hline
-			\bfseries Entry type & \raggedright\bfseries Fields\tabularnewline
-			\hline\hline
-			article & \raggedright{\bfseries author, title, journal, year, } volume, number, pages, note, {{\bfseries lang}uage}\tabularnewline
-			\hline
-			book & \raggedright{\bfseries author/editor, title, }edition, translator, address, publisher, year, pages, note, {{\bfseries lang}uage}\tabularnewline
-			\hline
-			inproceedings(conference) & \raggedright {\bfseries author, title, }editor, booktitle, address, publisher,
-			year, pages, note, {{\bfseries lang}uage}\tabularnewline
-			\hline
-			mastersthesis  &\raggedright{\bfseries author, title, address, school, year, }note, {{\bfseries lang}uage}\tabularnewline
-			\hline
-			phdthesis  &\raggedright{\bfseries author, title, address, school, year, }note, {{\bfseries lang}uage}\tabularnewline
-			\hline
-			patent & \raggedright{\bfseries applicant\footnotemark, title, }littype\footnotemark,
-			country, pid\footnotemark, year, month, day,
-			note, {{\bfseries lang}uage}\tabularnewline
-			\hline
-			standard & \raggedright{\bfseries author, title, }stdcode\footnotemark, address, publisher, year,
-			note, {{\bfseries lang}uage}\tabularnewline
-			\hline
-			news & \raggedright{\bfseries author, title, newspaper, }year, month, day, pages, note, {{\bfseries lang}uage}\tabularnewline
-			\hline
-			misc &\raggedright{\bfseries }author, title, url, year, month, day, note, {{\bfseries lang}uage}\tabularnewline
-			\hline
-		\end{tabular}
+	\centering
+	\caption{\label{entrytable}不同entry type支持的field}
+	\begin{tabular}{|c||p{10cm}|}
+	\hline
+	\bfseries Entry type & \raggedright\bfseries Fields\tabularnewline
+	\hline\hline
+	article & \raggedright{\bfseries author, title, journal, year, } volume, number, pages, note, {{\bfseries lang}uage}\tabularnewline
+	\hline
+	book & \raggedright{\bfseries author/editor, title, }edition, translator, address, publisher, year, pages, note, {{\bfseries lang}uage}\tabularnewline
+	\hline
+	inproceedings(conference) & \raggedright {\bfseries author, title, }editor, booktitle, address, publisher,
+	year, pages, note, {{\bfseries lang}uage}\tabularnewline
+	\hline
+	mastersthesis  &\raggedright{\bfseries author, title, address, school, year, }note, {{\bfseries lang}uage}\tabularnewline
+	\hline
+	phdthesis  &\raggedright{\bfseries author, title, address, school, year, }note, {{\bfseries lang}uage}\tabularnewline
+	\hline
+	patent & \raggedright{\bfseries applicant\footnotemark, title, }littype\footnotemark,
+	country, pid\footnotemark, year, month, day,
+	note, {{\bfseries lang}uage}\tabularnewline
+	\hline
+	standard & \raggedright{\bfseries author, title, }stdcode\footnotemark, address, publisher, year,
+	note, {{\bfseries lang}uage}\tabularnewline
+	\hline
+	news & \raggedright{\bfseries author, title, newspaper, }year, month, day, pages, note, {{\bfseries lang}uage}\tabularnewline
+	\hline
+	misc &\raggedright{\bfseries }author, title, url, year, month, day, note, {{\bfseries lang}uage}\tabularnewline
+	\hline
+	\end{tabular}
 	\end{table}
 	\footnotetext[1]{专利申请人}
 	\footnotetext[2]{专利文献类型}
@@ -1422,4 +1514,4 @@
 	
 	\resume{作者简介}
 	\seuthesix 开发组，目前仅有四人(当前活跃用户只有樊智猛一人)，希望感兴趣的同学加入。
-\end{document}
+	\end{document}
