@@ -24,6 +24,8 @@
 	
 	%%论文的摘要
 	\makecover
+	\seudeclare
+	
 	\begin{abstract}{武功，心法，内功，灵犀一指}
 		灵犀一指是一种非常厉害的武功。
 	\end{abstract}
@@ -39,12 +41,37 @@
 	
 	\mainmatter
 	
+%	\begin{mainmatter} % 开始正文
+	
 	\chapter{绪论}
 	\section{研究背景}
 	
 	随着移动互联网技术的飞速发展，移动无线网络在我们生活、学习、娱乐的地位也变得越来越重要，而移动无线通信技术本身也在不断地更新换代。
 	
-	移动通信技术发展始于二十世纪七十年代，至今为止，移动通信技术的发展经历了5个阶段，如图\ref{fig:f11}所示
+	移动通信技术发展始于二十世纪七十年代，至今为止，移动通信技术的发展经历了5个阶段，如表\ref{tab1_1_1}所示：
+
+	\begin{table}[tbp]
+	\caption{
+		\textsc{移动通信发展历程}
+		\label{tab1_1_1}
+	}
+	\begin{center}
+		\begin{tabular*}{15cm}{@{\extracolsep{\fill}}lccccc}
+			\hline\hline
+						&1G			& 2G		& 3G		& 4G			& 5G			\\ \hline
+			年份		& 1980 		& 1991 		& 2001 		& 2008			& 2017			\\ \hline
+			技术		& AMPS 		& GSM 		& CDMA2000 	& LTE			& Small cell	\\ 
+						& TACS 		& PDC 		& WCDMA 	& LTE-A			& Massive MIMO	\\
+						& NMT 		& D-AMPS 	& TD-SCDMA 	& WiMax			& D2D			\\
+						& C-Netz 	& CDMA		&   		& IEEE 802.16m	& Others		\\ \hline
+			服务		& 基本语音 	& 语音通话 	& 语音通话 	& 视频通话		& 视频通话、短信\\ 
+						& 		 	& 短信 		& 短信 		& 短信、上网	& 互联网、物联网\\ 
+						& 		 	&   		& 上网  	& 在线视频		& 无人驾驶		\\ 
+						& 		 	&   		& 		 	& 线上游戏		& AR/VR			\\ \hline
+			速度		& 2.4Kbps 	& 64Kbps	& 2Mbps 	& 100Mbps		& 1Gmbps		\\ \hline \hline
+		\end{tabular*}
+	\end{center}
+	\end{table}
 	
 	第一代移动通信技术（1G，1st Generation）采用的主要是频分多址技术（FDMA，Frequency Division Multiple Access）和模拟技术，用于提供模拟语音的业务，相关标准制定于二十世纪八十年代。受传输带宽限制，只能是一种区域性的移动通信系统。主要有美国的AMPS（Advanced Mobile Phone System），英国的TACS（Total Access Communications System），西德的 C-Netz，北欧的NMT（Nordic Mobile Telephone）等。第一代移动通信有许多的不足之处，如制式太多、容量有限、互不兼容、保密性差、提供不了数据业务、通话质量差和无法提供自动漫游等。
 	
@@ -64,11 +91,11 @@
 	
 	具体优势可以体现在以下几个方面：
 	（1）设备与设备间的通信距离缩短，用较小的传输功率获得较大的传输速率；
-
+	
 	（2）传统蜂窝通信方式需要基站进行中继传输，D2D 通信不需要网络中转从而有效减轻基站负担；
-
+	
 	（3）D2D 通信模式下，用户可以复用小区中其他用户的频谱资源接入网络，从而提高频谱利用率；
-
+	
 	（4）D2D 通信因为不需要基站中继，因此在基站故障或损坏情况下也能正常通信。
 	
 	\subsection{D2D通信关键技术}
@@ -77,7 +104,7 @@
 	D2D设备发现。D2D设备发现是指一个终端设备识别附近的另一个终端设备的过程，也是D2D通信连接的前提条件。目前 D2D设备的发现方案有两种：基于核心网的发现方案和基于direct空口的发现方案。基于核心网的发现方案中，通过精准的定位技术，核心网可以很快速地获取到移动终端的地理位置信息，因此也可以比较简单的判断一个移动终端附近存在哪些其他移动终端，并将这些位置判决信息，包括移动终端的身份信息告知给有D2D发现请求的移动终端，从而完成发现过程。而基于direct空口的发现，是通过移动终端间直接进行D2D发现信号的发射和检测，来感知并识别相邻的移动终端，这种方案可以降低终端和网络对定位功能的依赖，即使地理位置上并非临近，只要信号可达即可发现。
 	
 	D2D资源分配。在D2D通信与传统通信方式并存的网络中，由于D2D复用资源，系统必须保证蜂窝用户通信和D2D用户通信都能顺利进行。而D2D对于资源的复用由基站控制，只要通过合理的功率控制和资源分配，就能够保证D2D和蜂窝用户正常通信。综合考虑用户QoS 需求和功率控制等因素，可根据以下原则进行资源分配：
-
+	
 	1）根据用户距离，基站搜索所有可以接入网络的D2D用户，并为其找到所有可供复用通道的蜂窝用户。由于D2D直通链路距离短，用户可以使用较小的发射功率满足其QoS需求，而不损害双方的通信质量，从而提高资源利用效率。
 	
 	2）在D2D用户和蜂窝用户复用信道时进行最优功率分配。根据凸优化理论得到最优功率值的闭合解。
@@ -90,21 +117,21 @@
 	
 	
 	\section{研究内容}
-
+	
 	本论文主要研究的是蜂窝D2D通信系统的实时干扰图构建算法，资源分配与功率控制算法是当前D2D研究的两个关键技术，许多的资源分配与功率控制算法是基于小区的干扰图的。而多数的研究是集中在已知小区干扰图的前提下采用最优匹配，图着色等理论而获得性能的提升，但小区的链路往往是动态变化的，而这会导致小区的干扰图的动态变化，如果干扰图不能够实时更新，基于不完整的干扰图进行的资源分配会导致性能的下降，因此本文提出一种。
-
-
+	
+	
 	\section{论文的组织结构}
 	本文共分为5章，各章主要内容具体如下：
-
+	
 	第一章为绪论部分，首先介绍了课题的研究背景，回顾了移动通信的发展历程，介绍了每一代移动通信的主要特点、核心技术以及协议标准。然后介绍D2D通信技术的原理，关键技术与研究热点。最后说明了本文的研究内容和意义并简要列出论文的组织结构。
-
+	
 	第二章提出以一种蜂窝D2D通信系统复用蜂窝上行链路的实时干扰图构建算法。本文算法针对蜂窝D2D通信系统underlay部署的场景，将小区的无线资源划分成了控制部分和数据传输部分，利用控制域部分的资源池进行干扰图构建。本章详细介绍了干扰图构建算法的流程，将干扰图按照干扰边的类型划分成了CToD类型、DToD类型和DToC三种类型分别进行完整的算法描述。
-
+	
 	第三章对本文所提出算法那进行了理论分析，详细给出了小区链路的数学模型，给出了每一部分少边率的计算公式。
-
+	
 	第四章是性能仿真部分，首先对比本文所提算法相对其他算法的性能，然后采取控制变量法，研究各个参数对算法性能的影响，并给出每一条仿真曲线进行相应的理论曲线，从理论的角度去分析算法性能变化的原因，并应用场景给出相应的建议。
-
+	
 	第五章对本文的内容进行了总结，并对未来的研究方向和内容作了进一步的展望。
 	
 	\chapter{蜂窝D2D通信系统实时干扰图构建算法}
@@ -117,13 +144,22 @@
 	
 	\section{系统模型}
 	\subsection{无线资源}
-	假设小区的通信系统采用频分双工的通信方式进行通信，频域划分为$N_{F}$个频域块，时域资源则划分成连续的$N_{T}$个时域块。构建小区的干扰图所需要的资源如图\ref{fig:f21}所示，小区的无线资源划分为数据传输域和控制域两个区域，系统的通信所需要的资源块（RU，Resource Unit）指的就是图中的一小格时域资源块。其中控制域的RU专门用于干扰图的构建，而数据传输域的RU则专门用于蜂窝链路和D2D链路的数据传输，用$\mathcal{N}$表示控制域$N_{F}$个资源块的集合，称为资源池。
+	假设小区的通信系统采用频分双工的通信方式进行通信，频域划分为$L_{FU}$个频域块，时域资源则划分成连续的$L_{TU}$个时域块。构建小区的干扰图所需要的资源如图\ref{fig2_1}所示，小区的无线资源划分为数据传输域和控制域两个区域，系统的通信所需要的资源块（RU，Resource Unit）指的就是图中的一小格时域资源块。其中控制域的RU专门用于干扰图的构建，而数据传输域的RU则专门用于蜂窝链路和D2D链路的数据传输，用$\mathcal{N}$表示控制域$N_{F}$个资源块的集合，称为资源池。
 	\begin{figure}[htb]
 		\centering
 		% Requires \usepackage{graphicx}
-		%\includegraphics[scale =1.4 ]{/eps/f21.eps}
-		\caption{资源池示意图}\label{f21}
+		\includegraphics[scale = 0.5]{/eps/fig2_1.eps}
+		\caption{资源池示意图}
+		\label{fig2_1}
 	\end{figure}
+
+	% \begin{figure}[!h]
+	% 	\centering
+	% 	% Requires \usepackage{graphicx}
+	% 	\includegraphics[scale = 0.53 ]{/eps/fig4_7.eps}
+	% 	\caption{蜂窝链路进出速度对$CToD$类型干扰图的影响}
+	% 	\label{fig4_7}
+	% \end{figure}
 	
 	\subsection{小区模型}
 	本文研究的蜂窝D2D通信系统为overlay inband D2D模型，D2D通信复用的是蜂窝链路上行通信的频率。小区中存在的两种链路，即蜂窝链路和D2D链路分别用$cLink$和$dLink$表示。不同的链路之间通过唯一的ID标识进行区分，用$link_i$表示ID标识为i的链路。每条链路均由T端（发射端）和R端（接收端）构成，由于复用的是上行通信，所以在这里所有蜂窝链路的接收端都相同，均为基站。链路的T端发射信号，携带信息为相应链路的ID；链路的接收端检测各个资源块上的接收情况，并基站汇报到基站。在干扰图模型中，如果一条链路$link_i$的发射端的广播信息能够被另一条链路$link_j$的接收端接收到，链路既可以是蜂窝链路也可以是D2D链路，那么在干扰图模型中表示为两条链路$link_i$与$link_j$之间存在一条有向边，即$link_i$是$link_j$的邻居。存在邻居关系的两条链路在分配资源的时候不能够使用同一时频的资源，否则将会在通信过程中产生干扰，从而降低通信效率，快速构建准确的干扰图能够有效地提高无线资源的使用效率。
@@ -496,13 +532,21 @@
 	结束此次迭代，进入下一个迭代过程。
 	
 	\section{本章小结}
-
+	
 	本章详细介绍了一种蜂窝D2D通信系统的干扰图构建算法，该算法依照干扰边的类型划分成了DToD、DToC和CToD三部分，同时将资源池中的资源块划分成用于蜂窝链路广播的资源池也用于D2D链路广播的资源池部分。其中对于DToD和DToC部分，本文主要是根据D2D链路数量多而通信距离较短的特点，从空间复用的角度，提出使用冲突通过构建冲突权重表，采取最小冲突和的方式来为D2D链路分配资源块以减少链路的冲突。另一方面本文算法除了保存链路的干扰边信息外，还储存了非干扰邻居以及可能的干扰邻居集合列表，采用多次反馈计算的方式结合附加存储的信息进行集合运算来增大识别干扰冲突的概率。对于CToD链路部分，本文算法根据蜂窝链路通信距离长而D2D链路数量多的特点，除了为蜂窝链路分配合理的资源块外，还通过为链路设置优先权等级来控制广播链路的数量，从而提高可识别冲突的比例。通过根据链路的不同特点针对性得采取相应的解决方案能够有效得提高干扰图构建的性能。
 	
 	
 	\chapter{干扰图构建算法的理论分析}
 	\section{引言}
-	上一章我们叙述了蜂窝D2D通信系统的系统模型，介绍了无线资源和小区的情况，并详细介绍了本文所提出的蜂窝D2D实时干扰图构建算法的实现流程，并对流程中的每一个步骤的实现进行了详细的介绍。本章我们依旧按照干扰边两端链路的类型划分成CToD,DToD和DToC三种不同的干扰边类型进行分析。
+	上一章我们叙述了蜂窝D2D通信系统的系统模型，介绍了无线资源和小区的情况，并详细介绍了本文所提出的蜂窝D2D实时干扰图构建算法的实现流程，并对流程中的每一个步骤的实现进行了详细的介绍。在本章我们将会算法的性能进行理论分析，考虑到小区中的蜂窝链路和D2D链路并非固定不变而是随着时间而变化，因为干扰图的构建需要花费数帧的时间才能完成，可能真实的干扰图在基站完成干扰图构建之前就已经发生了变化，因此需要引入一个值来衡量这种动态场景下的性能。
+
+	用$G = (V,E)$和$\tilde G = (\tilde V,\tilde E)$分别表示每一帧结束的时候小区真实的干扰图和基站构建的干扰图，本算法的前提是基站能够发现存在于小区中的D2D链路，因此我们可以知道$\tilde V  = V $，以及$\left| \tilde E \right| \le  \left| E \right|$，而$\left| E \right| - \left| \tilde E \right|$就是少边的数量，因此我们用$\frac{{\left| {\left| E \right| - \left| \tilde E \right|} \right|}}{{\left| E \right|}}$来衡量基站构造的干扰图的完整性。我们需要分析的是小区中存在的3种类型的干扰边，分别为
+
+	假设小区的小区蜂窝链路数为$Q_C$，每帧蜂窝链路进出数为$Q_{vC}$，可用资源块数$N$，划分给D2D链路广播的数量为$N_D$，划分给蜂窝链路广播的数量为$N_C$。
+
+	用$Q_{arriveC}$和$Q_{leaveC}$分别表示进入和离开小区的蜂窝链路数量，用$Q_{arriveD}$和$Q_{leaveD}$分别表示进入和离开小区的D2D链路对数量，在分析的过程中我们假设每一帧进入小区和离开小区的相应类型链路数量均相等，数量分别为：$Q_{arriveC} = Q_{leaveC} = Q_{vC}$和$Q_{arriveD} = Q_{leaveD} = Q_{vD}$
+
+	本章我们依旧按照干扰边两端链路的类型划分成CToD,DToD和DToC三种不同的干扰边类型进行分析，定义类型少边率为。
 	
 	在具体分析之前需要分析一个很重要的变量，即小区中的链路接收端所能接收到的链路的数量，这个也称为链路的度D。
 	
@@ -513,30 +557,34 @@
 	
 	理论分析的主要参数是少边率，即包含总少边率和类型少边率。
 	
-	假设小区的小区蜂窝链路数为$Q_C$，每帧蜂窝链路进出数为$Q_{vC}$，小区的D2D链路数为$Q_D$，每帧D2D链路进出数为$Q_{vD}$，可用资源块数$N$，划分给D2D链路广播的数量为$N_D$，划分给蜂窝链路广播的数量为$N_C$。
+	
+
+	用$P_{newCLink}$和$P_{newDLink}$分别表示当前帧加入的蜂窝链路和D2D链路的比例，只要不是当前帧加入小区的链路就称为原有链路，用$P_{oldCLink}$和$P_{oldDLink}$分别表示小区原有的蜂窝链路和D2D链路的比例。
+
+
 	
 	
 	
-	小区的新加蜂窝链路的比例为：
+	% 小区的新加蜂窝链路的比例为：
 	
-	\begin{equation}\label{eq3.1}
-	{P_{newCLink}} = \frac{{Q_{vC}}}{{Q_C}}
-	\end{equation}
+	% \begin{equation}\label{eq3.1}
+	% {P_{newCLink}} = \frac{{Q_{vC}}}{{Q_C}}
+	% \end{equation}
 	
-	原有蜂窝链路的比例为：
-	\begin{equation}\label{eq3.2}
-	{P_{oldCLink}} = 1 - {P_{newCLink}}
-	\end{equation}
+	% 原有蜂窝链路的比例为：
+	% \begin{equation}\label{eq3.2}
+	% {P_{oldCLink}} = 1 - {P_{newCLink}}
+	% \end{equation}
 	
-	小区新加D2D链路的比例为：
+	% 小区新加D2D链路的比例为：
 	
-	\begin{equation}\label{eq3.3}
-	{P_{newDLink}} = \frac{{Q_{vD}}}{{Q_D}}
-	\end{equation}
-	小区的原始D2D链路的比例为：
-	\begin{equation}\label{eq3.4}
-	{P_{oldDLink}} = 1 - {P_{newDLink}}
-	\end{equation}
+	% \begin{equation}\label{eq3.3}
+	% {P_{newDLink}} = \frac{{Q_{vD}}}{{Q_D}}
+	% \end{equation}
+	% 小区的原始D2D链路的比例为：
+	% \begin{equation}\label{eq3.4}
+	% {P_{oldDLink}} = 1 - {P_{newDLink}}
+	% \end{equation}
 	
 	----------------------------这边省略了一些东西----------------------------
 	
@@ -668,6 +716,14 @@
 	\begin{equation}\label{eq3.1}
 	Pmiss_{CToD} = \sum\limits_{\chi = {H_{\min }}}^{{H_{\max }}} Pmiss_{\chi }*Pstate_{\chi }
 	\end{equation}
+	
+	\begin{figure}[!h]
+		\centering
+		% Requires \usepackage{graphicx}
+		\includegraphics[scale = 0.53 ]{/eps/fig3_2_1.eps}
+		\caption{$CToD$类型干扰图的理论分析值}
+		\label{fig3_2_1}
+	\end{figure}
 	
 	
 	\section{DToD类型干扰边分析}
@@ -888,6 +944,14 @@
 	Pmis{s_{DToD}} = \sum\limits_{T = 1}^{{T^*}} {({p_{linkStay(T)}}*Pmis{s_{linStay(T)}})}
 	\end{equation}
 	
+	\begin{figure}[!h]
+		\centering
+		% Requires \usepackage{graphicx}
+		\includegraphics[scale = 0.53 ]{/eps/fig3_3_1.eps}
+		\caption{$DToD$类型干扰图的理论分析值}
+		\label{fig3_3_1}
+	\end{figure}
+	
 	
 	\section{DToC类型干扰边分析}
 	对于DToC类型的干扰边与DToD类型的干扰边分析类似，算法的过程都是D2D链路按照最小冲突和进行资源分配后，D2D链路进行广播，然后链路的接收端监听所有的$/t$频率单元，然后基站统计分析监听单元的频率情况类型情况。因此对于 的分析过程 类似，两者的不同之处有两点：所有蜂窝链路的接收端均为基站和模型中基站处于小区的中心位置。
@@ -902,25 +966,36 @@
 	Pmis{s_{DToC}} \approx pmis{s_{linStay({T^*})}}
 	\end{equation}
 	
+	\begin{figure}[!h]
+		\centering
+		% Requires \usepackage{graphicx}
+		\includegraphics[scale = 0.53 ]{/eps/fig3_4_1.eps}
+		\caption{$DToC$类型干扰图的理论分析值}
+		\label{fig3_4_1}
+	\end{figure}
+	
+	
+	
 	\section{本章小结}
-	本章主要从理论上分析了干扰图的构建
+	本章对本文所提算法进行了完整的理论分析，针对算法的内容，分别建立相应的DToD、DToC和CToD三种干扰边分析模型。对CToD类型干扰的分析，我们从对蜂窝链路优先权的等级分布入手，分析相应优先级等级下链路的少边概率。对DToD和DToC部分的分析，我们用等效的数学模型分析循环随机算法，然后分析最小冲突和算法与循环随机算法的数值期望关系，最后才分析整个迭代过程的性能期望。为了更好得对所提算法进行理论分析，本章的整个理论分析过程，我们留意性能突变的拐点，针对不同的资源块数量、链路数量和链路进出速度建立相应分段模型，而理论曲线均与仿真曲线的高吻合度也能够说明了本章模型建立和分析的准确性。
+	
 	
 	
 	
 	\chapter{干扰图构建算法的性能仿真}
 	\section{引言}
 	上一章我们详细地从对本文所提出的算法进行理论上的推导，从上一章的分析可以知道小区的蜂窝用户数量、D2D用户数量、用户进入和离开的速率、D2D的通信半径、资源块的数量这些参数都会影响到干扰图构建的性能。静态的场景下构建干扰图相对容易，而动态的场景下由于真实的干扰图$G = (V,E)$也是时刻变化的，干扰图的构建需要花费一点的时间，基站端的干扰图数据$\tilde G = (\tilde V,\tilde E)$会落后于真实干扰图$G = (V,E)$，为了进一步衡量本文所提出的算法的适用性，本章将进一步结合仿真数据分析所本文算法各种动态场景下的性能。
-
-
+	
+	
 	D2D用户和蜂窝用户的密度以及用户的流动性是衡量算法性能所主要考虑的场景，本章将深入去探讨分析本算法所支持的用户的密度以及用户流动速度；D2D的通信最大通信距离受到所用技术和设备的影响，通信距离的变化相应会引起通信功率的变化，进而导致链路间的干扰发生变化，本章也深入将会分析通信距离对干扰图的影响；资源池的资源块是从小区的可用无线资源中划分出来的，在保证干扰图构建性能满足要求下尽可能得不浪费资源则是本章对资源块数量分析的意义。
-
-
+	
+	
 	本章将设置一系列的仿真场景来评估所提算法的性能，在仿真的过程中链路的位置随机产生，蜂窝链路和D2D链路的发射端都均匀分布在整个小区中，而D2D链路的接收端则是由通信距离和通信角度决定，$dLink_i$的通信距离$d_i$在$(0,d_{max}]$之间均匀分布，而通信角度$a_i$在$[0,2*\pi )$之间均匀分布。
 	
 	为了不失一般性，本文的干扰图构建过程中的广播距离基于的模型$r_i = w * d_i$，在这里$w$是一个参数，如果没有特别说明，则仿真实验中$w = 2$。在实验的过程中如果链路$link_i$的发射端与$link_j$的接收端的距离$d_{i,j} <　r_i$，则$link_i$与$link_j$之间存在干扰边。对于每一个参数设置，我们都进行了1000次实验，然后取的平均值。本章所进行的仿真分析的参数范围大体表\ref{tab:4.1}所示。
-
+	
 	由于干扰图按照干扰边的类型划分成了CToD，DToD，DToC三部分，一些参数的改变直接影响的是相应的类型干扰图，本章将首先对比RED算法、循环RED算法、最小冲突和算法、无反馈，简单反馈、多次反馈以及优先权轮播算法的性能，然后分析本文算法那在具体的场景下相应类型干扰图构建的性能。
-
+	
 	\begin{table}[!h]
 		\caption{\textsc{仿真参数设置} \label{tab:4.1}}
 		\centering
@@ -990,7 +1065,7 @@
 	本组实验改变的参数为$Q_{D}$，参数的变化范围为：$Q_{D} = 100,200,...,600$，进出小区的速率设为小区D2D链路数的10\%，即$Q_{vD} = 10\% * Q_{D}$。图\ref{fig4_4}、\ref{fig4_5}和\ref{fig4_6}分别对应该参数变化对应的$Pmiss_{DToD}$、$Pmiss_{DToC}$和$Pmiss_{CToD}$。
 	
 	如图\ref{fig4_4}所示，在DToD类型干扰图的构建方面，在每帧链路进出速度等于小区D2D链路数的$10\%$，随着小区D2D链路密度的提升，$Pmiss_{DToD}$的值也跟着上升。如果采用本文的算法，即使小区的链路数量达到$600$，等于$N_{D}$的12倍，$Pmiss_{DToD}$也能维持在$2\%$左右。仿真曲线和我们的理论分析曲线基本一致，随着链路数量的增加如果不对$Pmiss_{DToD}$进行迭代，误差会随之增加，但在该仿真参数设置下基本上只需要通过一次的迭代就能达到接近仿真值的效果。
-
+	
 	\begin{figure}[!h]
 		\centering
 		% Requires \usepackage{graphicx}
@@ -998,11 +1073,11 @@
 		\caption{D2D链路数量对$DToD$类型干扰图的影响}
 		\label{fig4_4}
 	\end{figure}
-
+	
 	
 	如图\ref{fig4_5}所示，本文所提出的算法在DToC类型干扰图的构建方面性能更加优越，实际的性能在D2D链路的密度较低的时候优于我们的理论预期，当小区的链路数量较少的时候，本文所提出的最小冲突和算法与多次反馈的组合基本上避免了不可识别的DToC类型干扰边的出现。如果小区的链路总数小于$300$，$Pmiss_{DToC}$几乎为0，即使小区的链路数量达到$600$的时候，$Pmiss_{DToC}$也能仅仅在$1\%$附近。
 	
-
+	
 	\begin{figure}[!h]
 		\centering
 		% Requires \usepackage{graphicx}
@@ -1010,8 +1085,8 @@
 		\caption{D2D链路数量对$DToC$类型干扰图的影响}
 		\label{fig4_5}
 	\end{figure}
-
-
+	
+	
 	如图\ref{fig4_6}所示，当除了$Q_{vD}$和$Q_D$的值，其余参数不变，$Pmiss_{CToD}$的仿真曲线基本上和理论曲线一样是一条平行于$X$轴的直线。这是因为蜂窝链路的优先权等级$H$值的分布是由$Q_C$和$N_C$的值确定，而$Q_C$和$N_C$固定，$Pstate_{\chi }$也就确定了，再由公式\ref{eqxxxxxx}可知，$Pmiss_{\chi }$的值也仅与$Q_{vD}/Q_D$的值有关，而本次仿真$Q_{vD}/Q_D$的值恒定，因此理论上采用优先权轮播反馈算法的CToD类型部分，$Pmiss_{CToD}$与小区的链路总数无关，是一个固定的值。
 	
 	\begin{figure}[!h]
@@ -1021,8 +1096,8 @@
 		\caption{D2D链路数量对$DToC$类型干扰图的影响}
 		\label{fig4_6}
 	\end{figure}
-
-
+	
+	
 	\begin{itemize}
 		\item 蜂窝链路进出速度的影响
 	\end{itemize}
@@ -1036,14 +1111,14 @@
 		\caption{蜂窝链路进出速度对$CToD$类型干扰图的影响}
 		\label{fig4_7}
 	\end{figure}
-
+	
 	
 	\begin{itemize}
 		\item 蜂窝链路总数的影响
 	\end{itemize}
 	
 	本组实验改变的参数为$Q_{C}$，参数的变化范围为：$Q_{C} = 50,100,...,150$，该参数的改变只会影响CToD类型干扰图。如图\ref{fig4_8}所示，$Q_{C}$的改变会引起$H$的分布和$Pstate_{\chi }$的值，由第三章的分析可知当$Q_{C} \le 2 * N_C$的场景，恒有$Pmiss_{CToD} = 0$，而当蜂窝链路的数量达到$3 * N_{C}$的时候，接近于$3\%$，性能下降较快。
-
+	
 	\begin{figure}[!h]
 		\centering
 		% Requires \usepackage{graphicx}
@@ -1051,7 +1126,7 @@
 		\caption{蜂窝链路数量对$CToD$类型干扰图的影响}
 		\label{fig4_8}
 	\end{figure}
-
+	
 	
 	\begin{itemize}
 		\item D2D的最大通信距离的影响
@@ -1060,7 +1135,7 @@
 	本组实验改变的参数为$D_{max}$，参数的变化范围为：$D_{max} = 30,35,...,70$，由之前的分析可以知道该参数的变化并不会影响$Pmiss_{CToD}$的值，现在主要分析该参数对$Pmiss_{DToD}$、$Pmiss_{DToC}$的影响。
 	
 	如图\ref{fig4_9}与\ref{fig4_10}所示，$D_{max}$的增大会使导致每个D2D链路所能收到的广播数量$A$增大，从而增大冲突的概率，在动态的场景下，导致干扰图构建的实时性降低。因为$A$的值大体上与$D_{max}$呈平方关系，因此随着$D_{max}$的增加，少边率并不是简单的线性增加，而是会出现加速上升的趋势。
-
+	
 	\begin{figure}[!h]
 		\centering
 		% Requires \usepackage{graphicx}
@@ -1068,7 +1143,7 @@
 		\caption{$D_{max}$对$DToD$类型干扰图的影响}
 		\label{fig4_9}
 	\end{figure}
-
+	
 	\begin{figure}[!h]
 		\centering
 		% Requires \usepackage{graphicx}
@@ -1083,7 +1158,7 @@
 	\end{itemize}
 	
 	本组实验改变的参数为$N_{D}$，参数的变化范围为：$N_{D} = 20,25,...,90$，该参数的改变会影响DToD和DToC类型干扰图的性能。如图\ref{fig4_11}与\ref{fig4_12}所示，两者的总体曲线的趋势接近，以$N_{D} = 50$为转折点，当$N_{D} < 50$的时候，性能下降较为明显，同时理论分析值也需要经过多次的迭代才能接近仿真的值。性能下降的主要原因是$Q_{D} / N_{D}$的值迅速上升，导致平均每个资源块被D2D链路使用的迅速上升，大大提高了广播冲突的概率。
-
+	
 	\begin{figure}[!h]
 		\centering
 		% Requires \usepackage{graphicx}
@@ -1091,7 +1166,7 @@
 		\caption{$N_D$对$DToD$类型干扰图的影响}
 		\label{fig4_11}
 	\end{figure}
-
+	
 	\begin{figure}[!h]
 		\centering
 		% Requires \usepackage{graphicx}
@@ -1099,14 +1174,14 @@
 		\caption{$N_D$对$DToC$类型干扰图的影响}
 		\label{fig4_12}
 	\end{figure}
-
+	
 	\begin{itemize}
-	\item 用于蜂窝链路广播的资源块数量的影响
+		\item 用于蜂窝链路广播的资源块数量的影响
 	\end{itemize}
 	
 	本组实验改变的参数为$N_{C}$，参数的变化范围为：$N_{C} = 35,40,...,65$，该参数的改变只会影响CToD类型干扰图。如图\ref{fig4_13}所示，对于蜂窝链路的资源块
 	
-
+	
 	\begin{figure}[!h]
 		\centering
 		% Requires \usepackage{graphicx}
@@ -1114,414 +1189,28 @@
 		\caption{$N_C$对$CToD$类型干扰图的影响}
 		\label{fig4_13}
 	\end{figure}
-
+	
 	\section{本章小结}
-
+	
 	本章设计了一系列的仿真实验来评估本文算法的性能，首先对比RED算法、循环RED算法、最小冲突和算法、无反馈，简单反馈、多次反馈以及优先权轮播算法的性能，其中RED算法和循环RED算法为传统的干扰图构建算法。本文所提出的CToD部分采用优先权轮播反馈，DToD和DToC部分采用最小冲突和算法多次反馈的组合在任意的链路进出速度下性能表现均为最佳，远远优于传统的算法。然后采取控制变量的方式深入研究蜂窝链路数量、D2D链路数量、蜂窝链路进出速度、D2D链路进出速度、最大D2D通信距离、资源块数量等参数对本文算法性能的影响，并对比理论分析的预期，验证我们理论分析的正确性。几乎所有的仿真场景下，理论曲线均与仿真曲线相差不大，可见我们的理论分析模型的建立较为准确。通过这一系列实验的观察与分析得到的一些结论，也可以为以后的干扰图算法研究提供一些参考和优化点。
 	
-	
-	\chapter{说明}
-	\section{模板整体框架}
-	使用 \seuthesix 模板的整体框架如下所示，其中\verb+<...>+表示可替换的文本(replacement text)。
-	{\color{magenta}
-		\begin{verbatim}
-		%文档到此结束
-		\end{verbatim}
-	}
-	
-	\section{详细说明}
-	下面对这些命令及其参数进行详细介绍。
-	\subsection{文档类及其选项}
-	下面对这些命令及其参数进行详细介绍。
-	\subsubsection{这个不知道怎么样}
-	subsubsection{这个不知道怎么样}
-	
-	{\color{magenta}
-		\begin{verbatim}
-		\documentclass[<class_options>]{seuthesix}
-		\end{verbatim}
-	}
-	该命令使用\seuthesix 文档类，其中\verb+<class_options>+用\texttt{masters, phd, engieering} 来分别表示
-	学术硕士，博士，和工程硕士的学位论文。三者的区别主要在于封面的logo 不同。此外，
-	博士学位论文称为Dissertation, 而硕士学位论文(包括学术型和工程硕士)称为Thesis 。
-	除了这三项之外，还可以添加别的选项。如{\texttt{nocolorlinks}}用于最终论文付梓(打印)时去除
-	\texttt{hyperref}宏包
-	产生的颜色链接（用方框表示，但该方框在打印时无效），使得打印的纸质版在这些地方更清晰。
-	此外，基本参数，如纸张大小，页面布局等已经在文档类中指定，用户无需再次指定。
-	对于Windows 系统，系统默认编码方式为GBK，因此需要注意使用
-	编辑器将源文件以UTF8 编码保存，否则会出现乱码。对于Linux，系统默认编码就是UTF8，因此不存在这个问题。
-	最后，如果需要在目录之后产生插图目录、表格目录、算法目录、术语与符号目录，需要分别
-	提供\texttt{figurelist, tablelist, algorithmlist, nomlist}选项来指定。若这四个目录中至少有一个，
-	还需要给出\verb+\listofothers+命令来真正将该表格排版出来。
-	若四个目录都不需要，则无需给出这四个选项和\verb+\listofothers+命令。
-	\subsection{载入更多宏包}
-	{\color{magenta}
-		\begin{verbatim}
-		\usepackage[<package_options>]{<package_name>}
-		\end{verbatim}
-	}
-	如果用户还需要载入更多的宏包，可以通过这个命令载入。但是前提是不能破坏\seuthesix 文档类的基本参数设定。
-	一般来讲，是不需要载入其他宏包的，除非用户知道自己到底在干什么。
-	
-	\subsection{基本信息设置}
-	{\color{magenta}
-		\begin{verbatim}
-		\categorynumber{<000>} % 分类采用《中国图书资料分类法》
-		\UDC{<000>}            %《国际十进分类法UDC》的类号
-		\secretlevel{<公开>}    %学位论文密级分为"公开"、"内部"、"秘密"和"机密"四种
-		\studentid{<000000>}   %学号要完整，前面的零不能省略。
-		\title{<\seuthesix 用户手册>}{<手册>}{<\seuthesix User Manual>}{<\seuthesix>}
-		%中文标题，中文副标题，英文标题，英文副标题， 副标题没有可以置为空，
-		%即 \title{<\seuthesix 用户手册>}{}{<\seuthesix User Manual>}{}
-		\author{<\seuthesix 开发组>}{<\seuthesix developer group>}
-		%作者中英文姓名
-		\advisor{<高德纳>}{<教授>}{<Donald E. Knuth>}{<Prof.>}
-		%导师中英文姓名与职称
-		\coadvisor{<兰伯特>}{<副教授>}{<Leslie Lamport>}{<Associate Prof.>}
-		% 副导师中英文姓名与职称，若没有，可以不使用该命令
-		\degreetype{<\TeX 学硕士>}{<Master of \TeX>}
-		% 详细学位类型，如工学硕士，Master of Engineering
-		\major{<\TeX>}%一级学科名
-		\submajor{<\LaTeX>}%二级学科名
-		\defenddate{<\today>}%答辩日期
-		\authorizedate{<\today>}%授予学位日期
-		\committeechair{<高德纳>}%答辩委员会主席姓名
-		\reviewer{<Frank Mittlebach>}{<David Carlisle>}%两位评阅人姓名
-		\department{<\TeX{}学院>}{<School of \TeX>}
-		%学院名称
-		\seuthesisthanks{<本课题的研究获\LaTeX{ }project 赞助\url{www.latex-project.org}>}
-		%致谢信息，没有可以不写
-		\end{verbatim}
-	}
-	这些命令用来设置基本的参数。这些参数用于生成论文的封面、致谢信息等。
-	
-	
-	{\color{magenta}
-		\begin{verbatim}  
-		\makebigcover
-		\makecover
-		\end{verbatim}
-	}
-	提供了相关信息之后，就可以利用这两条命令来生成A3大封面、中文封面和英文封面。
-	
-	
-	\subsection{中英文摘要}
-	{\color{magenta}
-		\begin{verbatim}
-		\begin{abstract}{<中文关键词>}
-		<中文摘要>
-		\end{abstract}
-		\begin{englishabstract}{<English keywords>}
-		<English Abstract>
-		\end{englishabstract}
-		\end{verbatim}
-	}
-	这两条命令分别用来生成中、英文摘要。
-	
-	\subsection{目录与图表目录等}
-	{\color{magenta}
-		\begin{verbatim}
-		\setnomname{<术语与符号约定>}%设置术语表的名称，用于\listofothers
-		\end{verbatim}
-	}
-	摘要之后就是目录，如果需要生成论文中使用的术语和符号列表，可以通过这个命令设置列表的名称，如
-	\textit{术语与符号约定}，等等。若不需要该列表，则无需使用该命令。
-	
-	{\color{magenta}
-		\begin{verbatim}
-		\tableofcontents
-		\listofothers
-		\end{verbatim}
-	}
-	此时可以使用这两条命令生成目录和其他目录：插图目录，表格目录，算法目录，术语目录。
-	只有目录时必须的，其他四个目录可选。若需要其中一个或多个，则要使用
-	\verb+\listofothers+命令，同时在文档类选项中指定具体需要哪几个目录。
-	比如，需得到算法目录，需要在文档类选项中提供\texttt{algorithmlist}选项。
-	
-	\subsection{正文章节}
-	{\color{magenta}
-		\begin{verbatim}
-		\chapter{绪论}
-		<正文是学位论文的主体。内容可因研究课题的性质不同而有所变化。一般可包
-		括：文献综述、理论基础、计算方法、实验方法、经过整理加工的实验结果的分析讨
-		论、见解和结论。本研究课题国内外已有的重要文献的扼要概括，
-		阐明研究此课题的目的、意义，
-		研究的主要内容和所要解决的问题。本研究工作在国民经济建设和社会发展中的理论
-		意义与实用价值。>...
-		\section{<...>}
-		<正文一律用阿拉伯数字编排页码，页码在底部居中。正文之前的摘要、目录等
-		内容单独编排罗马数字页码。>...
-		<在查阅国内外文献和了解国内外有关科技情况的基础上，围绕课题涉及的问题，
-		综述前人工作情况，达到承前启后的目的。要求：
-		1.  总结课题方向至少 10 年以来的国内外动态；
-		2.  明确前人的工作水平；
-		3.  介绍目前尚存在的问题；
-		4.  说明本课题的主攻方向。
-		文献总结应达到可独立成为一篇综述文章的要求。>
-		
-		....
-		
-		\chapter{<...>}
-		<利用研究生本人所掌握的理论知识对所选课题进行科学地、严密地理论分析、
-		数值计算或统计分析，剖析课题，提出自己的见解。>
-		\section{<...>}
-		<利用研究生本人所掌握的理论知识对所选课题进行科学地、严密地理论分析、
-		数值计算或统计分析，剖析课题，提出自己的见解。>
-		
-		\chapter{<...>}
-		<列出数据的图或表，并对数据结果进行讨论，对比分析、结果推论要严格准确，
-		避免采用模棱两可的评定语言。对反常的数据要保留并做解释或者说明，不可随意剔
-		除数据做出有违科学公正的行为。>
-		
-		\chapter{<...>}
-		...
-		
-		\chapter{<...>}
-		...
-		
-		\chapter{<全文总结>}
-		...
-		
-		\end{verbatim}
-	}
-	
-	\subsection{致谢}
-	{\color{magenta}
-		\begin{verbatim}
-		\acknowledgement
-		\end{verbatim}
-	}
-	该命令开启一个新的章(没有章编号)，之后用户可以写入致谢内容。致谢内容自成一章。
-	该部分可选。
-	\subsection{参考文献}
-	{\color{magenta}
-		\begin{verbatim}
-		\thesisbib{<database.bib>}
-		\end{verbatim}
-	}
-	该命令自动生成参考文献，使用\texttt{seuthesix.bst} 指定的文献风格。
-	作为该命令的参数，用户需提供自己的文献数据库文件，即\texttt{.bib}文件。
-	
-	\subsection{附录}
-	{\color{magenta}
-		\begin{verbatim}
-		\appendix
-		\end{verbatim}
-	}
-	该命令切换到目录状态。
-	此后的每个\verb+\chapter{<...>}+都会变成一个目录。
-	章编号变为“目录A，目录B”，等等。
-	该部分及后续的目录章为可选。
-	\subsection{作者简介}
-	{\color{magenta}
-		\begin{verbatim}
-		\resume{<作者简介>}
-		\end{verbatim}
-	}
-	该命令开启一个新的章，用于作者简介。章名称通过参数\texttt{<作者简介>}指定。
-	此后可开始作者简介的具体内容。该部分也自成一章。该部分可选。
-	
-	
-	\chapter{注意事项}
-	\section{文献引用}
-	根据要求，文献应用应为数字标签(numerical label)，上标形式。但是有时也会用到正常形式，即非
-	上标形式，用于正文叙述。为此分别提供了两个命令来实现。
-	{\color{magenta}
-		\begin{verbatim}
-		\cite{<citation_key>}
-		\end{verbatim}
-	}
-	用于实现上标的数字形式文献引用\cite{knuth}，
-	{\color{magenta}
-		\begin{verbatim}
-		\citen{<citation_key>}
-		\end{verbatim}
-	}
-	用于实现正常(非上标，normal)的数字形式文献引用\citen{mittlebach}。
-	\section{参考文献格式}
-	见\verb+seuthesix.bst+的文档: 本文第\ref{bst}章。
-	
-	\section{图表格式处理}
-	图名、表名字体字号已经有文档类 设定好，用户无需再次设定。但是，用户需要让它居中。图名位于图下方，
-	表名位于表上方。图片文件可直接置于当前工作目录，也可置于当前工作目录的\texttt{figures}子目录下(用户根据需要，自己创建该子目录)。
-	图片名称只需要给出名称和扩展名，无需给出完整的路径。图\ref{logo}给出了一个图的例子。表\ref{entrytable}给出了一个表的例子。
-	{\color{magenta}
-		\begin{verbatim}
-		\begin{figure}
-		\centering
-		\includegraphics[...]{...}
-		\caption{...}
-		\label{...}
-		\end{figue}
-		...
-		\begin{table}
-		\centering
-		\caption{...}
-		\label{...}
-		\begin{tabular}{...}
-		...
-		\end{tabular}.
-		\end{table}
-		
-		\end{verbatim}
-	}
-	
-	\begin{figure}
-	\centering
-	\caption{\seuthesix logo\label{logo}}
-	\chuhao \seuthesix
-	\end{figure}
-	
-	\section{算法格式处理}
-	\seuthesix 文档类采用了\texttt{algorithm, algorithmic }两个宏包来设置算法排版格式。
-	详细使用方法参见这两个宏包的手册。这里给出一个简单的例子。
-	{\color{magenta}
-		\begin{verbatim}
-		\begin{algorithm}
-		\caption{\label{algoinsight}如何使用\seuthesix 文档类}
-		\begin{algorithmic}[1]
-		\STATE if (具备一定的\LaTeX 使用经验) else (stop here)
-		\STATE 有耐心阅读文档
-		\STATE 仔细阅读本文档
-		\STATE 在使用中熟悉它
-		\end{algorithmic}
-		\end{algorithm}
-		\end{verbatim}
-	}
-	
-	以上代码给出了算法\ref{algoinsight}的排版结果。
-	\begin{algorithm}
-	\caption{\label{algoinsight}如何使用\seuthesix 文档类}
-	\begin{algorithmic}[1]
-	\STATE if (具备一定的\LaTeX 使用经验) else (stop here)
-	\STATE 有耐心阅读文档
-	\STATE 仔细阅读本文档
-	\STATE 在使用中熟悉它
-	\end{algorithmic}
-	\end{algorithm}
-	
-	\section{术语生成}
-	{\color{magenta}
-		\begin{verbatim}
-		\nomenclature{LTE}{Long Term Evolution}
-		\nomenclatue[noprefix]{$\mathcal{CN}(0, C)$}{协方差矩阵为$C$的循环对称复高斯分布}
-		\end{verbatim}
-	}
-	\nomenclature{LTE}{Long Term Evolution}
-	\nomenclature[noprefix]{$\mathcal{CN}(0, C)$}{协方差矩阵为$C$的循环对称复高斯分布}
-	术语生成借助\texttt{nomencl}宏包。以上代码例子的排版结果在术语表中。对于数学符号，为使得它
-	排在普通术语的后面，需要加上\texttt{[noprefix]}选项。
-	编译时，第一次
-	
-	\verb+xelatex <filename>+
-	
-	之后执行
-	
-	\verb+makeindex <filename> .nlo -s nomencl.ist -o <filename> .nls+
-	
-	然后再次执行
-	
-	\verb+xelatex <filename>+
-	
-	一次。实际上，考虑到参考文献的生成，最后应该执行
-	
-	\verb+xelatex <filename>+
-	
-	至少两次。
-	\chapter{\texttt{seuthesix.bst}参考文献格式\label{bst}}
-	\section{简介}
-	\texttt{seuthesix.bst} 是符合东南大学硕士和博士毕业论文参考文献格式要求的 bibliography style。
-	由于该文献格式是数字标签(numeric label)格式，且无需排序。因此，它是在标准的BibTeX
-	格式\texttt{unsrt.bst} 的基础上发展而来。同时，\verb=seuthesix.bst=文献格式不支持\texttt{crossref}字段。
-	该文献格式支持中英文两种语言，采用中英文分离，分别进行处理的思想。对于中文文献的entry，
-	要求在\verb=.bib=文献数据库中该entry 提供\texttt{language} field
-	，其取值任意，但为了保持一致性，建议设为\verb+language={zh}+，或\verb+language="zh"+。
-	
-	\section{支持的Entry type}
-	\texttt{seuthesix.bst}支持以下几种不同的entry type。
-	\begin{description}
-	\item[book] 书籍
-	\item[article] 期刊文章
-	\item[inproceedings/conference] 会议文章
-	\item[mastersthesis] 硕士学位论文
-	\item[phdthesis] 博士学位论文
-	\item[patent] 专利
-	\item[standard] 标准
-	\item[news] 报纸新闻
-	\item[misc] 杂项，包括电子媒体及其他未能识别的entry type
-	\end{description}
-	
-	\section{各 entry type 所支持的field}
-	不同的entry type所支持的field 不尽相同。对于每个entry type 而言，其中的field 可分为三类：
-	required, optional, ignored。required field 应该必须出现，否则BibTeX 会发出warning(由bst中的output.check函数发出)，
-	且最终得到的格式不能保证美观。
-	optional field 可选，若未出现，不会导致BibTeX warning。ignored field
-	不起任何作用，被BibTeX 忽略。在entry type 对应的bibtex 函数(如 \verb=FUNCTION {article}=)中未使用的 field 都属于 ignored field。
-	
-	下面列出各entry type所支持的field(即required field 和optional field)，
-	其中required field使用黑体。如表\ref{entrytable}所示。
-	
-	\begin{table}
-	\centering
-	\caption{\label{entrytable}不同entry type支持的field}
-	\begin{tabular}{|c||p{10cm}|}
-	\hline
-	\bfseries Entry type & \raggedright\bfseries Fields\tabularnewline
-	\hline\hline
-	article & \raggedright{\bfseries author, title, journal, year, } volume, number, pages, note, {{\bfseries lang}uage}\tabularnewline
-	\hline
-	book & \raggedright{\bfseries author/editor, title, }edition, translator, address, publisher, year, pages, note, {{\bfseries lang}uage}\tabularnewline
-	\hline
-	inproceedings(conference) & \raggedright {\bfseries author, title, }editor, booktitle, address, publisher,
-	year, pages, note, {{\bfseries lang}uage}\tabularnewline
-	\hline
-	mastersthesis  &\raggedright{\bfseries author, title, address, school, year, }note, {{\bfseries lang}uage}\tabularnewline
-	\hline
-	phdthesis  &\raggedright{\bfseries author, title, address, school, year, }note, {{\bfseries lang}uage}\tabularnewline
-	\hline
-	patent & \raggedright{\bfseries applicant\footnotemark, title, }littype\footnotemark,
-	country, pid\footnotemark, year, month, day,
-	note, {{\bfseries lang}uage}\tabularnewline
-	\hline
-	standard & \raggedright{\bfseries author, title, }stdcode\footnotemark, address, publisher, year,
-	note, {{\bfseries lang}uage}\tabularnewline
-	\hline
-	news & \raggedright{\bfseries author, title, newspaper, }year, month, day, pages, note, {{\bfseries lang}uage}\tabularnewline
-	\hline
-	misc &\raggedright{\bfseries }author, title, url, year, month, day, note, {{\bfseries lang}uage}\tabularnewline
-	\hline
-	\end{tabular}
-	\end{table}
-	\footnotetext[1]{专利申请人}
-	\footnotetext[2]{专利文献类型}
-	\footnotetext[3]{专利号}
-	\footnotetext[4]{标准号}
-	需要注意的是，若为英文参考文献，则language field 可以省略，而对于中文参考文献language field 则必须出现在\verb=.bib= 文献数据库中。
-	其取值任意，但建议设为\verb+language={zh}+，或\verb+language="zh"+，以保持一致性。
-	这就是表\ref{entrytable}中的{{\bfseries lang}uage}一半黑体一半非黑体的原因。
-	参考文献部分给出了很多文献格式的例子。
-	
-	\nocite{komine2004fundamental}
-	\nocite{dimitrov2015principles}
-	\nocite{fujimoto2014fastest}
-	\nocite{ieee2012ieee}
-	\nocite{irdawebsite}
-	\nocite{vlcnews}
-	\nocite{pt}
-	\nocite{thesis:a}
-	\nocite{thesis:b}
-	
-	\chapter{全文总结}
+	\chapter{全文总结与展望}
 	本文主要介绍了如何使用\seuthesix \LaTeX 文档类来对东南大学硕士与博士学位论文进行排版。
 	当然，\seuthesix 肯定存在许多不足的地方，希望各位读者予以指正。
 	
+	
+	\resume{作者攻读硕士学位期间的研究成果}
+	\begin{flushleft}
+		{\bfseries \large 发表的论文}\\ \relax
+		[1] 第一作者，“灵犀一指：理论与应用”, 武侠学报，
+		2015年5月。\\
+	\end{flushleft}
+	\begin{flushleft}
+		{\bfseries \large 已申请专利}\\ \relax
+		[1] 第一作者，“灵犀一指：理论与应用”, 武侠学报，
+		2015年5月。\\
+	\end{flushleft}
+
 	\acknowledgement
 	感谢每一个支持\seuthesix 的人。
-	
-	\thesisbib{seuthesix}
-	
-	\appendix
-	
-	\resume{作者简介}
-	\seuthesix 开发组，目前仅有四人(当前活跃用户只有樊智猛一人)，希望感兴趣的同学加入。
-	\end{document}
+\end{document}
